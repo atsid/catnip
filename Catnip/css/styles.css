@@ -2566,8 +2566,56 @@ body {
   height: 100%;
   margin: 0px;
   padding: 0px;
-  text-transform: uppercase;
+  text-transform: none;
   width: 100%;
+}
+#results .all-groups {
+  width: 100%;
+  background-color: none;
+  height: 100%;
+}
+#results .group {
+  background-color: none;
+  border-top: 1px solid #81b4fc;
+  width: 100%;
+  padding: 15px;
+  display: inline-block;
+}
+#results .group:last-child {
+  border-bottom: 1px solid #81b4fc;
+}
+#results .group-icon {
+  display: inline-block;
+  width: 30%;
+  margin: 0 auto;
+}
+#results img {
+  max-width: 150px;
+  max-height: 50px;
+}
+#results .details {
+  width: 70%;
+  margin: 0;
+  float: right;
+}
+#results .details .genre {
+  color: #81b4fc;
+  display: block;
+  font-size: 20px;
+  margin: 1%;
+}
+#results .details .time {
+  color: #81b4fc;
+  display: block;
+  font-size: 14px;
+  margin: 1%;
+}
+#results .details .count {
+  color: #81b4fc;
+  display: block;
+  font-size: 12px;
+  margin: 1%;
+  font-style: italic;
 }
 .km-widget {
   background: #3a3a3a !important;
