@@ -27,40 +27,14 @@
 		
 		<!-- Catnip Code -->
         <script src="scripts/config.js"></script>
-		
-		<!-- Demo Code -->
-        <script src="scripts/identity-provider.js"></script>
-        <script src="scripts/main.js"></script>
+        <script src="scripts/preferences.js"></script>
+        <script src="scripts/food.js"></script>
 		
 		<!-- Initialize -->
 		<script type="text/javascript">
 			$(function() {
-				app.initializeEverlive();
-				(function() {
-					var today = new Date();
-					today = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
-					config.set("food", pi.observable());
-					config.set("food.categories", pi.data.DataSource.create({
-						source: "Everlive.FoodCategories"
-					})).fetch();
-					config.set("food.preferences", pi.data.DataSource.create({
-						// source: "Everlive.DailyFoodPreferences",
-	type: "everlive",
-    transport: {
-        typeName: "DailyFoodPreferences",
-        create: {
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("X-Everlive-Debug", "true")
-            }
-        }
-    },
-						serverFiltering: true,
-						filter: [
-							{ field: "Date", operator: "eq", value: today }
-						]
-					})).fetch();
-				})();
-				
+
+
 				new kendo.mobile.Application(document.body,{
 					layout: "android-layout"
 				});
