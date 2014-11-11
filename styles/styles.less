@@ -20,6 +20,10 @@
     margin: 1%;
     list-style:none;
 }
+.section-box-shadow{
+    box-shadow:0 0 20px #333;
+    border-left: 2px solid #333;
+}
 .throw-off-screen(){
     position:absolute;
     left: -9999px;
@@ -37,9 +41,14 @@ body {
     text-transform:none;
     width:100%;
 }
-
+#drawer{
+    background: lighten(@base-background, 20%);
+}
 #results{
+    .section-box-shadow;
     .km-content{
+        display:block;
+        width: 100%;
         max-width: 500px;
         margin:0 auto;
         .all-groups {

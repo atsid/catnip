@@ -40,6 +40,7 @@
         <!-- Initialize -->
         <script type="text/javascript">
             $(function() {
+                var theData = {};
                 app.initializeEverlive();
                 (function() {
                     config.set("results", pi.observable());
@@ -51,16 +52,16 @@
 
                 var setDetailData = function (groupId) {
                     var detailData = theData.groups[groupId];
-                    $('#detail span.genre').text(detailData.restaurant);
-                    $('#detail span.time').text(detailData.time);
-                    var theUl = $('#detail ul.people');
+                    $('#results_detail span.genre').text(detailData.restaurant);
+                    $('#results_detail span.time').text(detailData.time);
+                    var theUl = $('#results_detail ul.people');
                     theUl.find('li').remove();
                     $.each(detailData.group, function (idx, name) {
                         theUl.append($('<li></li>').text(name));
                     });
                 };
 
-                var populateDiv = function (theData) {
+                var populateDiv = function () {
                     var allGroups = $('.all-groups');
                     $.each(theData.groups, function (key, vals) {
                         var grpDiv = $('<div></div>').addClass('group').attr('data-group-id', key);
@@ -88,12 +89,11 @@
                                 groupId = grp.attr('data-group-id');
                             }
                             setDetailData(groupId);
-                            window.location.hash = "#detail";
+                            window.location.hash = "#results_detail";
                         });
                         allGroups.append(grpDiv);
                     })
                 };
-                var theData = {};
                 $.get('/ajax/results')
                     .fail(function () {
                         theData = {
@@ -118,7 +118,7 @@
                                 "3": {
                                     "restaurant": "Deliahs",
                                     "time": "14:30",
-                                    "group": ["Josiah", "Tonio", "Kris", "Yoshi"]
+                                    "group": ["Josiah", "Tonio", "Kris", "Derek", "Craig", "Gary", "Yoshi"]
                                 }
                             }
                         };
@@ -126,27 +126,28 @@
                     })
                     .done(function (data) {
                         theData = data;
-                        populateDiv(theData);
+                        populateDiv();
                     });
 
 
             });
         </script>
     </head>
-    //a href #detail
     <body>
         <div id="results" data-role="view" data-title="Where?">
             <div class="all-groups">
             </div>
         </div>
-        <div id="detail" data-role="view" data-title="Where?">
+        <div id="results_detail" data-role="view" data-title="Where?">
             <div class="img">
                 <img src="img/color-table.png"/>
             </div>
-            <div>
+            <div class="details">
                 <span class="genre"></span>
                 <span class="time"></span>
-                <ul class="people"></ul>
+                <div class="scroll-list" data-role="scroller">
+                    <ul class="people" data-role="listview"></ul>
+                </div>
             </div>
         </div>
         <div data-id="ios-layout" data-role="layout">
