@@ -33,6 +33,7 @@
         <script src="scripts/config.js"></script>
 		<script src="scripts/preferences.js"></script>
 		<script src="scripts/food.js"></script>
+		<script src="scripts/results.js"></script>
 	
 		<!-- Demo Code
         <script src="scripts/identity-provider.js"></script>
@@ -50,6 +51,23 @@
 	</head>
 	
 	<body>
+        <div id="results" data-role="view" data-title="Where?">
+            <div class="all-groups">
+            </div>
+        </div>
+        <div id="results_detail" data-role="view" data-title="Where?">
+            <div class="img">
+                <img src="img/color-table.png"/>
+            </div>
+            <div class="details">
+                <span class="genre"></span>
+                <span class="time"></span>
+                <div class="scroll-list" data-role="scroller">
+                    <ul class="people" data-role="listview"></ul>
+                </div>
+            </div>
+        </div>
+
         <div id="social-login" data-role="view">
 			<div class="app">
 				<button id="loginFb">Login with Facebook</button>
