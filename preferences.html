@@ -42,14 +42,23 @@
                 app.onDeviceReady();
                 
                 app.initializeEverlive();
-
+                
+                var today = new Date();
+                today.setUTCHours('0');
+                today.setUTCMinutes('0');
+                today.setUTCSeconds('0');
+                today.setUTCMilliseconds('0');
+                //today.setUTCDate(today.getUTCDate() + 1);
+                
                 (function() {
-                        config.set("preferences", pi.observable());
-                        config.set("preferences.dataSource", pi.data.DataSource.create({
-                            source: "Everlive.DailyPreferences"
-                        })).fetch();
-                        // It's common to type the 's' in source as lowercase, so this is an alias.
-                        config.preferences.datasource = config.preferences.dataSource;
+                    config.set("preferences", pi.observable());
+                    config.set("preferences.dataSource", pi.data.DataSource.create({
+                        source: "Everlive.DailyPreferences",
+                        serverFiltering: true,
+                        filter: {field: 'Date', operator: 'eq', value: today}
+                    })).fetch();
+                    // It's common to type the 's' in source as lowercase, so this is an alias.
+                    config.preferences.datasource = config.preferences.dataSource;
                 })();
             });
         </script>
@@ -57,17 +66,26 @@
     </head>
     
     <body>
+        <div style="display:none;">
+			<div class="app">
+				<button id="loginFb">Login with Facebook</button>
+				<button id="loginGoogle">Login with Google</button>
+				<button id="loginLiveId">Login with LiveID</button>
+				<button id="loginADFS">Login with ADFS</button>
+			</div>
+        </div>
+        
         <div id="preferences" data-role="view" data-title="When?">
             <!-- Daily preferences -->
             <!-- Times -->
             <div>
                 <label for="startTime">Earliest I can leave</label>
-                <input id="startTime" name="StartTime" value="12:00" />
+                <input id="startTime" name="StartTime" value="12:00 PM" />
             </div>
             
             <div>
                 <label for="endTime">Latest I can be back</label>
-                <input id="endTime" name="EndTime" value="1:00" />                
+                <input id="endTime" name="EndTime" value="1:00 PM" />
             </div>
             
             <!-- Options -->
@@ -76,6 +94,7 @@
             <table data-role="grid" data-source="config.preferences.dataSource" data-toolbar="['add']">
 				<thead>
 					<tr>
+                        <th>UUID</th>
 						<th>Bringing Back</th>
 						<th>I Brought</th>
 						<th>Sit Down</th>
@@ -87,21 +106,56 @@
 				</thead>
 				<tbody>
 					<tr>
+						<td><input name="Id" type="text" value="" /></td>
 						<td><input name="BringBack" type="checkbox" value="Yes" /></td>
 						<td><input name="Brought" type="checkbox" value="Yes" /></td>
 						<td><input name="SitDown" type="checkbox" value="Yes" /></td>
-						<td><input name="Date" type="number" value="" /></td>
-						<td><input name="StartTime" type="number" value="" /></td>
-						<td><input name="EndTime" type="number" value="" /></td>
-						<td><input name="PreferredTime" type="number" value="" /></td>
+						<td><input name="Date" type="text" value="" /></td>
+						<td><input name="StartTime" type="text" value="" /></td>
+						<td><input name="EndTime" type="text" value="" /></td>
+						<td><input name="PreferredTime" type="text" value="" /></td>
 					</tr>
 				</tbody>
 			</table>
             
             <script type="text/javascript">
                 $(function () {
-                    var $startTime, $endTime, dataSource, preferenceData;
+                    var $startTime, $endTime, data, dataSource, record, today;
                     
+                    Date.prototype.padNumber = function (num) {
+                        if (num < 10) {
+                            num = '0' + num;
+                        }
+                        return num.toString();
+                    };
+                    
+                    Date.prototype.trimToDate = function () {
+                        this.setUTCHours('0');
+                        this.setUTCMinutes('0');
+                        this.setUTCSeconds('0');
+                        this.setUTCMilliseconds('0');
+                        return this;
+                    }
+                    
+                    Date.prototype.getShortDate = function () {
+                        var day, month, year;
+                        
+                        day = this.padNumber(this.getDate());
+                        month = this.padNumber(this.getMonth() + 1);
+                        year = this.getFullYear();
+                        
+                        return year + month + day;
+                    };
+
+                    Date.prototype.getShortTime = function () {
+                        var hours, minutes;
+                        
+                        hours = this.padNumber(this.getHours());
+                        minutes = this.padNumber(this.getMinutes());
+                        
+                        return hours + minutes;
+                    };
+
                     function startTimeChangeHandler(e) {
                         var startDate = new Date($startTime.value());
                         if (startDate) {
@@ -113,13 +167,29 @@
                     }
                     
                     function endTimeChangeHandler(e) {
-                        preferenceData.StartTime = $startTime.value();
-                        preferenceData.EndTime = $endTime.value();
-                        console.log(preferenceData);
+                        var startTime, endTime;
+                        
+                        today = new Date();
+                        startTime = new Date($startTime.value());
+                        endTime = new Date($endTime.value());
+                        
+                        record.set('StartTime', startTime.getShortTime());
+                        record.set('EndTime', endTime.getShortTime());
+                        console.log(record);
+                        //console.log(dataSource.hasChanges());
+                        
+                        //dataSource.sync();
                     }
                     
-                    dataSource = config.get('preferences.dataSource');
-                    preferenceData = {};
+                    today = new Date().trimToDate();
+                    dataSource = config.preferences.dataSource;
+
+                    record = dataSource.at(0) || dataSource.add({
+                        'Date': today
+                    });
+
+                    console.log(dataSource.at(0));
+                    console.log(record);
                     
                     $startTime = $('#startTime').kendoTimePicker({
                         change: startTimeChangeHandler
@@ -134,7 +204,6 @@
                     
                     $endTime.min("11:30 AM");
                     $endTime.max("4:00 PM");
-
                 });
             </script>
         </div>
