@@ -42,11 +42,50 @@
 			});
 		</script>
 
-	</head>
+
+
+    </head>
 	
 	<body>
+    <style>
+        .all-groups {
+            width: 100%;
+            background-color: #dfff00;
+        }
+        .group {
+            background-color: pink;
+            width: 150px;
+            height: 50px;
+            display: inline-block;
+        }
+    </style>
         <div id="results" data-role="view" data-title="Where?">
-			
+			<fieldset>
+                <legend>11:00 - Chinese</legend>
+                <ul>
+                    <li>Bob</li>
+                    <li>Jane</li>
+                    <li>Bill</li>
+                    <li>Derek</li>
+                    <li>Chris</li>
+                    <li>Kris</li>
+                    <li>Yoshi</li>
+                </ul>
+			</fieldset>
+            <div class="all-groups">
+                <div class="group" data-group-id="abc">
+                    <span class="time">11:30</span><br/>
+                    <span class="genre">Thai</span>
+                </div>
+                <div class="group" data-group-id="def">
+                    <span class="time">12:00</span><br/>
+                    <span class="genre">Burger Joint</span>
+                </div>
+                <div class="group" data-group-id="hij">
+                    <span class="time">13:15</span><br/>
+                    <span class="genre">Sandwich</span>
+                </div>
+            </div>
         </div>
 		
 		<div data-id="ios-layout" data-role="layout">
