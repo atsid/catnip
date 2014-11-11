@@ -51,10 +51,6 @@
                         // It's common to type the 's' in source as lowercase, so this is an alias.
                         config.preferences.datasource = config.preferences.dataSource;
                 })();
-                
-                new kendo.mobile.Application(document.body,{
-                    layout: "android-layout"
-                });
             });
         </script>
 
@@ -64,11 +60,11 @@
         <div id="preferences" data-role="view" data-title="When?">
             <!-- Daily preferences -->
             <!-- Times -->
-            <label for="StartTime">Earliest I can leave</label>
-            <input id="StartTime" value="12:00" />
+            <label for="startTime">Earliest I can leave</label>
+            <input id="startTime" name="StartTime" value="12:00" />
             
-            <label for="EndTime">Latest I can be back</label>
-            <input id="EndTime" value="1:00" />
+            <label for="endTime">Latest I can be back</label>
+            <input id="endTime" name="EndTime" value="1:00" />
             
             <!-- Options -->
             
@@ -98,10 +94,9 @@
 				</tbody>
 			</table>
             
-            <!-- View initialization -->
             <script type="text/javascript">
-                $(function() {
-                    var $startTime, $endTime;
+                $(function () {
+                    var $startTime, $endTime, dataSource, preferenceData;
                     
                     function startTimeChangeHandler(e) {
                         var startDate = new Date($startTime.value());
@@ -115,7 +110,13 @@
                     
                     function endTimeChangeHandler(e) {
                         // Nothing yet
+                        preferenceData.StartTime = $startTime.value();
+                        preferenceData.EndTime = $endTime.value();
+                        console.log(preferenceData);
                     }
+                    
+                    dataSource = config.get('preferences.dataSource');
+                    preferenceData = {};
                     
                     $startTime = $('#startTime').kendoTimePicker({
                         change: startTimeChangeHandler
@@ -130,6 +131,7 @@
                     
                     $endTime.min("11:30 AM");
                     $endTime.max("4:00 PM");
+
                 });
             </script>
         </div>
