@@ -36,7 +36,7 @@
 		<script type="text/javascript">
 			$(function() {
 				new kendo.mobile.Application(document.body,{
-					layout: "ios-layout"
+					layout: "android-layout"
 				});
 				app.onDeviceReady();
 			});
@@ -45,13 +45,8 @@
 	</head>
 	
 	<body>
-        <div id="social-login" data-role="view">
-			<div class="app">
-				<button id="loginFb">Login with Facebook</button>
-				<button id="loginGoogle">Login with Google</button>
-				<button id="loginLiveId">Login with LiveID</button>
-				<button id="loginADFS">Login with ADFS</button>
-			</div>
+        <div id="login" data-role="view" data-title="Login">
+			
         </div>
 		
 		<div data-id="ios-layout" data-role="layout">
