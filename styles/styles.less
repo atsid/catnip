@@ -18,6 +18,7 @@
     display: block;
     font-size: @size;
     margin: 1%;
+    list-style:none;
 }
 .throw-off-screen(){
     position:absolute;
@@ -109,6 +110,48 @@ body {
         .count{
             .accent-list;
             font-style: italic;
+        }
+    }
+}
+
+#results_detail{
+    .img{
+        text-align:center;
+        position:relative;
+        margin-top:10%;
+    }
+    .details{
+        .accent-list;
+        text-align:center;
+        .genre{
+            display:block;
+            font-size:@font-size-large+20;
+            margin-top: 10%;
+        }
+        .time{
+            display:block;
+            font-size:@font-size-large;
+            margin-top: 5%;
+        }
+        ul.people{
+        }
+    }
+    .scroll-list{
+        border: @list-border;
+        border-radius: 10px;
+        display:block;
+        height:15%;
+        width:70%;
+        max-height:150px;
+        max-width: 400px;
+        margin:10% auto 0 auto;
+        li{
+            border-top: @list-border;
+            color: @accent-color-1;
+            padding: 3% 0;
+            &:last-child{
+                border-bottom:@list-border;
+            }
         }
     }
 }
