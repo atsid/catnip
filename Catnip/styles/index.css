@@ -20,6 +20,14 @@
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
 
+/* Show Navbar at the top on Android */
+.km-android .km-view:not(.km-splitview) {
+    -webkit-box-direction: normal;
+    -moz-box-direction: normal;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+
 /* Portrait layout (default) */
 
 h1 {
