@@ -35,10 +35,14 @@
 		<!-- Initialize -->
 		<script type="text/javascript">
 			$(function() {
+				app.initializeEverlive();
+				(function() {
+					config.set("results", pi.observable());
+				})();
+				
 				new kendo.mobile.Application(document.body,{
 					layout: "android-layout"
 				});
-				app.onDeviceReady();
 			});
 		</script>
 
