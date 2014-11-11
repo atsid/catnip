@@ -1,0 +1,19 @@
+{
+  "name": "catnip",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node server/app.js",
+    "debug": "node --debug server/app.js"
+  },
+  "private": true,
+  "dependencies": {
+    "ejs": "^1.0.0",
+    "express": "^4.10.2",
+    "express-session": "^1.9.1",
+    "passport": "^0.2.1",
+    "passport-facebook": "^1.0.3",
+    "passport-twitter": "^1.0.2"
+  }
+}
