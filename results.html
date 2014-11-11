@@ -12,6 +12,7 @@
 
         <!-- Local Styles -->
         <link rel="stylesheet" type="text/css" href="styles/index.css" />
+        <link rel="stylesheet/less" type="text/css" href="styles/styles.less" />
 
         <!--- Cordova - Loaded on mobile apps only -->
         <script type="text/javascript" src="cordova.js"></script>
@@ -29,6 +30,9 @@
         <!-- Catnip Code -->
         <script src="scripts/config.js"></script>
 
+        <!-- Less.js -->
+        <script src="scripts/less-1.7.5.min.js" type="text/javascript"></script>
+
         <!-- Demo Code -->
         <script src="scripts/identity-provider.js"></script>
         <script src="scripts/main.js"></script>
@@ -44,117 +48,56 @@
                 new kendo.mobile.Application(document.body,{
                     layout: "android-layout"
                 });
+                var theData = {
+                    "me": 0,
+                    "happiness": 0,
+                    "groups": {
+                        "0": {
+                            "restaurant": "Pasara",
+                            "time": "10:30",
+                            "group": ["Craig"]
+                        },
+                        "1": {
+                            "restaurant": "Pasara",
+                            "time": "13:00",
+                            "group": ["David", "Jabari", "Gary"]
+                        },
+                        "2": {
+                            "restaurant": "Chinese",
+                            "time": "13:00",
+                            "group": ["Kurt", "Ken", "Cary", "Jeff"]
+                        },
+                        "3": {
+                            "restaurant": "Deliahs",
+                            "time": "14:30",
+                            "group": ["Josiah", "Tonio", "Kris", "Yoshi"]
+                        }
+                    }
+                };
+                var allGroups = $('.all-groups');
+                $.each(theData.groups, function (key, vals) {
+                    var grpDiv = $('<div></div>').addClass('group').attr('data-group-id', key);
+                    var grp = $('<div></div>').addClass('details');
+                    grp.append($('<span></span>').addClass('genre').text(vals.restaurant));
+                    grp.append($('<span></span>').addClass('time').text(vals.time));
+                    grp.append($('<span><span class="count-num"></span> people</span>').addClass('count'));
+                    grp.find('.count-num').text(vals.group.length);
+
+                    var iconSpan = $('<span></span>').addClass('group-icon');
+                    iconSpan.append($('<img />').attr('src', 'img/color-table.png'));
+
+                    grpDiv.append(iconSpan);
+                    grpDiv.append(grp);
+                    allGroups.append(grpDiv);
+                })
+
+
             });
         </script>
     </head>
     <body>
         <div id="results" data-role="view" data-title="Where?">
             <div class="all-groups">
-                <div class="group" data-group-id="abc">
-                    <div class="group-icon-circle">
-                        <div class="circle-indicator">
-                            <span class="circle-child">
-                                <span class="circle-child">
-                                    <span class="circle-child">
-                                        <span class="circle-child">
-                                            <span class="circle-child">
-                                                <span class="circle-child">
-                                
-                                                </span>
-                                            </span>
-                                        </span>
-                                    </span>
-                                </span>
-                            </span>
-                            
-                        </div>
-                    </div>
-                    <div class="details">
-                        <span class="genre">Thai</span>
-                        <span class="time">11:30 - 13:00</span>
-                        <span class="count"><span class="count-num">5</span> people</span>
-                    </div>
-                </div>
-                <div class="group" data-group-id="def">
-                    <div class="group-icon-circle">
-                        <img src="img/color-table.png">
-                    </div>
-                    <div class="details">
-                        <span class="genre">Thai</span>
-                        <span class="time">11:30 - 13:00</span>
-                        <span class="count"><span class="count-num">5</span> people</span>
-                    </div>
-                </div>
-                <div class="group" data-group-id="hij">
-                    <div class="group-icon-circle">
-                        <span class="circle-indicator"></span>
-                    </div>
-                    <div class="details">
-                        <span class="genre">Thai</span>
-                        <span class="time">11:30 - 13:00</span>
-                        <span class="count"><span class="count-num">5</span> people</span>
-                    </div>
-                </div>
-                <div class="group" data-group-id="hij">
-                    <div class="group-icon-circle">
-                        <span class="circle-indicator"></span>
-                    </div>
-                    <div class="details">
-                        <span class="genre">Thai</span>
-                        <span class="time">11:30 - 13:00</span>
-                        <span class="count"><span class="count-num">5</span> people</span>
-                    </div>
-                </div>
-                <div class="group" data-group-id="hij">
-                    <div class="group-icon-circle">
-                        <span class="circle-indicator"></span>
-                    </div>
-                    <div class="details">
-                        <span class="genre">Thai</span>
-                        <span class="time">11:30 - 13:00</span>
-                        <span class="count"><span class="count-num">5</span> people</span>
-                    </div>
-                </div>
-                <div class="group" data-group-id="hij">
-                    <div class="group-icon-circle">
-                        <span class="circle-indicator"></span>
-                    </div>
-                    <div class="details">
-                        <span class="genre">Thai</span>
-                        <span class="time">11:30 - 13:00</span>
-                        <span class="count"><span class="count-num">5</span> people</span>
-                    </div>
-                </div>
-                <div class="group" data-group-id="hij">
-                    <div class="group-icon-circle">
-                        <span class="circle-indicator"></span>
-                    </div>
-                    <div class="details">
-                        <span class="genre">Thai</span>
-                        <span class="time">11:30 - 13:00</span>
-                        <span class="count"><span class="count-num">5</span> people</span>
-                    </div>
-                </div>
-                <div class="group" data-group-id="hij">
-                    <div class="group-icon-circle">
-                        <span class="circle-indicator"></span>
-                    </div>
-                    <div class="details">
-                        <span class="genre">Thai</span>
-                        <span class="time">11:30 - 13:00</span>
-                        <span class="count"><span class="count-num">5</span> people</span>
-                    </div>
-                </div>
-                <div class="group" data-group-id="hij">
-                    <div class="group-icon-circle">
-                        <span class="circle-indicator"></span>
-                    </div>
-                    <div class="details">
-                        <span class="genre">Thai</span>
-                        <span class="time">11:30 - 13:00</span>
-                        <span class="count"><span class="count-num">5</span> people</span>
-                    </div>
-                </div>
             </div>
         </div>
 
