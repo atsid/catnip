@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <title><%= title %></title>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <% if(locals.user){ %>
+      <p>Welcome <%= user.name %></p>
+      <form action="/logout" method="post">
+        <button type="submit">Log out</button>
+      </form>
+    <% } else { %>
+      <p>Welcome to <%= title %></p>
+      <p><a href="/auth/twitter">Sign in with Twitter</a></p>
+      <p><a href="/auth/facebook">Login with Facebook</a></p>
+    <% } %>
+  </body>
+</html>
