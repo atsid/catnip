@@ -62,17 +62,41 @@ body {
     .group-icon-circle {
         display: inline-block;
         position:relative;
-        width:100px;
-        background:white;
-        border-radius: 50%;
-        margin: 0 auto;
+        width: 40%;
+        .circle-indicator{
+            position:absolute;
+            text-align:center;
+            width: 40px;
+            height: 40px;
+            left:20px;
+            top:10px;
+            background:#81B4FC;
+            border-radius: 50%;
+            margin: 0 auto;
+            .circle-child{
+                position:absolute;
+                left: 15px;
+                top: 15px;
+                z-index:2000;
+                background:white;
+                width: 10px;
+                height: 10px;
+                display:block;
+                border-radius:50%;
+                transform:translate(0, -30px);
+                > span{
+                    transform:rotate(360deg/6);
+                }
+            }
+        }
     }
+    
     img {
         max-width: 150px;
         max-height: 50px;
     }
     .details{
-        width: 70%;
+        width: 60%;
         margin: 0;
         float:right;
         .genre{
