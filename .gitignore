@@ -1,6 +1,3 @@
 */bin
 */obj
 *.user-settings.xml
-.DS_Store
-node_modules
-npm-debug.log
