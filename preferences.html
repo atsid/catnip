@@ -1,91 +1,181 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Lunch?</title>
-		<!-- Kendo Styles -->
-		<link rel="stylesheet" type="text/css" href="kendo/styles/kendo.common.min.css" />
-		<link rel="stylesheet" type="text/css" href="kendo/styles/kendo.default.min.css" />
-		<link rel="stylesheet" type="text/css" href="kendo/styles/kendo.mobile.common.min.css" />
-		<link rel="stylesheet" type="text/css" href="kendo/styles/kendo.mobile.all.min.css" />
-		
-		<!-- Local Styles -->
-		<link rel="stylesheet" type="text/css" href="styles/index.css" />
-		
-		<!--- Cordova - Loaded on mobile apps only -->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Lunch?</title>
+        <!-- Kendo Styles -->
+        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.common.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.default.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.mobile.common.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.mobile.all.min.css" />
+        
+        <!-- Local Styles -->
+        <link rel="stylesheet" type="text/css" href="styles/index.css" />
+        <link rel="stylesheet" type="text/css" href="styles/views.css" />
+        
+        <!--- Cordova - Loaded on mobile apps only -->
         <script type="text/javascript" src="cordova.js"></script>
-		
-		<!-- jQuery Js -->
-		<script src="kendo/js/jquery-1.9.1.js"></script>
-		
-		<!-- Kendo Js -->
-		<script src="kendo/js/kendo.all.js"></script>
-	    <script src="kendo/js/everlive.all.js"></script>
-		
-		<!-- MillionMunkeys Js -->
-		<script src="MillionMunkeys/KendoMunkey_1_0.js"></script>
-		
-		<!-- Catnip Code -->
+        
+        <!-- jQuery Js -->
+        <script src="kendo/js/jquery-1.9.1.js"></script>
+        
+        <!-- Kendo Js -->
+        <script src="kendo/js/kendo.all.js"></script>
+        <script src="kendo/js/everlive.all.js"></script>
+        
+        <!-- MillionMunkeys Js -->
+        <script src="MillionMunkeys/KendoMunkey_1_0.js"></script>
+        
+        <!-- Catnip Code -->
         <script src="scripts/config.js"></script>
-		
-		<!-- Demo Code -->
+        
+        <!-- Demo Code -->
         <script src="scripts/identity-provider.js"></script>
         <script src="scripts/main.js"></script>
-		
-		<!-- Initialize -->
-		<script type="text/javascript">
-			$(function() {
-				new kendo.mobile.Application(document.body,{
-					layout: "android-layout"
-				});
-				app.onDeviceReady();
-			});
-		</script>
+        
+        <!-- Initialize -->
+        <script type="text/javascript">
+            $(function() {
+                new kendo.mobile.Application(document.body,{
+                    layout: "android-layout"
+                });
+                app.onDeviceReady();
+                
+                app.initializeEverlive();
 
-	</head>
-	
-	<body>
+                (function() {
+                        config.set("preferences", pi.observable());
+                        config.set("preferences.dataSource", pi.data.DataSource.create({
+                            source: "Everlive.DailyPreferences"
+                        })).fetch();
+                        // It's common to type the 's' in source as lowercase, so this is an alias.
+                        config.preferences.datasource = config.preferences.dataSource;
+                })();
+            });
+        </script>
+
+    </head>
+    
+    <body>
         <div id="preferences" data-role="view" data-title="When?">
-			
+            <!-- Daily preferences -->
+            <!-- Times -->
+            <div>
+                <label for="startTime">Earliest I can leave</label>
+                <input id="startTime" name="StartTime" value="12:00" />
+            </div>
+            
+            <div>
+                <label for="endTime">Latest I can be back</label>
+                <input id="endTime" name="EndTime" value="1:00" />                
+            </div>
+            
+            <!-- Options -->
+            
+            <!-- Throwaway table -->
+            <table data-role="grid" data-source="config.preferences.dataSource" data-toolbar="['add']">
+				<thead>
+					<tr>
+						<th>Bringing Back</th>
+						<th>I Brought</th>
+						<th>Sit Down</th>
+						<th>Date</th>
+						<th>Start Time</th>
+						<th>End Time</th>
+						<th>Preferred Time</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><input name="BringBack" type="checkbox" value="Yes" /></td>
+						<td><input name="Brought" type="checkbox" value="Yes" /></td>
+						<td><input name="SitDown" type="checkbox" value="Yes" /></td>
+						<td><input name="Date" type="number" value="" /></td>
+						<td><input name="StartTime" type="number" value="" /></td>
+						<td><input name="EndTime" type="number" value="" /></td>
+						<td><input name="PreferredTime" type="number" value="" /></td>
+					</tr>
+				</tbody>
+			</table>
+            
+            <script type="text/javascript">
+                $(function () {
+                    var $startTime, $endTime, dataSource, preferenceData;
+                    
+                    function startTimeChangeHandler(e) {
+                        var startDate = new Date($startTime.value());
+                        if (startDate) {
+                            startDate.setMinutes(startDate.getMinutes() + 30);
+                            $endTime.min(startDate);
+                            startDate.setMinutes(startDate.getMinutes() + 30);
+                            $endTime.value(startDate);
+                        }
+                    }
+                    
+                    function endTimeChangeHandler(e) {
+                        preferenceData.StartTime = $startTime.value();
+                        preferenceData.EndTime = $endTime.value();
+                        console.log(preferenceData);
+                    }
+                    
+                    dataSource = config.get('preferences.dataSource');
+                    preferenceData = {};
+                    
+                    $startTime = $('#startTime').kendoTimePicker({
+                        change: startTimeChangeHandler
+                    }).data('kendoTimePicker');
+                    
+                    $startTime.min("11:00 AM");
+                    $startTime.max("3:00 PM");
+                    
+                    $endTime = $('#endTime').kendoTimePicker({
+                        change: endTimeChangeHandler
+                    }).data('kendoTimePicker');
+                    
+                    $endTime.min("11:30 AM");
+                    $endTime.max("4:00 PM");
+
+                });
+            </script>
         </div>
-		
-		<div data-id="ios-layout" data-role="layout">
-			<header data-role="header">
-				<nav data-role="navbar">
-					<a data-role="backbutton" data-align="left">Back</a>
-					<div data-role="view-title">Lunch?</div>
-				</nav>
-			</header>
-			<footer data-role="footer">
-		        <div data-role="tabstrip">
-					<a data-icon="home" href="login.html">Login</a>
-					<a data-icon="recents" href="preferences.html">Daily Preferences</a>
-					<a data-icon="cart" href="food.html">Food Preferences</a>
-					<a data-icon="search" href="results.html">Results</a>
-				</div>
-	        </footer>
-		</div>
-		
-		<div data-id="android-layout" data-role="layout">
-			<header data-role="header">
-				<nav data-role="navbar">
-					<a data-role="button" data-rel="drawer" href="#drawer" data-align="left" style="transform:rotate(90deg)">|||</a>
-					<div data-role="view-title">Lunch?</div>
-				</nav>
-			</header>
-		</div>
-		<div data-role="drawer" id="drawer">
-			<ul data-role="listview" data-type="group">
-				<li>Menu
-					<ul>
-						<li><a data-icon="home" href="login.html">Login</a></li>
-						<li><a data-icon="recents" href="preferences.html">Daily Preferences</a></li>
-						<li><a data-icon="cart" href="food.html">Food Preferences</a></li>
-						<li><a data-icon="search" href="results.html">Results</a></li>
-					</ul>
-				</li>
-			</ul>
-		</div>
-		
-	</body>
+        
+        <div data-id="ios-layout" data-role="layout">
+            <header data-role="header">
+                <nav data-role="navbar">
+                    <a data-role="backbutton" data-align="left">Back</a>
+                    <div data-role="view-title">Lunch?</div>
+                </nav>
+            </header>
+            <footer data-role="footer">
+                <div data-role="tabstrip">
+                    <a data-icon="home" href="login.html">Login</a>
+                    <a data-icon="recents" href="preferences.html">Daily Preferences</a>
+                    <a data-icon="cart" href="food.html">Food Preferences</a>
+                    <a data-icon="search" href="results.html">Results</a>
+                </div>
+            </footer>
+        </div>
+        
+        <div data-id="android-layout" data-role="layout">
+            <header data-role="header">
+                <nav data-role="navbar">
+                    <a data-role="button" data-rel="drawer" href="#drawer" data-align="left" style="transform:rotate(90deg)">|||</a>
+                    <div data-role="view-title">Lunch?</div>
+                </nav>
+            </header>
+        </div>
+        <div data-role="drawer" id="drawer">
+            <ul data-role="listview" data-type="group">
+                <li>Menu
+                    <ul>
+                        <li><a data-icon="home" href="login.html">Login</a></li>
+                        <li><a data-icon="recents" href="preferences.html">Daily Preferences</a></li>
+                        <li><a data-icon="cart" href="food.html">Food Preferences</a></li>
+                        <li><a data-icon="search" href="results.html">Results</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        
+    </body>
 </html>

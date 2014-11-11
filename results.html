@@ -1,91 +1,145 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Lunch?</title>
-		<!-- Kendo Styles -->
-		<link rel="stylesheet" type="text/css" href="kendo/styles/kendo.common.min.css" />
-		<link rel="stylesheet" type="text/css" href="kendo/styles/kendo.default.min.css" />
-		<link rel="stylesheet" type="text/css" href="kendo/styles/kendo.mobile.common.min.css" />
-		<link rel="stylesheet" type="text/css" href="kendo/styles/kendo.mobile.all.min.css" />
-		
-		<!-- Local Styles -->
-		<link rel="stylesheet" type="text/css" href="styles/index.css" />
-		
-		<!--- Cordova - Loaded on mobile apps only -->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Lunch?</title>
+        <!-- Kendo Styles -->
+        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.common.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.default.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.mobile.common.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.mobile.all.min.css" />
+
+        <!-- Local Styles -->
+        <link rel="stylesheet" type="text/css" href="styles/index.css" />
+
+        <!--- Cordova - Loaded on mobile apps only -->
         <script type="text/javascript" src="cordova.js"></script>
-		
-		<!-- jQuery Js -->
-		<script src="kendo/js/jquery-1.9.1.js"></script>
-		
-		<!-- Kendo Js -->
-		<script src="kendo/js/kendo.all.js"></script>
-	    <script src="kendo/js/everlive.all.js"></script>
-		
-		<!-- MillionMunkeys Js -->
-		<script src="MillionMunkeys/KendoMunkey_1_0.js"></script>
-		
-		<!-- Catnip Code -->
+
+        <!-- jQuery Js -->
+        <script src="kendo/js/jquery-1.9.1.js"></script>
+
+        <!-- Kendo Js -->
+        <script src="kendo/js/kendo.all.js"></script>
+        <script src="kendo/js/everlive.all.js"></script>
+
+        <!-- MillionMunkeys Js -->
+        <script src="MillionMunkeys/KendoMunkey_1_0.js"></script>
+
+        <!-- Catnip Code -->
         <script src="scripts/config.js"></script>
-		
-		<!-- Demo Code -->
+
+        <!-- Demo Code -->
         <script src="scripts/identity-provider.js"></script>
         <script src="scripts/main.js"></script>
-		
-		<!-- Initialize -->
-		<script type="text/javascript">
-			$(function() {
-				new kendo.mobile.Application(document.body,{
-					layout: "android-layout"
-				});
-				app.onDeviceReady();
-			});
-		</script>
 
-	</head>
-	
-	<body>
+        <!-- Initialize -->
+        <script type="text/javascript">
+            $(function() {
+                app.initializeEverlive();
+                (function() {
+                    config.set("results", pi.observable());
+                })();
+
+                new kendo.mobile.Application(document.body,{
+                    layout: "android-layout"
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <style>
+            body {
+                text-transform: none;
+            }
+            .all-groups {
+                width: 100%;
+                background-color: #dfff00;
+            }
+            .group {
+                background-color: pink;
+                width: 100%;
+                height: 50px;
+                display: inline-block;
+                border-style: solid solid none solid;
+                border-width: 1px;
+            }
+            .group-icon {
+                float: left;
+            }
+            img {
+                max-width: 150px;
+                max-height: 50px;
+            }
+            .genre {
+                float: right;
+            }
+            .time {
+                float: right;
+            }
+            .count {
+                float: right;
+            }
+        </style>
         <div id="results" data-role="view" data-title="Where?">
-			
+            <div class="all-groups">
+                <div class="group" data-group-id="abc">
+                    <span class="group-icon"><img src="img/logo.png"/></span>
+                    <span class="genre">Thai</span>
+                    <span class="time">11:30 - 13:00</span>
+                    <span class="count"><span class="count-num">5</span> people</span>
+                </div>
+                <div class="group" data-group-id="def">
+                    <span class="group-icon"><img src="img/logo.png"/></span>
+                    <span class="genre">Burger Joint</span>
+                    <span class="time">12:00 - 13:00</span>
+                    <span class="count"><span class="count-num">3</span> people</span>
+                </div>
+                <div class="group" data-group-id="hij">
+                    <span class="group-icon"><img src="img/logo.png"/></span>
+                    <span class="genre">Sandwich</span>
+                    <span class="time">13:15 - 15:00</span>
+                    <span class="count"><span class="count-num">7</span> people</span>
+                </div>
+            </div>
         </div>
-		
-		<div data-id="ios-layout" data-role="layout">
-			<header data-role="header">
-				<nav data-role="navbar">
-					<a data-role="backbutton" data-align="left">Back</a>
-					<div data-role="view-title">Lunch?</div>
-				</nav>
-			</header>
-			<footer data-role="footer">
-		        <div data-role="tabstrip">
-					<a data-icon="home" href="login.html">Login</a>
-					<a data-icon="recents" href="preferences.html">Daily Preferences</a>
-					<a data-icon="cart" href="food.html">Food Preferences</a>
-					<a data-icon="search" href="results.html">Results</a>
-				</div>
-	        </footer>
-		</div>
-		
-		<div data-id="android-layout" data-role="layout">
-			<header data-role="header">
-				<nav data-role="navbar">
-					<a data-role="button" data-rel="drawer" href="#drawer" data-align="left" style="transform:rotate(90deg)">|||</a>
-					<div data-role="view-title">Lunch?</div>
-				</nav>
-			</header>
-		</div>
-		<div data-role="drawer" id="drawer">
-			<ul data-role="listview" data-type="group">
-				<li>Menu
-					<ul>
-						<li><a data-icon="home" href="login.html">Login</a></li>
-						<li><a data-icon="recents" href="preferences.html">Daily Preferences</a></li>
-						<li><a data-icon="cart" href="food.html">Food Preferences</a></li>
-						<li><a data-icon="search" href="results.html">Results</a></li>
-					</ul>
-				</li>
-			</ul>
-		</div>
-		
-	</body>
+
+        <div data-id="ios-layout" data-role="layout">
+            <header data-role="header">
+                <nav data-role="navbar">
+                    <a data-role="backbutton" data-align="left">Back</a>
+                    <div data-role="view-title">Lunch?</div>
+                </nav>
+            </header>
+            <footer data-role="footer">
+                <div data-role="tabstrip">
+                    <a data-icon="home" href="login.html">Login</a>
+                    <a data-icon="recents" href="preferences.html">Daily Preferences</a>
+                    <a data-icon="cart" href="food.html">Food Preferences</a>
+                    <a data-icon="search" href="results.html">Results</a>
+                </div>
+            </footer>
+        </div>
+
+        <div data-id="android-layout" data-role="layout">
+            <header data-role="header">
+                <nav data-role="navbar">
+                    <a data-role="button" data-rel="drawer" href="#drawer" data-align="left" style="transform:rotate(90deg)">|||</a>
+                    <div data-role="view-title">Lunch?</div>
+                </nav>
+            </header>
+        </div>
+        <div data-role="drawer" id="drawer">
+            <ul data-role="listview" data-type="group">
+                <li>Menu
+                    <ul>
+                        <li><a data-icon="home" href="login.html">Login</a></li>
+                        <li><a data-icon="recents" href="preferences.html">Daily Preferences</a></li>
+                        <li><a data-icon="cart" href="food.html">Food Preferences</a></li>
+                        <li><a data-icon="search" href="results.html">Results</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </body>
 </html>
