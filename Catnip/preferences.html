@@ -100,8 +100,34 @@
             
             <script type="text/javascript">
                 $(function () {
-                    var $startTime, $endTime, dataSource, preferenceData;
+                    var $startTime, $endTime, dataSource, preferenceData, record, today;
                     
+                    Date.prototype.padNumber = function (num) {
+                        if (num < 10) {
+                            num = '0' + num;
+                        }
+                        return num.toString();
+                    };
+                    
+                    Date.prototype.getShortDate = function () {
+                        var day, month, year;
+                        
+                        day = this.padNumber(this.getDate());
+                        month = this.padNumber(this.getMonth() + 1);
+                        year = this.getFullYear();
+                        
+                        return year + month + day;
+                    };
+
+                    Date.prototype.getShortTime = function () {
+                        var hours, minutes;
+                        
+                        hours = this.padNumber(this.getHours());
+                        minutes = this.padNumber(this.getMinutes());
+                        
+                        return hours + minutes;
+                    };
+
                     function startTimeChangeHandler(e) {
                         var startDate = new Date($startTime.value());
                         if (startDate) {
@@ -113,12 +139,26 @@
                     }
                     
                     function endTimeChangeHandler(e) {
-                        preferenceData.StartTime = $startTime.value();
-                        preferenceData.EndTime = $endTime.value();
-                        console.log(preferenceData);
+                        var startTime, endTime;
+                        
+                        today = new Date();
+                        startTime = new Date($startTime.value());
+                        endTime = new Date($endTime.value());
+                        
+                        record.set('StartTime', startTime.getShortTime());
+                        record.set('EndTime', endTime.getShortTime());
+                        console.log(record);
                     }
                     
-                    dataSource = config.get('preferences.dataSource');
+                    today = new Date();
+                    dataSource = config.preferences.dataSource;
+
+                    if (!dataSource.filter({'Date': parseInt(today.getShortDate())})) {
+                        record = dataSource.add();
+                    } else {
+                        record = dataSource.data()[0];
+                    }
+                    
                     preferenceData = {};
                     
                     $startTime = $('#startTime').kendoTimePicker({
@@ -134,7 +174,6 @@
                     
                     $endTime.min("11:30 AM");
                     $endTime.max("4:00 PM");
-
                 });
             </script>
         </div>
