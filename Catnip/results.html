@@ -48,6 +48,18 @@
                 new kendo.mobile.Application(document.body,{
                     layout: "android-layout"
                 });
+
+                var setDetailData = function (groupId) {
+                    var detailData = theData.groups[groupId];
+                    $('#detail span.genre').text(detailData.restaurant);
+                    $('#detail span.time').text(detailData.time);
+                    var theUl = $('#detail ul.people');
+                    theUl.find('li').remove();
+                    $.each(detailData.group, function (idx, name) {
+                        theUl.append($('<li></li>').text(name));
+                    });
+                };
+
                 var populateDiv = function (theData) {
                     var allGroups = $('.all-groups');
                     $.each(theData.groups, function (key, vals) {
@@ -64,17 +76,27 @@
                         grpDiv.append(iconSpan);
                         grpDiv.append(grp);
 
-                        if (parseInt(key, 10) === theData.me) {
+                        if (key === theData.me.toString()) {
                             grpDiv.addClass('user-selected-group');
                         }
-
+                        grpDiv.on('click', function (evt) {
+                            var grp = $(evt.target).closest('div.group');
+                            var groupId = "";
+                            if (!grp.attr('data-group-id')) {
+                                groupId = grp.parent('div').attr('data-group-id');
+                            } else {
+                                groupId = grp.attr('data-group-id');
+                            }
+                            setDetailData(groupId);
+                            window.location.hash = "#detail";
+                        });
                         allGroups.append(grpDiv);
                     })
                 };
-
+                var theData = {};
                 $.get('/ajax/results')
                     .fail(function () {
-                        var theData = {
+                        theData = {
                             "me": 0,
                             "happiness": 0,
                             "groups": {
@@ -100,20 +122,33 @@
                                 }
                             }
                         };
-                        populateDiv(theData);
+                        populateDiv();
                     })
-                    .done(function (theData) {
+                    .done(function (data) {
+                        theData = data;
                         populateDiv(theData);
                     });
+
+
             });
         </script>
     </head>
+    //a href #detail
     <body>
         <div id="results" data-role="view" data-title="Where?">
             <div class="all-groups">
             </div>
         </div>
-
+        <div id="detail" data-role="view" data-title="Where?">
+            <div class="img">
+                <img src="img/color-table.png"/>
+            </div>
+            <div>
+                <span class="genre"></span>
+                <span class="time"></span>
+                <ul class="people"></ul>
+            </div>
+        </div>
         <div data-id="ios-layout" data-role="layout">
             <header data-role="header">
                 <nav data-role="navbar">
