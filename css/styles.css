@@ -2555,7 +2555,7 @@ This is the global icon set used within the TMNG UI Toolkit.  If you choose not 
     .icon-menu(@type, @top: auto, @left: auto, @color: inherit, @size: 1);
 */
 .section-box-shadow {
-  box-shadow: 0 0 20px #333;
+  box-shadow: 0 0 20px #222;
   border-left: 2px solid #333;
 }
 body {
@@ -2576,8 +2576,12 @@ body {
 #drawer {
   background: #6d6d6d;
 }
+.km-view {
+  box-shadow: 0 0 20px #222;
+  border-left: 2px solid #333;
+}
 #results {
-  box-shadow: 0 0 20px #333;
+  box-shadow: 0 0 20px #222;
   border-left: 2px solid #333;
 }
 #results .km-content {
