@@ -7,3 +7,4 @@ config = pi.observable({
 		scheme : "http"
 	}
 });
+Everlive.init(config.get("everlive"));
