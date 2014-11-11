@@ -39,15 +39,25 @@
 		<!-- Initialize -->
 		<script type="text/javascript">
 			$(function() {
-				app.onDeviceReady();
+
+                app.initializeEverlive();
 				[function() {
-					config.set("preferences", pi.observable());
-					config.set("preferences.dataSource", pi.data.DataSource.create({
-						source: "Everlive.DailyPreferences"
-					})).fetch();
-					// It's common to type the 's' in source as lowercase, so this is an alias.
-					config.preferences.datasource = config.preferences.dataSource;
-				},function() {
+                    var today = new Date();
+                    today.setUTCHours('0');
+                    today.setUTCMinutes('0');
+                    today.setUTCSeconds('0');
+                    today.setUTCMilliseconds('0');
+                    //today.setUTCDate(today.getUTCDate() + 1);
+                    
+                    config.set("preferences", pi.observable());
+                    config.set("preferences.dataSource", pi.data.DataSource.create({
+                        source: "Everlive.DailyPreferences",
+                        serverFiltering: true,
+                        filter: {field: 'Date', operator: 'eq', value: today}
+                    })).fetch();
+                    // It's common to type the 's' in source as lowercase, so this is an alias.
+                    config.preferences.datasource = config.preferences.dataSource;
+                },function() {
 					config.set("food", pi.observable());
 					config.set("food.categories", pi.data.DataSource.create({
 						source: "Everlive.FoodCategories"
@@ -103,6 +113,22 @@
 		</div>
 		<div data-role="drawer" id="drawer">
 			<ul data-role="listview" data-type="group">
+                <li>Daily Prefs
+                    <div id="preferences">
+                        <!-- Daily preferences -->
+                        <!-- Times -->
+                        <div>
+                            <label for="startTime">Earliest I can leave</label>
+                            <input id="startTime" name="StartTime" value="12:00 PM" />
+                        </div>
+                        
+                        <div>
+                            <label for="endTime">Latest I can be back</label>
+                            <input id="endTime" name="EndTime" value="1:00 PM" />
+                        </div>
+                        <script src="scripts/daily-prefs.js"></script>
+                    </div>
+                </li>
 				<li>Menu
 					<ul>
 						<li><a data-icon="home" href="login.html">Login</a></li>
