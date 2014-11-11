@@ -2573,12 +2573,109 @@ body {
   text-transform: none;
   width: 100%;
 }
-#drawer {
-  background: #6d6d6d;
+#drawer .km-scroll-container > span {
+  height: 10%;
+  display: block;
+  padding: 6%;
+  background: #000000;
+  color: #fff;
+}
+#drawer .km-scroll-container ul {
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  -webkit-padding-start: 0;
+}
+#drawer .km-scroll-container label {
+  color: white;
+}
+#drawer .km-scroll-container #preferences {
+  margin: 5%;
+}
+#drawer .km-scroll-container #preferences div {
+  margin-top: 5%;
+}
+#drawer .km-scroll-container #preferences .k-timepicker {
+  width: 100%;
+  margin-top: 3%;
+}
+#drawer .km-scroll-container .genres {
+  margin: 5%;
+}
+#drawer .km-scroll-container .genres th {
+  text-align: left;
+  color: white;
+  font-weight: normal;
+}
+#drawer .km-scroll-container .genres .k-combobox {
+  width: 100%;
+  margin-top: 3%;
+}
+#drawer .km-scroll-container button {
+  width: 40%;
+  position: relative;
+  left: 30%;
+  border: 1px solid #81b4fc;
+  background: none;
+  color: #81b4fc;
+  border-radius: 5px;
+}
+.km-ios7 .km-header .km-navbar {
+  height: 10%;
+  border: none;
+}
+.km-ios7 .km-header .km-navbar .km-view-title {
+  background: #000000;
+  opacity: .5
+                color: #fff !important;
+}
+.km-ios7 .km-view-title {
+  color: #ffffff;
+}
+.km-ios7 .app {
+  display: block;
+  height: 300px;
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  width: 60%;
+}
+.km-ios7 .app button {
+  background: none !important;
+  border: 1px solid #81b4fc;
+  color: #81b4fc;
+  margin: 3% 0;
+  padding: 3% 0;
+  border-radius: 5px;
+}
+.km-ios7 .menu-button {
+  position: absolute;
+  left: -9999px;
+}
+.km-ios7 .menu-button:before {
+  font-family: IconFont;
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  width: 1em;
+  margin-left: 0.3em;
+  content: "\e0bc";
+  font-size: 1em;
+  line-height: 1em;
+  color: inherit;
+  float: left;
+  position: static;
+  top: auto;
 }
 .km-view {
   box-shadow: 0 0 20px #222;
   border-left: 2px solid #333;
+}
+.km-ios7 .km-listgroup .km-group-title,
+.km-ios7 .km-listgroupinset .km-group-title {
+  border-top-width: none;
+  border-top-style: none;
 }
 #results {
   box-shadow: 0 0 20px #222;
@@ -2721,59 +2818,6 @@ body {
 .km-widget {
   background: #3a3a3a !important;
   color: #ffffff;
-}
-.km-ios7 .km-header .km-navbar {
-  border: none;
-}
-.km-ios7 .km-header .km-navbar .km-view-title {
-  background: #000000;
-  opacity: .5
-                color: #fff !important;
-}
-.km-ios7 .km-view-title {
-  color: #ffffff;
-}
-.km-ios7 .km-footer {
-  background: #000000;
-  opacity: .7;
-  height: 70px;
-}
-.km-ios7 .app {
-  display: block;
-  height: 300px;
-  position: absolute;
-  top: 50%;
-  left: 20%;
-  width: 60%;
-}
-.km-ios7 .app button {
-  background: none !important;
-  border: 1px solid #81b4fc;
-  color: #81b4fc;
-  margin: 3% 0;
-  padding: 3% 0;
-  border-radius: 5px;
-}
-.km-ios7 .menu-button {
-  position: absolute;
-  left: -9999px;
-}
-.km-ios7 .menu-button:before {
-  font-family: IconFont;
-  font-weight: normal;
-  font-style: normal;
-  display: inline-block;
-  vertical-align: middle;
-  text-align: center;
-  width: 1em;
-  margin-left: 0.3em;
-  content: "\e0bc";
-  font-size: 1em;
-  line-height: 1em;
-  color: inherit;
-  float: left;
-  position: static;
-  top: auto;
 }
 @media screen and (max-width: 320px) {
   #results_detail .details .img img {
