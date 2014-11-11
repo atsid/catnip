@@ -103,37 +103,34 @@
 			</header>
 		</div>
 		<div data-role="drawer" id="drawer">
-			<ul data-role="listview" data-type="group">
-                <li>Daily Prefs
-                    <div id="preferences">
-                        <!-- Daily preferences -->
-                        <!-- Times -->
-                        <div>
-                            <label for="startTime">Earliest I can leave</label>
-                            <input id="startTime" name="StartTime" value="12:00 PM" />
-                        </div>
-                        
-                        <div>
-                            <label for="endTime">Latest I can be back</label>
-                            <input id="endTime" name="EndTime" value="1:00 PM" />
-                        </div>
+            <span>Daily Prefs</span>
+			<ul data-type="group">
+                <div id="preferences">
+                    <!-- Daily preferences -->
+                    <!-- Times -->
+                    <div>
+                        <label for="startTime">Earliest I can leave</label>
+                        <input id="startTime" name="StartTime" value="12:00 PM" />
                     </div>
-                </li>
-				<li>Food Preferences
-					<table class="genres" data-toolbar="['add']">
-						<thead>
-							<tr>
-								<th>Name</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td><input class="genre" placeholder="Enter food genre"></td>
-							</tr>
-						</tbody>
-					</table>
-					<button class="set-genres">Set</button>
-				</li>
+                    
+                    <div>
+                        <label for="endTime">Latest I can be back</label>
+                        <input id="endTime" name="EndTime" value="1:00 PM" />
+                    </div>
+                </div>
+				<table class="genres" data-toolbar="['add']">
+					<thead>
+						<tr>
+							<th>Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input class="genre" placeholder="Enter Genre Choice"></td>
+						</tr>
+					</tbody>
+				</table>
+				<button class="set-genres">Set</button>
 				<!--
 				<li>Menu
 					<ul>
