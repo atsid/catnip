@@ -2554,6 +2554,10 @@ This is the global icon set used within the TMNG UI Toolkit.  If you choose not 
 -----------------
     .icon-menu(@type, @top: auto, @left: auto, @color: inherit, @size: 1);
 */
+.section-box-shadow {
+  box-shadow: 0 0 20px #333;
+  border-left: 2px solid #333;
+}
 body {
   -webkit-touch-callout: none;
   /* prevent callout to copy image, etc when tap to hold */
@@ -2569,7 +2573,16 @@ body {
   text-transform: none;
   width: 100%;
 }
+#drawer {
+  background: #6d6d6d;
+}
+#results {
+  box-shadow: 0 0 20px #333;
+  border-left: 2px solid #333;
+}
 #results .km-content {
+  display: block;
+  width: 100%;
   max-width: 500px;
   margin: 0 auto;
 }
