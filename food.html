@@ -37,12 +37,27 @@
 			$(function() {
 				app.initializeEverlive();
 				(function() {
+					var today = new Date();
+					today = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
 					config.set("food", pi.observable());
 					config.set("food.categories", pi.data.DataSource.create({
 						source: "Everlive.FoodCategories"
 					})).fetch();
 					config.set("food.preferences", pi.data.DataSource.create({
-						source: "Everlive.DailyFoodPreferences"
+						// source: "Everlive.DailyFoodPreferences",
+	type: "everlive",
+    transport: {
+        typeName: "DailyFoodPreferences",
+        create: {
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("X-Everlive-Debug", "true")
+            }
+        }
+    },
+						serverFiltering: true,
+						filter: [
+							{ field: "Date", operator: "eq", value: today }
+						]
 					})).fetch();
 				})();
 				
@@ -68,17 +83,19 @@
 					</tr>
 				</tbody>
 			</table>
-			<table data-role="grid" data-source="config.food.preferences" data-toolbar="['add']">
+			<table data-role="grid" data-source="config.food.preferences" data-toolbar="['add','save']">
 				<thead>
 					<tr>
 						<th>Date</th>
 						<th>Food</th>
+						<th>User</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td><input name="Date" type="number" value="" /></td>
+						<td><input name="Date" type="text" value="" /></td>
 						<td><select name="FoodCategory" data-source="config.food.categories"></select></td>
+						<td><input name="User" type="text" value="" /></td>
 					</tr>
 				</tbody>
 			</table>
