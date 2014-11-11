@@ -6,7 +6,7 @@ $(function() {
 	
 	var dataUriPrefix = 'http://api.everlive.com/v1/kD5Tly50Vf6nm8kn/';
 	var priorityToCategoryId = {};
-	var userId = '1bac2d70-69a0-11e4-8481-bd60c9634975';
+	var userId = config.get("user.id","");
 	
 	
 	var genresCount = 3;

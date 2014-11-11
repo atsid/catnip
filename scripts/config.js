@@ -8,3 +8,7 @@ config = pi.observable({
 	}
 });
 Everlive.init(config.get("everlive"));
+
+config.set("user", {
+	"id" : "1bac2d70-69a0-11e4-8481-bd60c9634975"
+});
