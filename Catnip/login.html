@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="initial-scale=1">
 		<title>Lunch?</title>
 		<!-- Kendo Styles -->
 		<link rel="stylesheet" type="text/css" href="kendo/styles/kendo.common.min.css" />
@@ -45,8 +46,13 @@
 	</head>
 	
 	<body>
-        <div id="login" data-role="view" data-title="Login">
-			
+        <div id="social-login" data-role="view">
+			<div class="app">
+				<button id="loginFb">Login with Facebook</button>
+				<button id="loginGoogle">Login with Google</button>
+				<button id="loginLiveId">Login with LiveID</button>
+				<button id="loginADFS">Login with ADFS</button>
+			</div>
         </div>
 		
 		<div data-id="ios-layout" data-role="layout">

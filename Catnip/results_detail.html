@@ -48,69 +48,38 @@
                 new kendo.mobile.Application(document.body,{
                     layout: "android-layout"
                 });
-                var populateDiv = function (theData) {
-                    var allGroups = $('.all-groups');
-                    $.each(theData.groups, function (key, vals) {
-                        var grpDiv = $('<div></div>').addClass('group').attr('data-group-id', key);
-                        var grp = $('<div></div>').addClass('details');
-                        grp.append($('<span></span>').addClass('genre').text(vals.restaurant));
-                        grp.append($('<span></span>').addClass('time').text(vals.time));
-                        grp.append($('<span><span class="count-num"></span> people</span>').addClass('count'));
-                        grp.find('.count-num').text(vals.group.length);
-
-                        var iconSpan = $('<span></span>').addClass('group-icon');
-                        iconSpan.append($('<img />').attr('src', 'img/color-table.png'));
-
-                        grpDiv.append(iconSpan);
-                        grpDiv.append(grp);
-
-                        if (parseInt(key, 10) === theData.me) {
-                            grpDiv.addClass('user-selected-group');
-                        }
-
-                        allGroups.append(grpDiv);
-                    })
-                };
-
-                $.get('/ajax/results')
-                    .fail(function () {
-                        var theData = {
-                            "me": 0,
-                            "happiness": 0,
-                            "groups": {
-                                "0": {
-                                    "restaurant": "Pasara",
-                                    "time": "10:30",
-                                    "group": ["Craig"]
-                                },
-                                "1": {
-                                    "restaurant": "Pasara",
-                                    "time": "13:00",
-                                    "group": ["David", "Jabari", "Gary"]
-                                },
-                                "2": {
-                                    "restaurant": "Chinese",
-                                    "time": "13:00",
-                                    "group": ["Kurt", "Ken", "Cary", "Jeff"]
-                                },
-                                "3": {
-                                    "restaurant": "Deliahs",
-                                    "time": "14:30",
-                                    "group": ["Josiah", "Tonio", "Kris", "Yoshi"]
-                                }
-                            }
-                        };
-                        populateDiv(theData);
-                    })
-                    .done(function (theData) {
-                        populateDiv(theData);
-                    });
+                var theData = {
+                            "restaurant": "Deliahs",
+                            "time": "14:30",
+                            "group": ["Josiah", "Tonio", "Kris", "Yoshi"]
+                    };
+                $('span.genre').text(theData.restaurant);
+                $('span.time').text(theData.time);
+                var theUl = $('ul.people');
+                $.each(theData.group, function (idx, name) {
+                    theUl.append($('<li></li>').text(name));
+                });
             });
         </script>
     </head>
     <body>
-        <div id="results" data-role="view" data-title="Where?">
-            <div class="all-groups">
+        <div id="results_detail" data-role="view" data-title="Where?">
+            <div class="img">
+                <img src="img/color-table.png"/>
+            </div>
+            <div class="details">
+                <span class="genre">Thai</span>
+                <span class="time">11:00am - 12:30pm</span>
+                <div class="scroll-list" data-role="scroller">
+                    <ul class="people" data-role="listview">
+                        <li>Joe</li>
+                        <li>John</li>
+                        <li>Betty</li>
+                        <li>Carl</li>
+                        <li>Ulysses</li>
+                        <li>Veronica</li>
+                    </ul>
+                </div>
             </div>
         </div>
 

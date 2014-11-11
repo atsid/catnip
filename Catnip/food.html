@@ -37,28 +37,36 @@
 			$(function() {
 				app.initializeEverlive();
 				
-				// config.set("food", pi.observable());
-				// config.set("food.categories", pi.data.DataSource.create({
-				// 	source: "Everlive.FoodCategories"
-				// })).fetch();
-				// config.set("food.preferences", pi.data.DataSource.create({
-				// 	source: "Everlive.DailyFoodPreferences",
-				// 	change: function(e) {
-				// 		var total = config.food.preferences.data().length;
-				// 		for (var i=total; i<3; i++) {
-				// 			config.food.preferences.add();
-				// 		}
-				// 		for (var i=total-1; i>2; i--) {
-				// 			config.food.preferences.remove(config.food.preferences.at(i));
-				// 		}
-				// 	}
-				// })).fetch();
-
 				var dataUriPrefix = 'http://api.everlive.com/v1/kD5Tly50Vf6nm8kn/';
 
 				var priorityToCategoryId = {};
 
 				var userId = '1bac2d70-69a0-11e4-8481-bd60c9634975';
+
+				// (function() {
+				// 	var today = new Date();
+				// 	today = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
+				// 	config.set("food", pi.observable());
+				// 	config.set("food.categories", pi.data.DataSource.create({
+				// 		source: "Everlive.FoodCategories"
+				// 	})).fetch();
+				// 	config.set("food.preferences", pi.data.DataSource.create({
+				// 		// source: "Everlive.DailyFoodPreferences",
+				// 		type: "everlive",
+				// 	    transport: {
+				// 	        typeName: "DailyFoodPreferences",
+				// 	        create: {
+				// 	            beforeSend: function (xhr) {
+				// 	                xhr.setRequestHeader("X-Everlive-Debug", "true")
+				// 	            }
+				// 	        }
+				// 	    },
+				// 		serverFiltering: true,
+				// 		filter: [
+				// 			{ field: "Date", operator: "eq", value: today }
+				// 		]
+				// 	})).fetch();
+				// })();
 
 				(function() {
 					var genresCount = 3;
@@ -92,7 +100,6 @@
 							}
 						});
 					});
-					// TODO typing in entries to one of the boxes causes the others to show Id
 				})();
 
 				$('.set-genres').on('click', function() {
@@ -101,7 +108,7 @@
 					var date = new Date();
 					
 					function getExisting() {
-						var dateStr = date.getYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+						var dateStr = [date.getYear(), (date.getMonth() + 1), date.getDate()].join('-');
 						var filter = JSON.stringify({
 							Date: dateStr
 						});
@@ -157,7 +164,7 @@
 	
 	<body>
         <div id="food" data-role="view" data-title="What?">
-			<!-- <table data-role="grid" data-source="config.food.categories" data-toolbar="['add']">
+			<table data-role="grid" data-source="config.food.categories" data-toolbar="['add']">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -168,21 +175,23 @@
 						<td><input name="Name" type="text" value="" /></td>
 					</tr>
 				</tbody>
-			</table> -->
-			<!-- <table data-role="grid" data-source="config.food.preferences" data-toolbar="['add']">
+			</table>
+			<table data-role="grid" data-source="config.food.preferences" data-toolbar="['add','save']">
 				<thead>
 					<tr>
 						<th>Date</th>
 						<th>Food</th>
+						<th>User</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td><input name="Date" type="number" value="" /></td>
+						<td><input name="Date" type="text" value="" /></td>
 						<td><select name="FoodCategory" data-source="config.food.categories"></select></td>
+						<td><input name="User" type="text" value="" /></td>
 					</tr>
 				</tbody>
-			</table> -->
+			</table>
 
 			<table class="genres" data-toolbar="['add']">
 				<thead>
