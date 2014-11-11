@@ -1,9 +1,9 @@
 // Enter your Backend Services project APIKey
-var everliveApiKey = '';
+var everliveApiKey = config.everlive.apiKey;
 
 // Change this to 'http' if you receive a "Your current subscription does not support calls over HTTPS" error fron the BS server
 // ADFS authentication will work only with 'https' URI scheme
-var everliveScheme = 'https'
+var everliveScheme = config.everlive.scheme;
 
 ///This is the info of Facebook project
 var facebookClientId = '',
@@ -44,7 +44,8 @@ var app = {
 		app.initializeGoogleAuthentication(); 
 		app.initializeLiveIdAuthentication();
         app.initializeADFSAuthentication();
-		navigator.splashscreen.hide();
+		if (navigator.splashscreen)
+			navigator.splashscreen.hide();
 	},
 	initializeEverlive:function() {
 		Everlive.init({
