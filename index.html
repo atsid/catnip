@@ -26,48 +26,21 @@
 		<!-- MillionMunkeys Js -->
 		<script src="MillionMunkeys/KendoMunkey_1_0.js"></script>
 		
-		<!-- Catnip Code -->
-        <script src="scripts/config.js"></script>
-		
         <!-- Less.js -->
         <script src="scripts/less-1.7.5.min.js" type="text/javascript"></script>
         
-		<!-- Demo Code -->
+		<!-- Catnip Code -->
+        <script src="scripts/config.js"></script>
+		<script type="text/javascript" src="preferences.js"></script>
+		<script type="text/javascript" src="food.js"></script>
+	
+		<!-- Demo Code
         <script src="scripts/identity-provider.js"></script>
-        <script src="scripts/main.js"></script>
+        <script src="scripts/main.js"></script> -->
 		
 		<!-- Initialize -->
 		<script type="text/javascript">
 			$(function() {
-
-                app.initializeEverlive();
-				[function() {
-                    var today = new Date();
-                    today.setUTCHours('0');
-                    today.setUTCMinutes('0');
-                    today.setUTCSeconds('0');
-                    today.setUTCMilliseconds('0');
-                    //today.setUTCDate(today.getUTCDate() + 1);
-                    
-                    config.set("preferences", pi.observable());
-                    config.set("preferences.dataSource", pi.data.DataSource.create({
-                        source: "Everlive.DailyPreferences",
-                        serverFiltering: true,
-                        filter: {field: 'Date', operator: 'eq', value: today}
-                    })).fetch();
-                    // It's common to type the 's' in source as lowercase, so this is an alias.
-                    config.preferences.datasource = config.preferences.dataSource;
-                },function() {
-					config.set("food", pi.observable());
-					config.set("food.categories", pi.data.DataSource.create({
-						source: "Everlive.FoodCategories"
-					})).fetch();
-					config.set("food.preferences", pi.data.DataSource.create({
-						source: "Everlive.DailyFoodPreferences"
-					})).fetch();
-					// It's common to type the 's' in source as lowercase, so this is an alias.
-					config.set("food.datasource", config.get("food.dataSource"));
-				}].forEach(function(init) {init()});
 				new kendo.mobile.Application(document.body,{
 					layout: "android-layout"
 				});
@@ -129,6 +102,7 @@
                         <script src="scripts/daily-prefs.js"></script>
                     </div>
                 </li>
+				<!--
 				<li>Menu
 					<ul>
 						<li><a data-icon="home" href="login.html">Login</a></li>
@@ -137,6 +111,7 @@
 						<li><a data-icon="search" href="results.html">Results</a></li>
 					</ul>
 				</li>
+				-->
 			</ul>
 		</div>
 		
