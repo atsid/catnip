@@ -35,18 +35,50 @@
 		<!-- Initialize -->
 		<script type="text/javascript">
 			$(function() {
+				app.initializeEverlive();
+				(function() {
+						config.set("preferences", pi.observable());
+						config.set("preferences.dataSource", pi.data.DataSource.create({
+							source: "Everlive.DailyPreferences"
+						})).fetch();
+						// It's common to type the 's' in source as lowercase, so this is an alias.
+						config.preferences.datasource = config.preferences.dataSource;
+				})();
+				
 				new kendo.mobile.Application(document.body,{
 					layout: "android-layout"
 				});
-				app.onDeviceReady();
 			});
 		</script>
-
+		
 	</head>
 	
 	<body>
         <div id="preferences" data-role="view" data-title="When?">
-			
+			<table data-role="grid" data-source="config.preferences.dataSource" data-toolbar="['add']">
+				<thead>
+					<tr>
+						<th>Bringing Back</th>
+						<th>I Brought</th>
+						<th>Sit Down</th>
+						<th>Date</th>
+						<th>Start Time</th>
+						<th>End Time</th>
+						<th>Preferred Time</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><input name="BringBack" type="checkbox" value="Yes" /></td>
+						<td><input name="Brought" type="checkbox" value="Yes" /></td>
+						<td><input name="SitDown" type="checkbox" value="Yes" /></td>
+						<td><input name="Date" type="number" value="" /></td>
+						<td><input name="StartTime" type="number" value="" /></td>
+						<td><input name="EndTime" type="number" value="" /></td>
+						<td><input name="PreferredTime" type="number" value="" /></td>
+					</tr>
+				</tbody>
+			</table>
         </div>
 		
 		<div data-id="ios-layout" data-role="layout">
