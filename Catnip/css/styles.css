@@ -2636,19 +2636,63 @@ body {
   display: block;
   font-size: 20px;
   margin: 1%;
+  list-style: none;
 }
 #results .details .time {
   color: #81b4fc;
   display: block;
   font-size: 14px;
   margin: 1%;
+  list-style: none;
 }
 #results .details .count {
   color: #81b4fc;
   display: block;
   font-size: 12px;
   margin: 1%;
+  list-style: none;
   font-style: italic;
+}
+#results_detail .img {
+  text-align: center;
+  position: relative;
+  margin-top: 10%;
+}
+#results_detail .details {
+  color: #81b4fc;
+  display: block;
+  font-size: 12px;
+  margin: 1%;
+  list-style: none;
+  text-align: center;
+}
+#results_detail .details .genre {
+  display: block;
+  font-size: 40px;
+  margin-top: 10%;
+}
+#results_detail .details .time {
+  display: block;
+  font-size: 20px;
+  margin-top: 5%;
+}
+#results_detail .scroll-list {
+  border: 1px solid #81b4fc;
+  border-radius: 10px;
+  display: block;
+  height: 15%;
+  width: 70%;
+  max-height: 150px;
+  max-width: 400px;
+  margin: 10% auto 0 auto;
+}
+#results_detail .scroll-list li {
+  border-top: 1px solid #81b4fc;
+  color: #81b4fc;
+  padding: 3% 0;
+}
+#results_detail .scroll-list li:last-child {
+  border-bottom: 1px solid #81b4fc;
 }
 .km-widget {
   background: #3a3a3a !important;
