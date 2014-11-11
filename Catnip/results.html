@@ -85,18 +85,25 @@
                 </nav>
             </header>
         </div>
-        <div data-role="drawer" id="drawer">
-            <ul data-role="listview" data-type="group">
-                <li>Menu
-                    <ul>
-                        <li><a data-icon="home" href="login.html">Login</a></li>
-                        <li><a data-icon="recents" href="preferences.html">Daily Preferences</a></li>
-                        <li><a data-icon="cart" href="food.html">Food Preferences</a></li>
-                        <li><a data-icon="search" href="results.html">Results</a></li>
-                    </ul>
+		<div data-role="drawer" id="drawer">
+			<ul data-role="listview" data-type="group">
+                <li>Daily Prefs
+                    <div id="preferences">
+                        <!-- Daily preferences -->
+                        <!-- Times -->
+                        <div>
+                            <label for="startTime">Earliest I can leave</label>
+                            <input id="startTime" name="StartTime" value="12:00 PM" />
+                        </div>
+                        
+                        <div>
+                            <label for="endTime">Latest I can be back</label>
+                            <input id="endTime" name="EndTime" value="1:00 PM" />
+                        </div>
+                        <script src="scripts/daily-prefs.js"></script>
+                    </div>
                 </li>
-            </ul>
-        </div>
-
+			</ul>
+		</div>
     </body>
 </html>
