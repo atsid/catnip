@@ -60,11 +60,15 @@
         <div id="preferences" data-role="view" data-title="When?">
             <!-- Daily preferences -->
             <!-- Times -->
-            <label for="startTime">Earliest I can leave</label>
-            <input id="startTime" name="StartTime" value="12:00" />
+            <div>
+                <label for="startTime">Earliest I can leave</label>
+                <input id="startTime" name="StartTime" value="12:00" />
+            </div>
             
-            <label for="endTime">Latest I can be back</label>
-            <input id="endTime" name="EndTime" value="1:00" />
+            <div>
+                <label for="endTime">Latest I can be back</label>
+                <input id="endTime" name="EndTime" value="1:00" />                
+            </div>
             
             <!-- Options -->
             
@@ -109,7 +113,6 @@
                     }
                     
                     function endTimeChangeHandler(e) {
-                        // Nothing yet
                         preferenceData.StartTime = $startTime.value();
                         preferenceData.EndTime = $endTime.value();
                         console.log(preferenceData);
