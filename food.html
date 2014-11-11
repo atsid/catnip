@@ -35,10 +35,22 @@
 		<!-- Initialize -->
 		<script type="text/javascript">
 			$(function() {
+				app.initializeEverlive();
+				(function() {
+					config.set("food", pi.observable());
+					config.set("food.categories", pi.data.DataSource.create({
+						source: "Everlive.FoodCategories"
+					})).fetch();
+					config.set("food.preferences", pi.data.DataSource.create({
+						source: "Everlive.DailyFoodPreferences"
+					})).fetch();
+					// It's common to type the 's' in source as lowercase, so this is an alias.
+					config.set("food.datasource", config.get("food.dataSource"));
+				})();
+				
 				new kendo.mobile.Application(document.body,{
 					layout: "android-layout"
 				});
-				app.onDeviceReady();
 			});
 		</script>
 
@@ -46,7 +58,32 @@
 	
 	<body>
         <div id="food" data-role="view" data-title="What?">
-			
+			<table data-role="grid" data-source="config.food.categories" data-toolbar="['add']">
+				<thead>
+					<tr>
+						<th>Name</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><input name="Name" type="text" value="" /></td>
+					</tr>
+				</tbody>
+			</table>
+			<table data-role="grid" data-source="config.food.preferences" data-toolbar="['add']">
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Food</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><input name="Date" type="number" value="" /></td>
+						<td><select name="FoodCategory" data-source="config.food.categories"></select></td>
+					</tr>
+				</tbody>
+			</table>
         </div>
 		
 		<div data-id="ios-layout" data-role="layout">
