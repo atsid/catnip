@@ -58,7 +58,7 @@ $(function() {
 						"group": ["Craig"]
 					},
 					"1": {
-						"restaurant": "Pasara",
+						"restaurant": "Sweet Fire Donna's",
 						"time": "13:00",
 						"group": ["David", "Jabari", "Gary"]
 					},

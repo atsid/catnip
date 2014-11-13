@@ -28,8 +28,7 @@ $(function() {
 			dataTextField: "Name",
 			dataValueField: "Id",
 			dataSource: pi.data.DataSource.create({ // need one data source per combobox
-				source: "Everlive.FoodCategories",
-				
+				source: "Everlive.FoodCategories"
 			}),
 			filter: "contains",
 			suggest: true,
@@ -47,7 +46,8 @@ $(function() {
 		function getExisting() {
 			var dateStr = [date.getYear(), (date.getMonth() + 1), date.getDate()].join('-');
 			var filter = JSON.stringify({
-				Date: dateStr
+				"Date" : dateStr,
+				"User" : config.get("user.id","")
 			});
 			$.get(uri + '?filter=' + filter)
 				// .done(deleteExisting); // TODO put back
