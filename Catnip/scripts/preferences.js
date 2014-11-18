@@ -68,7 +68,7 @@ $(function() {
         startTime = new Date($startTime.value());
         endTime = new Date($endTime.value());
         
-        record = preferences.options.selected;
+        record = preferences.options.get("selected");
 
         record.set('StartTime', startTime.getShortTime());
         record.set('EndTime', endTime.getShortTime());

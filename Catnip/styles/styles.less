@@ -41,6 +41,18 @@ body {
     text-transform:none;
     width:100%;
 }
+/* iOS7 allows you to color the phone's status bar, so you have to leave room for the icons. */
+.km-ios7 {
+	> * {
+		margin-top: 20px;
+		margin-bottom: -20px;
+	}
+}
+.km-android {
+	input {
+		color: inherit;
+	}
+}
 #drawer{
     .km-scroll-container{
         > span{
@@ -91,42 +103,49 @@ body {
         }
     }
 }
-.km-ios7{
-    .km-header{
-        .km-navbar{
-            height: 10%;
-            border:none;
-            .km-view-title{
-                background: darken(@base-background, 30%);
-                opacity: .5
-                color: #fff !important;
-            }
-        }
-    }
-    .km-view-title{
-        color: @header-font-color;
-    }
-    .app{
-        display:block;
-        height: 300px;
-        position: absolute;
-        top: 50%;
-        left: 20%;
-        width:60%;
-        button{
-            background: none !important;
-            border: @list-border;
-            color: @accent-color-1;
-            margin: 3% 0;
-            padding: 3% 0;
-            border-radius: @base-border-radius;
-        }
-    }
-    .menu-button{
-        .throw-off-screen;
-        .icon-before(@icon-menu-2);
-    }
+
+.km-header{
+	.km-navbar{
+		height: 10%;
+		border:none;
+		.km-view-title{
+			background: darken(@base-background, 30%);
+			opacity: .5
+			color: #fff !important;
+		}
+	}
 }
+.km-view-title{
+	color: @header-font-color;
+}
+.app{
+	display:block;
+	height: 300px;
+	position: absolute;
+	top: 50%;
+	left: 20%;
+	width:60%;
+	button{
+		background: none !important;
+		border: @list-border;
+		color: @accent-color-1;
+		margin: 3% 0;
+		padding: 3% 0;
+		border-radius: @base-border-radius;
+	}
+}
+.menu-button{
+	font-size: 1.5em;
+	.km-text {
+		display: none;
+	}
+	.icon-before(@icon-menu-2);
+	&:before {
+		margin-right: 0.3em;
+		float: none;
+	}
+}
+
 .km-view{
     .section-box-shadow;
 }
