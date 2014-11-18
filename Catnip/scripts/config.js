@@ -1,14 +1,44 @@
-config = pi.observable({
-	scheme : "http",
-	server : "http://localhost:8080",
-	version : "0.1.0",
-	everlive : {
-		apiKey : "kD5Tly50Vf6nm8kn",
-		scheme : "http"
+// WARNING: There should only ever be one record in the datasource!
+config = pi.data.DataSource.create({
+	id : "Catnip.Config",
+	// storage : "localStorage",
+	default : {
+		id : "catnip",
+		server : {
+			results : "https://catnip-ats.herokuapp.com/results"
+		},
+		version : "0.2.1",
+		everlive : {
+			apiKey : "kD5Tly50Vf6nm8kn",
+			scheme : "http"
+		},
+		google : {
+			scheme : "http",
+			domain : "none"
+		}
 	}
 });
-Everlive.init(config.get("everlive"));
+// This call will fire the JIT handler for selected.
+config = config.options.get("selected");
 
-config.set("user", {
-	"id" : "1bac2d70-69a0-11e4-8481-bd60c9634975"
-});
+// Init Everlive connection
+Everlive.init(config.get("everlive").toJSON());
+
+if (typeof(window.console) != "undefined") { // For IE 8 and below!
+	window.console.log("server: "+JSON.stringify(document.location));
+	window.console.log("config: "+JSON.stringify(config.toJSON()));
+}
+
+// Mobile App
+if (/file:\/\//.test(document.location.href) || (document.location.origin && /file:\/\//.test(document.location.origin)) ) {
+	// window.config.set("server", "https://catnip-ats.herokuapp.com/results");
+}
+// Icenium Simulator
+else if (/app\.icenium\.com/.test(document.location.host)) {
+	window.config.set("google.domain", "icenium.com");
+}
+// Local Server
+else if (/localhost/.test(document.location.host)) {
+	window.config.set("scheme", "http");
+	window.config.set("google.domain", "none");
+}

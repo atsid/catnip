@@ -49,7 +49,7 @@ $(function() {
     // URL for the website is: https://catnip-ats.herokuapp.com/
     // will either need to move the all the http hosting to the
     // same server, fix the origin rules or proxy.
-	$.get('https://catnip-ats.herokuapp.com/results')
+	$.get(config.get("server.results"))
 		.fail(function () {
 			theData = {
 				"me": 0,
