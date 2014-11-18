@@ -1,5 +1,5 @@
 try {
-	account = pi.data.DataSource.create({
+	window.account = pi.data.DataSource.create({
 		id : "Catnip.Account",
 		source : "Everlive.Users",
 		storage : "localStorage",
@@ -19,10 +19,7 @@ try {
 		}
 		*/
 	});
-	account.options.bind("set", function(e) {
-		if (e.field === "selected")
-			window.myAccount = e.value;
-	});
+	window.myAccount = account.options.get("selected");
 } catch(e) {
 	(pi||console).log(e);
 }
