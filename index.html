@@ -24,13 +24,26 @@
 	    <script src="kendo/js/everlive.all.js"></script>
 		
 		<!-- MillionMunkeys Js -->
-		<script src="MillionMunkeys/KendoMunkey_1_0.js"></script>
+		<!--
+		<script src="MillionMunkeys/KendoMunkey_1_1.min.js"></script>
+		-->
+		<script src="MillionMunkeys/KendoMunkey_1_1/Observable.js"></script>
+		<script src="MillionMunkeys/KendoMunkey_1_1/Log.js"></script>
+		<script src="MillionMunkeys/KendoMunkey_1_1/Widget.js"></script>
+		<script src="MillionMunkeys/KendoMunkey_1_1/Button.js"></script>
+		<script src="MillionMunkeys/KendoMunkey_1_1/ModalView.js"></script>
+		<script src="MillionMunkeys/KendoMunkey_1_1/DataSource.js"></script>
+    	<script src="MillionMunkeys/KendoMunkey_1_1/Validator.js"></script>
+    	<script src="MillionMunkeys/KendoMunkey_1_1/ColorPicker.js"></script>
+    	<script src="MillionMunkeys/KendoMunkey_1_1/ListView.js"></script>
+    	<script src="MillionMunkeys/KendoMunkey_1_1/Grid.js"></script>
 		
         <!-- Less.js -->
         <script src="scripts/less-1.7.5.min.js" type="text/javascript"></script>
         
 		<!-- Catnip Code -->
-        <script src="scripts/config.js"></script>
+		<script src="scripts/config.js"></script>
+        <script src="scripts/account.js"></script>
 		<script src="scripts/preferences.js"></script>
 		<script src="scripts/food.js"></script>
 		<script src="scripts/results.js"></script>
@@ -42,11 +55,14 @@
 		<!-- Initialize -->
 		<script type="text/javascript">
 			$(function() {
-				new kendo.mobile.Application(document.body,{
+				window.app = new kendo.mobile.Application(document.body,{
 					layout: "android-layout"
 				});
 			});
 		</script>
+		
+		<!-- Google Analytics -->
+		<!-- script src="scripts/Google.js"></script -->
 
 	</head>
 	
@@ -56,19 +72,27 @@
             </div>
         </div>
         <div id="results_detail" data-role="view" data-title="Where?">
-       		<a data-role="backbutton" data-align="left">Back</a>
-			<div class="img">
+            <div class="img">
                 <img src="img/color-table.png"/>
             </div>
             <div class="details">
-                <span class="genre">
-				</span>
+                <span class="genre"></span>
                 <span class="time"></span>
                 <div class="scroll-list" data-role="scroller">
                     <ul class="people" data-role="listview"></ul>
                 </div>
             </div>
         </div>
+		
+		<div id="login" data-role="view" title="Login">
+			<form id="Login" data-source="account" data-storage="local" onsubmit="return false;">
+				<ul data-role="listview" data-style="inset">
+					<li><label>Email: <input type="email" name="Username" required="required" /></label></li>
+					<li><label>Password: <input type="password" name="Password" required="required" /></label></li>
+					<li><button type="submit">Login</button>
+				</ul>
+			</form>
+		</div>
 
         <div id="social-login" data-role="view">
 			<div class="app">
@@ -78,6 +102,8 @@
 				<button id="loginADFS">Login with ADFS</button>
 			</div>
         </div>
+		
+		<!-- Layouts -->
 		
 		<div data-id="ios-layout" data-role="layout">
 			<header data-role="header">
@@ -105,37 +131,34 @@
 			</header>
 		</div>
 		<div data-role="drawer" id="drawer">
-			<ul data-role="listview" data-type="group">
-                <li>Daily Prefs
-                    <div id="preferences">
-                        <!-- Daily preferences -->
-                        <!-- Times -->
-                        <div>
-                            <label for="startTime">Earliest I can leave</label>
-                            <input id="startTime" name="StartTime" value="12:00 PM" />
-                        </div>
-                        
-                        <div>
-                            <label for="endTime">Latest I can be back</label>
-                            <input id="endTime" name="EndTime" value="1:00 PM" />
-                        </div>
+            <span>Daily Prefs</span>
+			<ul data-type="group">
+                <div id="preferences">
+                    <!-- Daily preferences -->
+                    <!-- Times -->
+                    <div>
+                        <label for="startTime">Earliest I can leave</label>
+                        <input id="startTime" name="StartTime" value="12:00 PM" />
                     </div>
-                </li>
-				<li>Food Preferences
-					<table class="genres" data-toolbar="['add']">
-						<thead>
-							<tr>
-								<th>Name</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td><input class="genre" placeholder="Enter food genre"></td>
-							</tr>
-						</tbody>
-					</table>
-					<button class="set-genres" data-role="button">Set</button>
-				</li>
+                    
+                    <div>
+                        <label for="endTime">Latest I can be back</label>
+                        <input id="endTime" name="EndTime" value="1:00 PM" />
+                    </div>
+                </div>
+				<table class="genres" data-toolbar="['add']">
+					<thead>
+						<tr>
+							<th>Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input class="genre" placeholder="Enter Genre Choice"></td>
+						</tr>
+					</tbody>
+				</table>
+				<button class="set-genres">Set</button>
 				<!--
 				<li>Menu
 					<ul>

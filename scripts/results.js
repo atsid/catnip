@@ -46,7 +46,10 @@ $(function() {
 			allGroups.append(grpDiv);
 		})
 	};
-	$.get('/ajax/results')
+    // URL for the website is: https://catnip-ats.herokuapp.com/
+    // will either need to move the all the http hosting to the
+    // same server, fix the origin rules or proxy.
+	$.get(config.get("server.results"))
 		.fail(function () {
 			theData = {
 				"me": 0,
@@ -58,7 +61,7 @@ $(function() {
 						"group": ["Craig"]
 					},
 					"1": {
-						"restaurant": "Pasara",
+						"restaurant": "Sweet Fire Donna's",
 						"time": "13:00",
 						"group": ["David", "Jabari", "Gary"]
 					},

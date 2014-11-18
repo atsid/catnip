@@ -26,8 +26,9 @@ pi.data.DataSource = {
 		// So we can only do this after instantiation when this internal object is finally made available to us.
 		result.options = pi.observable(result.options);
 		// Setup localStorage details
-		pi.data.DataSource.configureStorage.apply(result);
 		pi.data.DataSource.configureSelected.apply(result);
+		pi.data.DataSource.configureStorage.apply(result);
+		pi.data.DataSource.configureDefault.apply(result);
 		return result;
 	},
 	configureTransport : function(options) {
@@ -85,8 +86,100 @@ pi.data.DataSource = {
 				options.transport.typeName = options.source[1];
 				options.source = options.source.join('.');
 				// NOTE: We don't need to kepp a reference to the Everlive config object, since it's already stored in Everlive.$.
+				
+				if (options.transport.typeName === "Users")
+					this.everliveAuthentication(options);
 			}
 		}
+	},
+	everliveAuthentication : function(options) {
+		options.transport = {
+			success : function(data) {
+				if (data.result) {
+					this.options.selected.set("Id", data.result.principal_id);
+					this.options.selected.set("id", data.result.principal_id);
+					for (var field in data.result) {
+						this.options.selected.set(field, data.result[field]);
+					}
+					this.options.selected.set("password", "");
+				} else {
+					throw new Error({
+						name : "Everlive Login Failure",
+						message : "Everlive returned successfully, but there was no result property!"
+					});
+				}
+			},
+			read : function() {
+				var dataSource = this;
+				Everlive.$.Users.login( 
+					this.options.selected.get("username"),
+					this.options.selected.get("password"),
+					function (data) {
+						dataSource.transport.success(data);
+					},
+					function (error) {
+						error.type = error.type || "Everlive Login Failure";
+						error.message = error.message || "Invalid username/password combination";
+						throw new Error(error);
+					}
+				);
+			},
+			create : function() {
+				Everlive.$.Users.register(
+					this.options.selected.get("username"),
+					this.options.selected.get("password"),
+					this.options.selected.toJson(),
+					function (data) {
+						Everlive.$.Users.login(
+							this.options.selected.get("username"),
+							this.options.selected.get("password"),
+							function (data) {
+								dataSource.transport.success(data);
+							},
+							function (error) {
+								error.type = error.type || "Everlive Login Failure";
+								throw new Error(error);
+							}
+						)
+					},
+					function (error) {
+						error.type = error.type || "Everlive Account Creation Failure";
+						throw new Error(error);
+					}
+				);
+			},
+			update : function() {
+				if (this.selected.get("newpassword") !== this.selected.get("password")) {
+					Everlive.$.Users.changePassword(
+						this.selected.get("username"),
+						this.selected.get("password"),
+						this.selected.get("newpassword"),
+						true,
+						function (data) {
+							// WARNING: We clear the passwords, and prompt the user on the next update action, so that password are not visible in the browser javascript inspector!!
+							this.selected.set("password", "");
+							this.selected.set("newpassword", "");
+						},
+						function (error) {
+							error.type = error.type || "Everlive Account Update Failure";
+							throw new Error(error);
+						}
+					);
+				}
+			},
+			destroy : function() {
+				Everlive.$.Users.logout(
+					function (data) {
+						// do nothing
+					},
+					function (error) {
+						// Clean everlive manually
+						if (everlive && everlive.setup)
+							everlive.setup.token = null;
+					}
+				);
+			}
+		};
 	},
 	configurePaging : function(options) {
 		if (options.pageSize != undefined && options.page == undefined)
@@ -151,7 +244,12 @@ pi.data.DataSource = {
 		}
 	},
 	configureModel : function(options) {
-		if (!options.template) return;
+		if (!options.template) {
+			if (!options.schema.model)
+				// WARNING: If there's no model, sync() doesn't work, as well as a lot of other things.
+				(pi||console).log("CAUTION: A DataSource without a model cannot run the sync() function, plus a lot of other things won't work either! You should supply either a 'template' option to auto-create the model, or a schema.model value.","i");
+			return;
+		}
 		var template = $(options.template), defaultEditable = (options.editable) ? options.editable : "true";
 		if (!options.schema)
 			options.schema = {};
@@ -281,19 +379,22 @@ pi.data.DataSource = {
 		this.bind("change", function(e){
 			pi.data.DataSource.setGUID.apply(this,arguments);
 		});
-		this.bind("change", function(e) {
-			pi.data.DataSource.storeData.apply(this,arguments)
-		});
 		// Retrieve existing data if present
 		var data = this.options.storage.getItem(this.options.id);
 		// WARNING: Android 2.x throws an error if you pass a null value to JSON.parse!  New versions do not.
 		if (!this.data().length && data)
-			this.data(JSON.parse(data));
+			this.reset(JSON.parse(data));
+		/* Will be handled when we trigger("change") below.
 		for (var i=0, data=this.data(); i<data.length; i++)
 			data[i].uid = data[i].guid || data[i].uid;
+		*/
 		var destroyed = this.options.storage.getItem(this.options.id+"_destroyed");
 		if (destroyed)
 			this._destroyed = JSON.parse(destroyed);
+		// Don't execute this right now; execute it after a later change.
+		this.bind("change", function(e) {
+			pi.data.DataSource.storeData.apply(this,arguments)
+		});
 	},
 	configureSelected : function() {
 		// Handle the selection of a single record in the datasource.
@@ -326,36 +427,43 @@ pi.data.DataSource = {
 					this.options.set("selected", this.options.get("defaultSelected","first"));
 			}
 		});
-		this.options.bind("change", function(e) {
-			switch (e.field) {
-				case "selected":
-					if (!(this.selected instanceof kendo.data.Model)) {
-						if (typeof(this.selected) == "undefined")
-							this.selected = this.defaultSelected; // If it doesn't exist, that's okay.
-						if (typeof(this.selected) == "undefined") // still
-							this.selected = "first";
-						if (that.view().length) {
-							if (this.selected == "first")
-								this.selected = 0;
-							else if (this.selected == "last")
-								this.selected = that.view().length-1;
-							// CAUTION: Beware infinite loops!
-							if (typeof(this.selected) == "number")
-								this.set("selected", that.view()[this.selected]);
-							else if (typeof(this.selected) == "string")
-								this.set("selected", that.get(this.selected));
-						}
-					}
-					break;
+		// CAUTION: Don't execute right away, because there won't be any data yet, so we'll do this as a filter.
+		this.options.bind("get", function(e) {
+			e.value = this[e.field];
+			if (e.field === "selected" && !(e.value instanceof kendo.data.ObservableObject)) {
+				if (typeof(e.value) == "undefined")
+					e.value = this.defaultSelected; // If it doesn't exist, that's okay.
+				if (typeof(e.value) == "undefined") // still
+					e.value = "first";
+				if (that.view().length) {
+					if (e.value == "first")
+						e.value = 0;
+					else if (e.value == "last")
+						e.value = that.view().length-1;
+					// CAUTION: Beware infinite loops!
+					if (typeof(e.value) == "number")
+						this.set("selected", that.view()[e.value]);
+					else if (typeof(e.value) == "string")
+						this.set("selected", that.get(e.value));
+				}
 			}
 		});
+	},
+	configureDefault : function() {
+		if (!this.options.default) return;
+		this.bind("change", function(e) {
+			if (!this.data().length)
+				this.add( Object.create(this.options.default.toJSON ? this.options.default.toJSON() : this.options.default) );
+		}).trigger("change",{action:"init"});
 	}
 }
 
 kendo.data.DataSource.prototype.reset = function(defaultValues) {
 	// NOTE: The purpose of this function is a clean state that doesn't fire off any server synchronization.
+	this.options.remove("selected");
 	this.data( defaultValues || [] );
 	this.trigger("change");
+	this.options.set("selected", this.options.get("defaultSelected","first"));
 }
 
 
