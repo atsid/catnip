@@ -2,8 +2,60 @@
    references to error objects, preventing garbage collection.  Also, using console.log to log object details is a 
    known memory leak, since logged objects cannot be garbage collected. */
 pi = (typeof(pi) != "undefined") ? pi : {};
-pi.log = pi.observable([]);
-pi.log.bind("change", function(e) {
+pi.console = pi.observable([]);
+pi.log = function(message, type, category) {
+    try {
+        if (typeof(message) != "object")
+            message = { 
+                message: message, 
+                category : category,
+                type: type 
+            }
+		else if (message.toJSON) // Simplify observable objects
+			message = message.toJSON();
+        if (message.type == undefined)
+            message.type = type || "";
+        if (message.category == undefined)
+            message.category = category || "";
+        if (message.modal && modal.alert)
+            modal.alert(message.title||message.event||message.category||"",message.message,(message.type=="error")?"sad":"happy");
+        // Concatenate all details for console.log
+        switch (message.type.toLowerCase()) {
+            case "error":
+            case "e":
+                message.message="[ERROR] "+message.message;
+                break;
+            case "info":
+            case "i":
+                message.message="[INFO] "+message.message;
+                break;
+            case "warning":
+            case "w":
+                message.message="[WARNING] "+message.message;
+                break;
+            case "debug":
+            case "d":
+                message.message="[DEBUG] "+message.message;
+                break;
+        }
+        if (message.category.length)
+            message.message = message.category.toUpperCase() + ": " + message.message;
+        message.message="FLIKSHOP: "+message.message;
+        
+        if (pi.log)
+            pi.log.push(message);
+        else if (typeof(window.console) != "undefined") // For IE 8 and below!
+	        window.console.log(message.message);
+		
+    } catch(e) {
+        if (pi.log)
+            pi.log.push(e);
+        else if (typeof(window.console) != "undefined")
+            window.console.log(e.message);
+    }
+	pi.console.push(message);
+}
+pi.console.bind("change", function(e) {
 	switch (e.action) {
 		case "add":
 			for (var i=0, message; i<e.items.length; i++) {
