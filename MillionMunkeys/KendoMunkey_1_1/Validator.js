@@ -59,14 +59,15 @@ kendo.ui.Validator = pi.ui.Validator.extend({
 			switch (e.field) {
 				case "selected":
 					e.value = this.get(e.field);
+					/* I don't want to fail silently.  If this isn't a Model, we have a problem.
 					if (e.value instanceof kendo.data.Model) {
-						// CAUTION: There are problems when binding with the form itself, so bind with the children.
-                        if (kendo.mobile)
-	                        kendo.bind($this.children(), e.value, kendo.mobile.ui, kendo.ui);
-						else
-                        	kendo.bind($this.children(), e.value, kendo.ui);
-						that.hideMessages(); // required for firefox
-					}
+					} */
+					// CAUTION: There are problems when binding with the form itself, so bind with the children.
+					if (kendo.mobile)
+						kendo.bind($this.children(), e.value, kendo.mobile.ui, kendo.ui);
+					else
+						kendo.bind($this.children(), e.value, kendo.ui);
+					that.hideMessages(); // required for firefox
 					break;
 			}
 		});

@@ -1,5 +1,5 @@
 $(function() {
-    var $startTime, $endTime, data, dataSource, startDate, endDate, me, today;
+    var $startTime, $endTime, data, startDate, endDate, today;
     
     // Modify the native Date object (very dangerous, I know, I know...)
     Date.prototype.padNumber = function (num) {
@@ -68,40 +68,33 @@ $(function() {
         startTime = new Date($startTime.value());
         endTime = new Date($endTime.value());
         
-        record = config.get('preferences.current');
+        record = preferences.options.selected;
 
         record.set('StartTime', startTime.getShortTime());
         record.set('EndTime', endTime.getShortTime());
         console.log(record);
                                 
         $.ajax(restEndpoint + '/' + record.Id, {method: 'put', data: record.toJSON()});
-        dataSource.fetch();
+        window.preferences.fetch();
     }
     
     // Initialize variables
     today = new Date().trimToDate();
-    dataSource = config.get('preferences.dataSource');
-    me = '1bac2d70-69a0-11e4-8481-bd60c9634975';
     
     // Set configuration
-    config.set("preferences", pi.observable());
-    config.set("preferences.dataSource", pi.data.DataSource.create({
+    window.preferences = pi.data.DataSource.create({
         source: "Everlive.DailyPreferences",
         serverFiltering: true,
         filter: [
-            {field: 'User', operator: 'eq', value: me},
+            {field: 'User', operator: 'eq', value: myAccount.get("Id")},
             {field: 'Date', operator: 'eq', value: today.toISOString()}
         ],
-        change: function () {
-            var record = (this.at(0)) || this.add({
-                'User': me,
-                'Date': today.toISOString()
-            });
-            config.set('preferences.current', record);
-        }
-    })).fetch();
-    // It's common to type the 's' in source as lowercase, so this is an alias.
-    config.preferences.datasource = config.preferences.dataSource;
+		default : {
+			'User': myAccount.get("Id"),
+			'Date': today.toISOString()
+		}
+    });
+	window.preferences.fetch();
     
     // Set up kendo stuff
     $startTime = $('#startTime').kendoTimePicker({

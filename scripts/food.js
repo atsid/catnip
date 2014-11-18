@@ -1,12 +1,12 @@
 $(function() {
-	config.set("food", pi.observable());
-	config.set("food.preferences", pi.data.DataSource.create({
+	window.food = pi.data.DataSource.create({
 		source: "Everlive.DailyFoodPreferences"
-	})).fetch();
+	});
+	window.food.read();
 	
 	var dataUriPrefix = 'http://api.everlive.com/v1/kD5Tly50Vf6nm8kn/';
 	var priorityToCategoryId = {};
-	var userId = config.get("user.id","");
+	var userId = myAccount.get("Id","");
 	
 	
 	var genresCount = 3;
@@ -47,7 +47,7 @@ $(function() {
 			var dateStr = [date.getYear(), (date.getMonth() + 1), date.getDate()].join('-');
 			var filter = JSON.stringify({
 				"Date" : dateStr,
-				"User" : config.get("user.id","")
+				"User" : userId
 			});
 			$.get(uri + '?filter=' + filter)
 				// .done(deleteExisting); // TODO put back
