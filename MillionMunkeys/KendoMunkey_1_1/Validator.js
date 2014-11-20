@@ -99,8 +99,13 @@ $(function() {
 			$this.bind("submit",function(e) {
 				var validator = $this.data("kendoValidator");
 				// If datasource, sync changes.
-				if (validator && validator.validate() && validator.options.dataSource)
-                    if (validator.options.dataSource.hasChanges()) {
+				if (validator && validator.validate() && validator.options.dataSource) {
+					if ($this.attr("method") === "get") {
+						// CAUTION: For some reason it gets stuck, and every request after the first wouldn't run.
+						validator.options.dataSource._dequeueRequest();
+						validator.options.dataSource.read();
+					}
+					else if (validator.options.dataSource.hasChanges()) {
                         /*
                         if ($this.attr("data-loader") != "false") {
 	                        app.pane.loader.show();
@@ -111,6 +116,8 @@ $(function() {
                         */
 						validator.options.dataSource.sync();
                     }
+					return false;
+				}
 			});
             // Handle the enter key when inside a form field
             $this.bind("keyup",function(e) {

@@ -40,20 +40,18 @@ pi.log = function(message, type, category) {
         }
         if (message.category.length)
             message.message = message.category.toUpperCase() + ": " + message.message;
-        message.message="FLIKSHOP: "+message.message;
         
-        if (pi.log)
-            pi.log.push(message);
+		if (pi.console)
+	        pi.console.push(message);
         else if (typeof(window.console) != "undefined") // For IE 8 and below!
 	        window.console.log(message.message);
 		
     } catch(e) {
-        if (pi.log)
-            pi.log.push(e);
+		if (pi.console)
+	        pi.console.push(e);
         else if (typeof(window.console) != "undefined")
             window.console.log(e.message);
     }
-	pi.console.push(message);
 }
 pi.console.bind("change", function(e) {
 	switch (e.action) {

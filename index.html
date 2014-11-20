@@ -67,6 +67,24 @@
 	</head>
 	
 	<body>
+		<div id="login" data-role="view" title="Login" data-user-roles="false">
+			<form id="LoginForm" method="get" data-source="account">
+				<ul data-role="listview" data-style="inset">
+					<li><label>Email: <input type="email" name="Username" required="required" /></label></li>
+					<li><label>Password: <input type="password" name="Password" required="required" /></label></li>
+					<li><button type="submit">Login</button>
+				</ul>
+			</form>
+		</div>
+		
+		<div id="logout" data-role="view" title="Login" data-user-roles="true">
+			<form id="Logout" method="delete" data-source="account">
+				<ul data-role="listview" data-style="inset">
+					<li><button type="submit">Logout</button>
+				</ul>
+			</form>
+		</div>
+
         <div id="results" data-role="view" data-title="Where?">
             <div class="all-groups">
             </div>
@@ -84,16 +102,6 @@
             </div>
         </div>
 		
-		<div id="login" data-role="view" title="Login">
-			<form id="Login" data-source="account" data-storage="local" onsubmit="return false;">
-				<ul data-role="listview" data-style="inset">
-					<li><label>Email: <input type="email" name="Username" required="required" /></label></li>
-					<li><label>Password: <input type="password" name="Password" required="required" /></label></li>
-					<li><button type="submit">Login</button>
-				</ul>
-			</form>
-		</div>
-
         <div id="social-login" data-role="view">
 			<div class="app">
 				<button id="loginFb">Login with Facebook</button>
