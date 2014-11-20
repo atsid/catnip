@@ -16,19 +16,25 @@ pi.data.DataSource = {
 		var result;
 		options = options || {};
 		pi.data.DataSource.configureTransport(options);
+		pi.data.DataSource.everliveAuthentication(options);
 		pi.data.DataSource.configurePaging(options);
 		pi.data.DataSource.configureSchema(options);
-		if (options.template)
-			pi.data.DataSource.configureModel(options);
+		pi.data.DataSource.configureModel(options);
 		// Call initial function
 		result = new kendo.data.DataSource(options);
 		// CAUTION: Kendo uses the apply function to add options to an internal object.
 		// So we can only do this after instantiation when this internal object is finally made available to us.
 		result.options = pi.observable(result.options);
+		// CAUTION: Built-in Everlive functions require a reference to the dataSource.
+		if (result.transport)
+			result.transport.dataSource = result;
 		// Setup localStorage details
 		pi.data.DataSource.configureSelected.apply(result);
 		pi.data.DataSource.configureStorage.apply(result);
 		pi.data.DataSource.configureDefault.apply(result);
+		pi.data.DataSource.everliveSetup.apply(result);
+		// Lastly, if data is present, fire the JIT filter so selected has a value.
+		result.options.get("selected");
 		return result;
 	},
 	configureTransport : function(options) {
@@ -86,22 +92,31 @@ pi.data.DataSource = {
 				options.transport.typeName = options.source[1];
 				options.source = options.source.join('.');
 				// NOTE: We don't need to kepp a reference to the Everlive config object, since it's already stored in Everlive.$.
-				
-				if (options.transport.typeName === "Users")
-					this.everliveAuthentication(options);
 			}
 		}
 	},
+	everliveSetup : function() {
+		if (this.options.source !== "Everlive.Users")
+			return;
+		$.extend(Everlive.$.setup, {
+			token : this.options.get("selected.access_token",null),
+			tokenType : this.options.get("selected.token_type",null)
+		});
+	},
 	everliveAuthentication : function(options) {
+		if (options.source !== "Everlive.Users")
+			return;
 		options.transport = {
 			success : function(data) {
+				var selected = this.dataSource.options.get("selected");
 				if (data.result) {
-					this.options.selected.set("Id", data.result.principal_id);
-					this.options.selected.set("id", data.result.principal_id);
-					for (var field in data.result) {
-						this.options.selected.set(field, data.result[field]);
-					}
-					this.options.selected.set("password", "");
+					for (var field in data.result)
+						selected.set(field, data.result[field]);
+					if (data.result.principal_id)
+						selected.set("id", data.result.principal_id);
+					else if (data.result.Id)
+						selected.set("id", data.result.Id);
+					// selected.set("Password", "");
 				} else {
 					throw new Error({
 						name : "Everlive Login Failure",
@@ -110,31 +125,44 @@ pi.data.DataSource = {
 				}
 			},
 			read : function() {
-				var dataSource = this;
+				var that = this, selected = this.dataSource.options.get("selected");
 				Everlive.$.Users.login( 
-					this.options.selected.get("username"),
-					this.options.selected.get("password"),
-					function (data) {
-						dataSource.transport.success(data);
-					},
-					function (error) {
-						error.type = error.type || "Everlive Login Failure";
-						error.message = error.message || "Invalid username/password combination";
-						throw new Error(error);
-					}
-				);
+					selected.get("Username"),
+					selected.get("Password"))
+					.then(
+						function (data) {
+							that.success(data);
+							Everlive.$.Users.getById(data.result.principal_id)
+							.then(
+								function(data) {
+									that.success(data);
+								}, function (error) {
+									alert(JSON.stringify(error));
+								}
+							);
+						},
+						function (error) {
+							error.type = error.type || "Everlive Login Failure";
+							error.message = error.message || "Invalid username/password combination";
+							throw new Error(error);
+						}
+					);
 			},
 			create : function() {
+				var that = this, selected = this.dataSource.options.get("selected");
 				Everlive.$.Users.register(
-					this.options.selected.get("username"),
-					this.options.selected.get("password"),
-					this.options.selected.toJson(),
+					selected.get("Username"),
+					selected.get("Password"),
+					selected.toJSON(),
 					function (data) {
 						Everlive.$.Users.login(
-							this.options.selected.get("username"),
-							this.options.selected.get("password"),
+							selected.get("Username"),
+							selected.get("Password"),
 							function (data) {
-								dataSource.transport.success(data);
+								that.success(data);
+								Everlive.$.Users.getById(data.result.principal_id).then(that.success, function (error) {
+									alert(JSON.stringify(error));
+								});
 							},
 							function (error) {
 								error.type = error.type || "Everlive Login Failure";
@@ -149,16 +177,17 @@ pi.data.DataSource = {
 				);
 			},
 			update : function() {
-				if (this.selected.get("newpassword") !== this.selected.get("password")) {
+				var selected = this.dataSource.options.get("selected");
+				if (selected.get("NewPassword") !== selected.get("Password")) {
 					Everlive.$.Users.changePassword(
-						this.selected.get("username"),
-						this.selected.get("password"),
-						this.selected.get("newpassword"),
+						selected.get("Username"),
+						selected.get("Password"),
+						selected.get("NewPassword"),
 						true,
 						function (data) {
 							// WARNING: We clear the passwords, and prompt the user on the next update action, so that password are not visible in the browser javascript inspector!!
-							this.selected.set("password", "");
-							this.selected.set("newpassword", "");
+							selected.set("Password","");
+							delete selected.NewPassword;
 						},
 						function (error) {
 							error.type = error.type || "Everlive Account Update Failure";
@@ -174,9 +203,8 @@ pi.data.DataSource = {
 					},
 					function (error) {
 						// Clean everlive manually
-						if (everlive && everlive.setup)
-							everlive.setup.token = null;
-					}
+						Everlive.$.setup.token = null;
+						Everlive.$.setup.tokenType = null;					}
 				);
 			}
 		};
@@ -245,7 +273,7 @@ pi.data.DataSource = {
 	},
 	configureModel : function(options) {
 		if (!options.template) {
-			if (!options.schema.model)
+			if (options.schema && !options.schema.model)
 				// WARNING: If there's no model, sync() doesn't work, as well as a lot of other things.
 				(pi||console).log("CAUTION: A DataSource without a model cannot run the sync() function, plus a lot of other things won't work either! You should supply either a 'template' option to auto-create the model, or a schema.model value.","i");
 			return;
