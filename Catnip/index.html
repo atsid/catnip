@@ -61,6 +61,18 @@
 						for (var layout in this.pane.viewEngine.layouts) {
 							this.pane.viewEngine.layouts[layout].bind("show", account.verify);
 						}
+						var layout = this.pane.viewEngine.layouts[this.pane.viewEngine.layout];
+						// This must be called onInit to make sure that app exists for the handlers.
+						account.verify.call(layout, {
+							layout: layout,
+							sender: layout,
+							view: this.view()
+						});
+						pi.console.bind("change", function(e) {
+							if (e.action === "add") {
+								alert(e.items[0].message);
+							}
+						})
 					}
 				});
 			});
@@ -80,7 +92,6 @@
 					<li><button type="submit">Login</button>
 				</ul>
 			</form>
-			<a href="#results">results</a>
 		</div>
 		
 		<div id="logout" data-role="view" title="Login" data-user-roles="true">
@@ -91,11 +102,11 @@
 			</form>
 		</div>
 
-        <div id="results" data-role="view" data-title="Where?">
+        <div id="results" data-role="view" data-title="Where?" data-user-roles="true">
             <div class="all-groups">
             </div>
         </div>
-        <div id="results_detail" data-role="view" data-title="Where?">
+        <div id="results_detail" data-role="view" data-title="Where?" data-user-roles="true">
             <div class="img">
                 <img src="img/color-table.png"/>
             </div>
@@ -146,34 +157,34 @@
 		</div>
 		<div data-role="drawer" id="drawer">
             <span>Daily Prefs</span>
+			<form id="dailyprefs" data-source="preferences" data-storage="localStorage">
+				<!-- Daily preferences -->
+				<!-- Times -->
+				<div>
+					<label for="startTime">Earliest I can leave</label>
+					<input id="startTime" name="StartTime" data-role="timepicker" value="12:00" data-min="10:30" data-max="15:00" data-change="preferences.timeWindow" />
+				</div>
+				
+				<div>
+					<label for="endTime">Latest I can be back</label>
+					<input id="endTime" name="EndTime" data-role="timepicker" value="13:00" data-min="11:00" data-max="16:00" data-change="preferences.timeWindow" />
+				</div>
+			</form>
+			<table class="genres" data-toolbar="['add']">
+				<thead>
+					<tr>
+						<th>Name</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><input class="genre" placeholder="Enter Genre Choice"></td>
+					</tr>
+				</tbody>
+			</table>
+			<button class="set-genres">Set</button>
+			<!--
 			<ul data-type="group">
-                <div id="preferences">
-                    <!-- Daily preferences -->
-                    <!-- Times -->
-                    <div>
-                        <label for="startTime">Earliest I can leave</label>
-                        <input id="startTime" name="StartTime" value="12:00 PM" />
-                    </div>
-                    
-                    <div>
-                        <label for="endTime">Latest I can be back</label>
-                        <input id="endTime" name="EndTime" value="1:00 PM" />
-                    </div>
-                </div>
-				<table class="genres" data-toolbar="['add']">
-					<thead>
-						<tr>
-							<th>Name</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><input class="genre" placeholder="Enter Genre Choice"></td>
-						</tr>
-					</tbody>
-				</table>
-				<button class="set-genres">Set</button>
-				<!--
 				<li>Menu
 					<ul>
 						<li><a data-icon="home" href="login.html">Login</a></li>
@@ -182,8 +193,8 @@
 						<li><a data-icon="search" href="results.html">Results</a></li>
 					</ul>
 				</li>
-				-->
 			</ul>
+			-->
 			<div data-role="footer">
 				<form action="#" id="Logout" method="delete" data-source="account">
 					<button type="submit">Logout</button>

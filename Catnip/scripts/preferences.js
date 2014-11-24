@@ -80,44 +80,59 @@ $(function() {
     
     // Initialize variables
     today = new Date().trimToDate();
+	startTime = new Date();
+	startTime.setMinutes(0);
+	startTime.setHours(12);
+	endTime = new Date();
+	endTime.setMinutes(0);
+	endTime.setHours(13);
     
     // Set configuration
     window.preferences = pi.data.DataSource.create({
         source: "Everlive.DailyPreferences",
         serverFiltering: true,
         filter: [
-            {field: 'User', operator: 'eq', value: myAccount.get("Id")},
+			{field: 'User', operator: 'eq', value: window.myAccount ? window.myAccount.get("Id") : ""},
             {field: 'Date', operator: 'eq', value: today.toISOString()}
         ],
 		default : {
-			'User': myAccount.get("Id"),
-			'Date': today.toISOString()
+			"User": window.myAccount ? window.myAccount.get("Id") : "",
+			"Date": today.toISOString(),
+			"StartTime": startTime,
+			"EndTime" : endTime
+		},
+		change : function(e) {
+			if (e.action === "itemchange") {
+				var $startTime = $('#startTime').data("kendoTimePicker"), 
+					$endTime = $('#endTime').data("kendoTimePicker"), 
+					min = new Date($startTime.value()), 
+					endDate = new Date($endTime.value());
+				if (e.sender === $startTime) {
+					min.setMinutes(min.getMinutes() + 30);
+					$endTime.min(min);
+					if (min > endDate) {
+						min.setMinutes(min.getMinutes() + 30);
+						$endTime.value(min);
+					}
+				}
+			}
 		}
     });
-	window.preferences.fetch();
-	window.preferences.tokenChange = function(e) {
+	
+	window.preferences.timeWindow = function(e) {
+	}
+	
+	window.myAccount.bind("change", function(e) {
 		var account = this;
 		if (e.field === "access_token") {
-			window.preferences.filter([
-				{field: 'User', operator: 'eq', value: this.get("Id")},
-				{field: 'Date', operator: 'eq', value: today.toISOString()}
-			])
+			if (account.get(e.field).length)
+				window.preferences.filter([
+					{field: 'User', operator: 'eq', value: account.get("Id")},
+					{field: 'Date', operator: 'eq', value: today.toISOString()}
+				]);
+			else
+				window.preferences.reset()._filter = [];
 		}
-	}
-    
-    // Set up kendo stuff
-    $startTime = $('#startTime').kendoTimePicker({
-        change: startTimeChangeHandler
-    }).data('kendoTimePicker');
-    
-    $startTime.min("11:00 AM");
-    $startTime.max("3:00 PM");
-    
-    $endTime = $('#endTime').kendoTimePicker({
-        change: endTimeChangeHandler
-    }).data('kendoTimePicker');
-    
-    $endTime.min("11:30 AM");
-    $endTime.max("4:00 PM");
+	}).trigger("change", {field:"access_token"});
     
 });

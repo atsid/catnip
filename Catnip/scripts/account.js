@@ -16,36 +16,29 @@ $(function() {
 			default : {
 				"Username" : "",
 				"Email" : "",
-				"Password" : ""
+				"Password" : "",
+				"access_token" : "" // required blank value to kick of default navigation.
 			}
 		});
 		window.account.verify = function(e) {
 			var layout = this, roles = $(e.view.element).attr("data-user-roles");
 			if (roles === "false" && myAccount.get("access_token"))
-				router.replace("#results");
+				app.pane.history.length ? app.replace("#results") : app.navigate("#results");
 			else if (roles === "true" && !myAccount.get("access_token"))
-				router.replace("#login");
+				app.pane.history.length ? app.replace("#login") : app.navigate("#login");
 		}
 		
 		window.account.options.bind("change", function(e) {
 			if (e.field === "selected") {
 				window.myAccount = this.get(e.field);
-				if (typeof(window.myAccount) instanceof kendo.data.ObservableObject) {
-					window.myAccount.bind("set", function(e) {
-						if (e.field === "access_token") {
-							if (e.value) {
-								// on Login
-								
-							} else {
-								// on Logout
-								
-							}
-						}
-					});
-					window.myAccount.bind("set", preferences.tokenChange);
+				if (window.myAccount instanceof kendo.data.ObservableObject) {
+					window.myAccount.bind("change", function(e) {
+						if (e.field === "access_token" && window.app)
+							window.account.verify({view:window.app.view()});
+					}).trigger("change", {field:"access_token"});
 				}
 			}
-		});
+		}).trigger("change", {field:"selected"});
 		
 	} catch(e) {
 		(pi||console).log(e);

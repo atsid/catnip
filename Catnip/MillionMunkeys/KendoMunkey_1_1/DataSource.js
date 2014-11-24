@@ -150,6 +150,8 @@ pi.data.DataSource = {
 			},
 			create : function() {
 				var that = this, selected = this.dataSource.options.get("selected");
+				if (!selected.get("Username").length || !selected.get("Password").length)
+					return; // Blank record
 				Everlive.$.Users.register(
 					selected.get("Username"),
 					selected.get("Password"),
@@ -421,8 +423,9 @@ pi.data.DataSource = {
 			data[i].uid = data[i].guid || data[i].uid;
 		*/
 		var destroyed = this.options.storage.getItem(this.options.id+"_destroyed");
-		if (destroyed)
-			this._destroyed = JSON.parse(destroyed);
+		if (destroyed) {
+			this._destroyed = new kendo.data.ObservableArray(JSON.parse(destroyed));
+		}
 		// Don't execute this right now; execute it after a later change.
 		this.bind("change", function(e) {
 			pi.data.DataSource.storeData.apply(this,arguments)
@@ -484,24 +487,21 @@ pi.data.DataSource = {
 	configureDefault : function() {
 		if (!this.options.default) return;
 		// CAUTION: If an authentication datasource, this function creates a new record on logout and throws an error.
-		if (this.options.source === "Everlive.Users") return;
-		if (this.options.default.constructor !== Array)
-			this.options.default = [this.options.default];
+		// if (this.options.source === "Everlive.Users") return;
 		this.bind("change", function(e) {
 			if (!this.data().length)
-				this.reset();
+				this.add( Object.create(this.options.default.toJSON ? this.options.default.toJSON() : this.options.default) );
 		}).trigger("change",{action:"init"});
 	}
 }
 
 kendo.data.DataSource.prototype.reset = function(defaultValues) {
 	// NOTE: The purpose of this function is a clean state that doesn't fire off any server synchronization.
-	this.options.remove("selected");
-	if (!defaultValues && this.options.exists("default"))
-		defaultValues = Object.create(this.options.default.toJSON ? this.options.default.toJSON() : this.options.default);
 	this.data( defaultValues || [] );
-	this.trigger("change");
+	while (this._destroyed.length)
+		this._destroyed.pop();
 	this.options.set("selected", this.options.get("defaultSelected","first"));
+	return this; // allow chaining
 }
 
 

@@ -116,6 +116,18 @@ $(function() {
 							break;
 						case "delete":
 							validator.options.dataSource.remove( validator.options.dataSource.options.get("selected") );
+							/*
+							if (validator.options.dataSource.options.source === "Everlive.Users") {
+								// Authentication databases only
+								var blank = validator.options.dataSource.options.get("selected");
+								// We don't want to try to create a new blank record on the server
+								validator.options.dataSource._data = new Observable([]);
+								validator.options.dataSource.sync();
+								// But we need the blank record after we're done.
+								validator.options.dataSource.data([blank]);
+								break;
+							}
+							*/
 							// CAUTION: no break; fall through!
 						default:
 							if (validator.options.dataSource.hasChanges())
