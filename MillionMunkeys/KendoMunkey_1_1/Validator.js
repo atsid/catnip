@@ -100,22 +100,28 @@ $(function() {
 				var validator = $this.data("kendoValidator");
 				// If datasource, sync changes.
 				if (validator && validator.validate() && validator.options.dataSource) {
-					if ($this.attr("method") === "get") {
-						// CAUTION: For some reason it gets stuck, and every request after the first wouldn't run.
-						validator.options.dataSource._dequeueRequest();
-						validator.options.dataSource.read();
+					/*
+					if ($this.attr("data-loader") != "false") {
+						app.pane.loader.show();
+						validator.options.dataSource.one("change", function(){
+							app.pane.loader.hide();
+						});
 					}
-					else if (validator.options.dataSource.hasChanges()) {
-                        /*
-                        if ($this.attr("data-loader") != "false") {
-	                        app.pane.loader.show();
-                            validator.options.dataSource.one("change", function(){
-                                app.pane.loader.hide();
-                            });
-                        }
-                        */
-						validator.options.dataSource.sync();
-                    }
+					*/
+					switch ($this.attr("method")) {
+						case "get":
+							// CAUTION: For some reason it gets stuck, and every request after the first wouldn't run.
+							validator.options.dataSource._dequeueRequest();
+							validator.options.dataSource.read();
+							break;
+						case "delete":
+							validator.options.dataSource.remove( validator.options.dataSource.options.get("selected") );
+							// CAUTION: no break; fall through!
+						default:
+							if (validator.options.dataSource.hasChanges())
+								validator.options.dataSource.sync();
+							break;
+					}
 					return false;
 				}
 			});

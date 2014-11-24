@@ -56,7 +56,12 @@
 		<script type="text/javascript">
 			$(function() {
 				window.app = new kendo.mobile.Application(document.body,{
-					layout: "android-layout"
+					layout: "android-layout",
+					init: function(e) {
+						for (var layout in this.pane.viewEngine.layouts) {
+							this.pane.viewEngine.layouts[layout].bind("show", account.verify);
+						}
+					}
 				});
 			});
 		</script>
@@ -75,6 +80,7 @@
 					<li><button type="submit">Login</button>
 				</ul>
 			</form>
+			<a href="#results">results</a>
 		</div>
 		
 		<div id="logout" data-role="view" title="Login" data-user-roles="true">
@@ -178,6 +184,11 @@
 				</li>
 				-->
 			</ul>
+			<div data-role="footer">
+				<form action="#" id="Logout" method="delete" data-source="account">
+					<button type="submit">Logout</button>
+				</form>
+			</div>
 		</div>
 		
 	</body>
