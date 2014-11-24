@@ -118,10 +118,10 @@ pi.data.DataSource = {
 						selected.set("id", data.result.Id);
 					// selected.set("Password", "");
 				} else {
-					throw new Error({
+					(pi||console).log(new Error({
 						name : "Everlive Login Failure",
 						message : "Everlive returned successfully, but there was no result property!"
-					});
+					}));
 				}
 			},
 			read : function() {
@@ -144,7 +144,7 @@ pi.data.DataSource = {
 						function (error) {
 							error.type = error.type || "Everlive Login Failure";
 							error.message = error.message || "Invalid username/password combination";
-							throw new Error(error);
+							(pi||console).log(error);
 						}
 					);
 			},
@@ -166,13 +166,13 @@ pi.data.DataSource = {
 							},
 							function (error) {
 								error.type = error.type || "Everlive Login Failure";
-								throw new Error(error);
+								(pi||console).log(error);
 							}
 						)
 					},
 					function (error) {
 						error.type = error.type || "Everlive Account Creation Failure";
-						throw new Error(error);
+						(pi||console).log(error);
 					}
 				);
 			},
@@ -191,20 +191,24 @@ pi.data.DataSource = {
 						},
 						function (error) {
 							error.type = error.type || "Everlive Account Update Failure";
-							throw new Error(error);
+							(pi||console).log(error);
 						}
 					);
 				}
 			},
 			destroy : function() {
+				var dataSource = this.dataSource;
 				Everlive.$.Users.logout(
 					function (data) {
 						// do nothing
+						dataSource.reset();
 					},
 					function (error) {
 						// Clean everlive manually
 						Everlive.$.setup.token = null;
-						Everlive.$.setup.tokenType = null;					}
+						Everlive.$.setup.tokenType = null;
+						dataSource.reset();
+					}
 				);
 			}
 		};
@@ -479,9 +483,13 @@ pi.data.DataSource = {
 	},
 	configureDefault : function() {
 		if (!this.options.default) return;
+		// CAUTION: If an authentication datasource, this function creates a new record on logout and throws an error.
+		if (this.options.source === "Everlive.Users") return;
+		if (this.options.default.constructor !== Array)
+			this.options.default = [this.options.default];
 		this.bind("change", function(e) {
 			if (!this.data().length)
-				this.add( Object.create(this.options.default.toJSON ? this.options.default.toJSON() : this.options.default) );
+				this.reset();
 		}).trigger("change",{action:"init"});
 	}
 }
@@ -489,6 +497,8 @@ pi.data.DataSource = {
 kendo.data.DataSource.prototype.reset = function(defaultValues) {
 	// NOTE: The purpose of this function is a clean state that doesn't fire off any server synchronization.
 	this.options.remove("selected");
+	if (!defaultValues && this.options.exists("default"))
+		defaultValues = Object.create(this.options.default.toJSON ? this.options.default.toJSON() : this.options.default);
 	this.data( defaultValues || [] );
 	this.trigger("change");
 	this.options.set("selected", this.options.get("defaultSelected","first"));

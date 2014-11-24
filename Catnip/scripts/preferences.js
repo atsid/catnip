@@ -95,6 +95,15 @@ $(function() {
 		}
     });
 	window.preferences.fetch();
+	window.preferences.tokenChange = function(e) {
+		var account = this;
+		if (e.field === "access_token") {
+			window.preferences.filter([
+				{field: 'User', operator: 'eq', value: this.get("Id")},
+				{field: 'Date', operator: 'eq', value: today.toISOString()}
+			])
+		}
+	}
     
     // Set up kendo stuff
     $startTime = $('#startTime').kendoTimePicker({
