@@ -58,53 +58,55 @@ body {
 }
 #drawer{
     .km-scroll-container{
-        > span{
+        > *:first-child {
             height:10%;
             display:block;
             padding:6%;
             background: darken(@base-background, 30%);
             color: #fff;
         }
+	}
+	/*
         ul{
             -webkit-margin-before: 0;
             -webkit-margin-after: 0;
             -webkit-padding-start: 0;
         }
-        label{
-            color:white;
-        }
-        #preferences{
-            margin:5%;
-            div{
-                margin-top: 5%;
-            }
-            .k-timepicker{
-                width:100%;
-                margin-top:3%;
-            }
-        }
-        .genres{
-            margin:5%;
-            th{
-                text-align:left;
-                color:white;
-                font-weight:normal;
-            }
-            .k-combobox{
-                width:100%;
-                margin-top:3%;
-            }
-        }
-        button{
-            width: 40%;
-            position:relative;
-            left: 30%;
-            border: @list-border;
-            background: none;
-            color: @accent-color-1;
-            border-radius: @base-border-radius;
-        }
-    }
+	*/
+	label{
+		color:white;
+	}
+	#preferences{
+		margin:5%;
+		div{
+			margin-top: 5%;
+		}
+		.k-timepicker{
+			width:100%;
+			margin-top:3%;
+		}
+	}
+	.genres{
+		margin:5%;
+		th{
+			text-align:left;
+			color:white;
+			font-weight:normal;
+		}
+		.k-combobox{
+			width:100%;
+			margin-top:3%;
+		}
+	}
+	button{
+		width: 40%;
+		position:relative;
+		left: 30%;
+		border: @list-border;
+		background: none;
+		color: @accent-color-1;
+		border-radius: @base-border-radius;
+	}
 }
 
 .km-header{

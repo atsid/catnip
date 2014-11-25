@@ -156,33 +156,42 @@
 			</header>
 		</div>
 		<div data-role="drawer" id="drawer">
-            <span>Daily Prefs</span>
-			<form id="dailyprefs" data-source="preferences" data-storage="localStorage">
-				<!-- Daily preferences -->
-				<!-- Times -->
-				<div>
-					<label for="startTime">Earliest I can leave</label>
-					<input id="startTime" name="StartTime" data-role="timepicker" value="12:00" data-min="10:30" data-max="15:00" data-change="preferences.timeWindow" />
-				</div>
-				
-				<div>
-					<label for="endTime">Latest I can be back</label>
-					<input id="endTime" name="EndTime" data-role="timepicker" value="13:00" data-min="11:00" data-max="16:00" data-change="preferences.timeWindow" />
-				</div>
-			</form>
-			<table class="genres" data-toolbar="['add']">
-				<thead>
-					<tr>
-						<th>Name</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td><input class="genre" placeholder="Enter Genre Choice"></td>
-					</tr>
-				</tbody>
-			</table>
-			<button class="set-genres">Set</button>
+            <div data-role="view-title">Daily Prefs</div>
+			<ul data-role="listview" data-type="group">
+				<li>
+					<!-- Times -->
+						<ul>
+					<form id="dailyprefs" data-source="preferences" data-storage="localStorage">
+							<li>
+								<label for="startTime">Earliest I can leave</label>
+								<input name="StartTime" type="datetime" data-role="timepicker" data-format="h:mm tt" value="12:00" min="10:30" max="15:00" />
+							</li>
+							
+							<li>
+								<label for="endTime">Latest I can be back</label>
+								<input name="EndTime" type="datetime" data-role="timepicker" data-format="h:mm tt" value="13:00" min="11:00" max="16:00" />
+							</li>
+					</form>
+						</ul>
+				</li>
+				<li>
+					<table class="genres" data-toolbar="['add']">
+						<thead>
+							<tr>
+								<th>Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><input class="genre" placeholder="Enter Genre Choice"></td>
+							</tr>
+						</tbody>
+					</table>
+				</li>
+				<li>
+					<button class="set-genres">Set</button>
+				</li>
+			</ul>
 			<!--
 			<ul data-type="group">
 				<li>Menu
@@ -196,9 +205,13 @@
 			</ul>
 			-->
 			<div data-role="footer">
-				<form action="#" id="Logout" method="delete" data-source="account">
-					<button type="submit">Logout</button>
-				</form>
+				<ul data-role="listview" data-type="group">
+					<li>
+						<form action="#" id="Logout" method="delete" data-source="account">
+							<button type="submit">Logout</button>
+						</form>
+					</li>
+				</ul>
 			</div>
 		</div>
 		

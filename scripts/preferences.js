@@ -1,5 +1,7 @@
 $(function() {
-    var $startTime, $endTime, data, startDate, endDate, today;
+    
+	/*
+	var $startTime, $endTime, data, startDate, endDate, today;
     
     // Modify the native Date object (very dangerous, I know, I know...)
     Date.prototype.padNumber = function (num) {
@@ -77,61 +79,78 @@ $(function() {
         $.ajax(restEndpoint + '/' + record.Id, {method: 'put', data: record.toJSON()});
         window.preferences.fetch();
     }
+	*/
     
     // Initialize variables
-    today = new Date().trimToDate();
-	startTime = new Date();
-	startTime.setMinutes(0);
-	startTime.setHours(12);
-	endTime = new Date();
-	endTime.setMinutes(0);
-	endTime.setHours(13);
-    
-    // Set configuration
+    var today = new Date();
+	today = [today.getFullYear(), ("0"+(today.getMonth()+1)).substr(-2), ("0"+today.getDate()).substr(-2)];
+	
+	// Set configuration
     window.preferences = pi.data.DataSource.create({
         source: "Everlive.DailyPreferences",
+		storage: "localStorage", // Used to default to yesterday's preferences
+		template: $('#dailyprefs'),
+		debug: false,
         serverFiltering: true,
         filter: [
 			{field: 'User', operator: 'eq', value: window.myAccount ? window.myAccount.get("Id") : ""},
-            {field: 'Date', operator: 'eq', value: today.toISOString()}
+            {field: 'Date', operator: 'eq', value: today.join("")}
         ],
 		default : {
 			"User": window.myAccount ? window.myAccount.get("Id") : "",
-			"Date": today.toISOString(),
-			"StartTime": startTime,
-			"EndTime" : endTime
-		},
-		change : function(e) {
-			if (e.action === "itemchange") {
-				var $startTime = $('#startTime').data("kendoTimePicker"), 
-					$endTime = $('#endTime').data("kendoTimePicker"), 
-					min = new Date($startTime.value()), 
-					endDate = new Date($endTime.value());
-				if (e.sender === $startTime) {
+			"Date": today.join(""),
+			"StartTime": new Date(today.join("-")+" "+$('#dailyprefs input[name=StartTime]').attr('min')),
+			"EndTime": new Date(today.join("-")+" "+$('#dailyprefs input[name=EndTime]').attr('max'))
+		}
+    });
+	// If defaulting to yesterday's preferences, update the Date field.
+	window.myPreferences = window.preferences.options.get("selected");
+	if (window.myPreferences.get("Date") !== today) {
+		window.myPreferences.set("Date", today);
+		window.myPreferences.set("Id", "");
+		window.myPreferences.set("id", "");
+	}
+	/*
+	window.preferences.bind("requestEnd", function(e) {
+		if (e.response.Result) {
+			e.response.Result.forEach(function(item,index) {
+				item.StartTime = new Date(item.StartTime);
+				item.EndTime = new Date(item.EndTime);
+			});
+		}
+	});
+	*/
+	window.preferences.bind("change", function(e) {
+		if (e.action === "itemchange") {
+			if (e.field === "StartTime") {
+				e.items.forEach(function(item, index) {
+					var min = new Date(item.StartTime.toString()),
+						endDate = new Date(item.EndTime.toString()),
+						$endTime = $('#dailyprefs input[name=EndTime]').data("kendoTimePicker");
 					min.setMinutes(min.getMinutes() + 30);
 					$endTime.min(min);
 					if (min > endDate) {
 						min.setMinutes(min.getMinutes() + 30);
-						$endTime.value(min);
+						item.set("EndTime", min);
 					}
-				}
+				});
 			}
+			this.sync();
 		}
-    });
-	
-	window.preferences.timeWindow = function(e) {
-	}
+	});
 	
 	window.myAccount.bind("change", function(e) {
 		var account = this;
 		if (e.field === "access_token") {
-			if (account.get(e.field).length)
+			if (account.get(e.field).length) {
 				window.preferences.filter([
 					{field: 'User', operator: 'eq', value: account.get("Id")},
-					{field: 'Date', operator: 'eq', value: today.toISOString()}
+					{field: 'Date', operator: 'eq', value: today.join("")}
 				]);
-			else
+			}
+			else {
 				window.preferences.reset()._filter = [];
+			}
 		}
 	}).trigger("change", {field:"access_token"});
     
