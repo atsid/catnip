@@ -15,6 +15,10 @@ pi.data.DataSource = {
 	create : function(options) {
 		var result;
 		options = options || {};
+		if (typeof(options) === "string")
+			options = {source:options};
+		else if (options.constructor === Array)
+			options = {data:options};
 		pi.data.DataSource.configureTransport(options);
 		pi.data.DataSource.configureDebug(options);
 		pi.data.DataSource.everliveAuthentication(options);
@@ -544,10 +548,20 @@ pi.ui.List = {
 	init : function(element,options) {
 		pi.ui.Widget.attributeOptions.apply(this,arguments);
 		if (options.dataSource && !(options.dataSource instanceof kendo.data.DataSource)) {
-			if (options.dataSource.toJSON)
+			if (typeof(options.dataSource) === "string") {
+				options.dataSource = $.extend({
+					source: options.dataSource
+				},options);
+				delete options.dataSource.dataSource;
+				delete options.dataSource.bind; // reserved function names
+				delete options.dataSource.exists; // reserved function names
+			} else if (options.dataSource.toJSON) {
 				options.dataSource = options.dataSource.toJSON();
-			if (options.dataSource instanceof Array)
+			} else if (options.dataSource instanceof Array) {
 				options.dataSource = {data:options.dataSource};
+			}
+			if (options.dataSource && !options.template && (!options.schema || !options.schema.model))
+				options.dataSource.template = $(element);
 			options.dataSource = pi.data.DataSource.create(options.dataSource);
 		}
 		// Configure Value Fields for Telerik Cloud Services

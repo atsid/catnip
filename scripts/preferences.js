@@ -10,10 +10,7 @@ $(function() {
 		template: $('#dailyprefs'),
 		debug: false,
         serverFiltering: true,
-        filter: [
-			{field: 'User', operator: 'eq', value: window.myAccount ? window.myAccount.get("Id") : ""},
-            {field: 'Date', operator: 'eq', value: today.join("")}
-        ],
+        filter: window.account.getFilter(),
 		default : {
 			"User": window.myAccount ? window.myAccount.get("Id") : "",
 			"Date": today.join(""),
@@ -21,10 +18,10 @@ $(function() {
 			"EndTime": new Date(today.join("-")+" "+$('#dailyprefs input[name=EndTime]').attr('max'))
 		}
     });
-	// If defaulting to yesterday's preferences, update the Date field.
+	// If defaulting to yesterday's preferences, update the Date field, and clear 'Id' to fire the create method.
 	window.myPreferences = window.preferences.options.get("selected");
-	if (window.myPreferences.get("Date") !== today) {
-		window.myPreferences.set("Date", today);
+	if (window.myPreferences.get("Date") !== config.get("today")) {
+		window.myPreferences.set("Date", config.get("today"));
 		window.myPreferences.set("Id", "");
 		window.myPreferences.set("id", "");
 	}
@@ -48,17 +45,11 @@ $(function() {
 	});
 	
 	window.myAccount.bind("change", function(e) {
-		var account = this;
 		if (e.field === "access_token") {
-			if (account.get(e.field).length) {
-				window.preferences.filter([
-					{field: 'User', operator: 'eq', value: account.get("Id")},
-					{field: 'Date', operator: 'eq', value: today.join("")}
-				]);
-			}
-			else {
+			if (this.get(e.field).length)
+				window.preferences.filter(window.account.getFilter());
+			else
 				window.preferences.reset()._filter = [];
-			}
 		}
 	}).trigger("change", {field:"access_token"});
     

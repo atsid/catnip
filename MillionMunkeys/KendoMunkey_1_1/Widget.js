@@ -40,6 +40,7 @@ pi.ui.Widget = {
 						option = "dataSource";
 				} else {
 					switch (option) {
+						case "id":
 						case "placeholder":
 						case "height":
 						case "width":
@@ -66,7 +67,7 @@ pi.ui.Widget = {
 				} catch(e) {
 					result = null;
 				}
-				if (typeof(result) != "object")
+				if (typeof(result) != "object" && typeof(result) != "function")
 					value = value.replace(pi.ui.Widget.attributeTemplateRegEx, result);
 				else
 					return result;
