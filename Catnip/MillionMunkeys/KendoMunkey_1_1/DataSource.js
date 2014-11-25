@@ -16,6 +16,7 @@ pi.data.DataSource = {
 		var result;
 		options = options || {};
 		pi.data.DataSource.configureTransport(options);
+		pi.data.DataSource.configureDebug(options);
 		pi.data.DataSource.everliveAuthentication(options);
 		pi.data.DataSource.configurePaging(options);
 		pi.data.DataSource.configureSchema(options);
@@ -93,6 +94,37 @@ pi.data.DataSource = {
 				options.source = options.source.join('.');
 				// NOTE: We don't need to kepp a reference to the Everlive config object, since it's already stored in Everlive.$.
 			}
+		}
+	},
+	beforeSend: function (xhr) {
+		xhr.setRequestHeader("X-Everlive-Debug", true);
+	},
+	configureDebug : function(options) {
+		if (options.debug && options.transport) {
+			var methods = (options.method || "get,put,post,delete").split(",");
+			methods.forEach(function(method,index) {
+				switch (method) {
+					case "get":
+					case "read":
+						method = "read";
+						break;
+					case "put":
+					case "update":
+						method = "update";
+						break;
+					case "post":
+					case "create":
+						method = "create";
+						break;
+					case "delete":
+					case "destroy":
+						method = "destroy";
+						break;
+				}
+				if (!options.transport[method])
+					options.transport[method] = {};
+				options.transport[method].beforeSend = pi.data.DataSource.beforeSend;
+			});
 		}
 	},
 	everliveSetup : function() {
@@ -448,7 +480,7 @@ pi.data.DataSource = {
 		this.bind("requestEnd",function(e) {
 			that.one("change", function(e) {
 				// New records, set the selected record again.
-				if (this.options.selected instanceof kendo.data.Model) {
+				if (this.options.selected instanceof kendo.data.ObservableObject) {
 					// WARNING: Don't use set("selected") or we get an infinite loop!
 					if (this.options.selected.uid)
 						this.options.set("selected", this.getByUid(this.options.selected.uid));
@@ -456,7 +488,7 @@ pi.data.DataSource = {
 			});
 		});
 		this.bind("change",function(e) {
-			if (e.action == "remove" && this.options.selected instanceof kendo.data.Model) {
+			if (e.action == "remove" && this.options.selected instanceof kendo.data.ObservableObject) {
 				if (this.options.selected.uid && !this.getByUid(this.options.selected.uid))
 					// Selected record was removed
 					this.options.set("selected", this.options.get("defaultSelected","first"));

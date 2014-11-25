@@ -2584,44 +2584,48 @@ body {
 .km-android input {
   color: inherit;
 }
-#drawer .km-scroll-container > span {
+#drawer {
+  /*
+        ul{
+            -webkit-margin-before: 0;
+            -webkit-margin-after: 0;
+            -webkit-padding-start: 0;
+        }
+	*/
+}
+#drawer .km-scroll-container > *:first-child {
   height: 10%;
   display: block;
   padding: 6%;
   background: #000000;
   color: #fff;
 }
-#drawer .km-scroll-container ul {
-  -webkit-margin-before: 0;
-  -webkit-margin-after: 0;
-  -webkit-padding-start: 0;
-}
-#drawer .km-scroll-container label {
+#drawer label {
   color: white;
 }
-#drawer .km-scroll-container #preferences {
+#drawer #preferences {
   margin: 5%;
 }
-#drawer .km-scroll-container #preferences div {
+#drawer #preferences div {
   margin-top: 5%;
 }
-#drawer .km-scroll-container #preferences .k-timepicker {
+#drawer #preferences .k-timepicker {
   width: 100%;
   margin-top: 3%;
 }
-#drawer .km-scroll-container .genres {
+#drawer .genres {
   margin: 5%;
 }
-#drawer .km-scroll-container .genres th {
+#drawer .genres th {
   text-align: left;
   color: white;
   font-weight: normal;
 }
-#drawer .km-scroll-container .genres .k-combobox {
+#drawer .genres .k-combobox {
   width: 100%;
   margin-top: 3%;
 }
-#drawer .km-scroll-container button {
+#drawer button {
   width: 40%;
   position: relative;
   left: 30%;
