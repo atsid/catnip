@@ -1,4 +1,7 @@
 // WARNING: There should only ever be one record in the datasource!
+Date.prototype.toSortString = function() {
+	return this.getFullYear() + ("0"+(this.getMonth()+1)).substr(-2) + ("0"+this.getDate()).substr(-2);
+}
 config = pi.data.DataSource.create({
 	id : "Catnip.Config",
 	// storage : "localStorage",
@@ -15,7 +18,8 @@ config = pi.data.DataSource.create({
 		google : {
 			scheme : "http",
 			domain : "none"
-		}
+		},
+	   today : new Date().toSortString()
 	}
 });
 // This call will fire the JIT handler for selected.

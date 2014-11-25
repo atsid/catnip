@@ -27,6 +27,22 @@ $(function() {
 			else if (roles === "true" && !myAccount.get("access_token"))
 				app.pane.history.length ? app.replace("#login") : app.navigate("#login");
 		}
+		window.account.getFilter = function(filter) {
+			filter = filter || [];
+			if (filter.constructor !== Array)
+				filter = [filter];
+			
+			if (window.myAccount)
+				return [
+					{field: 'User', operator: 'eq', value: window.myAccount.get("Id") || ""},
+					{field: 'Date', operator: 'eq', value: config.get("today")}
+				].concat(filter);
+			else
+				return [
+					{field: 'User', operator: 'eq', value: ""},
+					{field: 'Date', operator: 'eq', value: config.get("today")}
+				].concat(filter);
+		}
 		
 		window.account.options.bind("change", function(e) {
 			if (e.field === "selected") {

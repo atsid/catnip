@@ -5,7 +5,7 @@ kendo.ui.Validator = pi.ui.Validator.extend({
 	init : function(element,options) {
 		$(element).removeAttr('data-role'); // Having a data-role attribute screws up binding to the selected record.
 		options = options || {};
-		pi.ui.Widget.attributeOptions.call(this,element,options);
+		pi.ui.List.init.call(this,element,options);
 		pi.ui.Validator.fn.init.call(this,element,options);
 		options = this.options;
 		if (this.options.autoBind != "false") {
