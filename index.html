@@ -72,7 +72,8 @@
 							if (e.action === "add") {
 								alert(e.items[0].message);
 							}
-						})
+						});
+						food.init();
 					}
 				});
 			});
@@ -191,6 +192,7 @@
 				<ul data-role="listview" data-type="group">
 					<li>
 						<form action="#" id="Logout" method="delete" data-source="account">
+							<div class="account" data-bind="text:Email"></div>
 							<button type="submit">Logout</button>
 						</form>
 					</li>

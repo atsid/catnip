@@ -2634,6 +2634,10 @@ body {
   color: #81b4fc;
   border-radius: 5px;
 }
+#drawer .km-footer .account {
+  text-align: center;
+  margin: 0.5em;
+}
 .km-header .km-navbar {
   height: 10%;
   border: none;
