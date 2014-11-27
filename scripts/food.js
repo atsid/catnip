@@ -1,5 +1,6 @@
 $(function() {
 	window.food = pi.data.DataSource.create({
+		id: "Lunch.FoodCategories",
 		source: "Everlive.FoodCategories",
 		storage: "localStorage"
 	});
@@ -25,4 +26,15 @@ $(function() {
 			this.sync();
 		}
 	}
+	
+	// Login/Logout
+	window.account.bind("change", function(e) {
+		if (e.action === "remove") {
+			$('#FoodPreferences form').each(function(index,element) {
+				var form = $(element).data('kendoValidator');
+				if (form && form.options.dataSource)
+					form.options.dataSource.reset();
+			});
+		}
+	});
 });

@@ -4,10 +4,10 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Lunch?</title>
 		<!-- Kendo Styles -->
-        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.common.min.css" />
-        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.default.min.css" />
-        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.mobile.common.min.css" />
-        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.mobile.all.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo.2014.3.1119/styles/kendo.common.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo.2014.3.1119/styles/kendo.default.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo.2014.3.1119/styles/kendo.mobile.common.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo.2014.3.1119/styles/kendo.mobile.all.min.css" />
 
 		<!-- Local Styles -->
 		<link rel="stylesheet" type="text/css" href="styles/index.css" />
@@ -17,31 +17,31 @@
         <script type="text/javascript" src="cordova.js"></script>
 		
 		<!-- jQuery Js -->
-		<script src="kendo/js/jquery-1.9.1.js"></script>
+		<script src="kendo.2014.3.1119/js/jquery-1.9.1.js"></script>
 		
 		<!-- Kendo Js -->
-		<script src="kendo/js/kendo.all.js"></script>
-	    <script src="kendo/js/everlive.all.js"></script>
+		<script src="kendo.2014.3.1119/js/kendo.all.js"></script>
+	    <script src="kendo.2014.3.1119/js/everlive.all.js"></script>
 		
 		<!-- MillionMunkeys Js -->
 		<!--
 		<script src="MillionMunkeys/KendoMunkey_1_1.js"></script>
 		-->
-		<script src="MillionMunkeys/KendoMunkey_1_1/Observable.js"></script>
-		<script src="MillionMunkeys/KendoMunkey_1_1/Log.js"></script>
-		<script src="MillionMunkeys/KendoMunkey_1_1/Widget.js"></script>
-		<script src="MillionMunkeys/KendoMunkey_1_1/Button.js"></script>
-		<script src="MillionMunkeys/KendoMunkey_1_1/ModalView.js"></script>
-		<script src="MillionMunkeys/KendoMunkey_1_1/DataSource.js"></script>
-    	<script src="MillionMunkeys/KendoMunkey_1_1/Validator.js"></script>
-    	<script src="MillionMunkeys/KendoMunkey_1_1/ColorPicker.js"></script>
-    	<script src="MillionMunkeys/KendoMunkey_1_1/ListView.js"></script>
-    	<script src="MillionMunkeys/KendoMunkey_1_1/Grid.js"></script>
+		<script src="MillionMunkeys/KendoMunkey_1_2/Observable.js"></script>
+		<script src="MillionMunkeys/KendoMunkey_1_2/Log.js"></script>
+		<script src="MillionMunkeys/KendoMunkey_1_2/Widget.js"></script>
+		<script src="MillionMunkeys/KendoMunkey_1_2/Button.js"></script>
+		<script src="MillionMunkeys/KendoMunkey_1_2/ModalView.js"></script>
+		<script src="MillionMunkeys/KendoMunkey_1_2/DataSource.js"></script>
+    	<script src="MillionMunkeys/KendoMunkey_1_2/Validator.js"></script>
+    	<script src="MillionMunkeys/KendoMunkey_1_2/ColorPicker.js"></script>
+    	<script src="MillionMunkeys/KendoMunkey_1_2/ListView.js"></script>
+    	<script src="MillionMunkeys/KendoMunkey_1_2/Grid.js"></script>
 		
         <!-- Less.js -->
         <script src="scripts/less-1.7.5.min.js" type="text/javascript"></script>
         
-		<!-- Catnip Code -->
+		<!-- Lunch Code -->
 		<script src="scripts/config.js"></script>
         <script src="scripts/account.js"></script>
 		<script src="scripts/preferences.js"></script>
@@ -134,7 +134,7 @@
 			<header data-role="header">
 				<nav data-role="navbar">
                     <button class="menu-button icon-menu-3">Menu</button>
-					<div data-role="view-title">CATNIP</div>
+					<div data-role="view-title">Lunch?</div>
 				</nav>
 			</header>
 			<footer data-role="footer">
@@ -174,15 +174,15 @@
 						</form>
 					</ul>
 				</li>
-				<li>
+				<li id="FoodPreferences">
 					<!-- Food Preferences -->
-					<form id="Priority0" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:0})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:0})#" data-change="#food.onChange#">
+					<form id="Lunch.Priority0" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:0})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:0})#" data-change="food.onChange">
 						<select name="FoodCategory" placeholder="Enter food choice..." data-role="combobox" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
 					</form>
-					<form id="Priority1" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:1})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:1})#" data-change="#food.onChange#">
+					<form id="Lunch.Priority1" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:1})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:1})#" data-change="food.onChange">
 						<select name="FoodCategory" placeholder="Enter food choice..." data-role="combobox" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
 					</form>
-					<form id="Priority2" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:2})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:2})#" data-change="#food.onChange#">
+					<form id="Lunch.Priority2" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:2})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:2})#" data-change="food.onChange">
 						<select name="FoodCategory" placeholder="Enter food choice..." data-role="combobox" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
 					</form>
 				</li>

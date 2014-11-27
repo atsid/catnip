@@ -1,7 +1,7 @@
 $(function() {
 	try {
 		window.account = pi.data.DataSource.create({
-			id : "Catnip.Account",
+			id : "Lunch.Account",
 			source : "Everlive.Users",
 			storage : "localStorage",
 			template : $("#LoginForm"),
@@ -14,6 +14,7 @@ $(function() {
 				"Password" : "" // "jason"
 			} */
 			default : {
+				"Id" : "",
 				"Username" : "",
 				"Email" : "",
 				"Password" : "",
