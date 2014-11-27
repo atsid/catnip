@@ -5,6 +5,7 @@ $(function() {
 	
 	// Set configuration
     window.preferences = pi.data.DataSource.create({
+		id: "Lunch.DailyPreferences",
         source: "Everlive.DailyPreferences",
 		storage: "localStorage", // Used to default to yesterday's preferences
 		template: $('#dailyprefs'),
@@ -40,17 +41,40 @@ $(function() {
 					}
 				});
 			}
-			this.sync();
+			if (e.field !== "guid")
+				this.sync();
 		}
 	});
-	
-	window.myAccount.bind("change", function(e) {
-		if (e.field === "access_token") {
-			if (this.get(e.field).length)
-				window.preferences.filter(window.account.getFilter());
-			else
-				window.preferences.reset()._filter = [];
+	/*
+	window.preferences.bind("requestEnd", function(e) {
+		if (e.response.Result) {
+			e.response.Result.forEach(function(item,index) {
+				item.StartTime = new Date(item.StartTime);
+				item.EndTime = new Date(item.EndTime);
+			});
 		}
-	}).trigger("change", {field:"access_token"});
+	});
+	*/
+	
+	// Login/Logout
+	window.account.bind("change", function(e) {
+		if (e.action === "itemchange") {
+			var value = e.items[0].get(e.field);
+			if (e.field === "Id" && value) {
+				// NOTE: Immediately add me to the mix, just for logging in today.
+				window.preferences.one("requestEnd", function(e) {
+					// NOTE: If no record found, we'll create one, then save it.
+					if (!e.response.Result.length) {
+						// Don't use set("User") to avoid a double-POST.
+						window.myPreferences.User = value;
+						window.preferences.sync();
+					}
+				});
+				window.preferences.filter(window.account.getFilter());
+			}
+		} else if (e.action === "remove") {
+			window.preferences.reset();
+		}
+	}).trigger("change", {action:"itemchange",field:"Id",items:window.account.data()});
     
 });

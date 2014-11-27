@@ -446,18 +446,24 @@ pi.data.DataSource = {
 		}
 		this.options.type = this.options.type || this.options.storage;
 		this.options.storage = window[this.options.storage];
-		this.bind("change", function(e){
-			pi.data.DataSource.setGUID.apply(this,arguments);
-		});
+		this.bind("requestEnd", function(e) {
+			if (e.type === "read")
+			this.one("change", function(e){
+				pi.data.DataSource.setGUID.apply(this,arguments);
+			});
+		})
 		// Retrieve existing data if present
 		var data = this.options.storage.getItem(this.options.id);
 		// WARNING: Android 2.x throws an error if you pass a null value to JSON.parse!  New versions do not.
 		if (!this.data().length && data)
 			this.reset(JSON.parse(data));
-		/* Will be handled when we trigger("change") below.
-		for (var i=0, data=this.data(); i<data.length; i++)
-			data[i].uid = data[i].guid || data[i].uid;
-		*/
+		// CAUTION: We don't want the uid change to fire an event.
+		for (var i=0, data=this.data(); i<data.length; i++) {
+			if (data[i].guid)
+				data[i].uid = data[i].guid;
+			else
+				data[i].guid = data[i].uid;
+		}
 		var destroyed = this.options.storage.getItem(this.options.id+"_destroyed");
 		if (destroyed) {
 			this._destroyed = new kendo.data.ObservableArray(JSON.parse(destroyed));
@@ -483,17 +489,19 @@ pi.data.DataSource = {
 		var that = this;
 		this.bind("requestEnd",function(e) {
 			that.one("change", function(e) {
+				var selected = this.options.get("selected"); // Use getter so we fire the filter
 				// New records, set the selected record again.
-				if (this.options.selected instanceof kendo.data.ObservableObject) {
+				if (selected instanceof kendo.data.ObservableObject) {
 					// WARNING: Don't use set("selected") or we get an infinite loop!
-					if (this.options.selected.uid)
-						this.options.set("selected", this.getByUid(this.options.selected.uid));
+					if (selected.uid)
+						this.options.set("selected", this.getByUid(selected.uid));
 				}
 			});
 		});
 		this.bind("change",function(e) {
-			if (e.action == "remove" && this.options.selected instanceof kendo.data.ObservableObject) {
-				if (this.options.selected.uid && !this.getByUid(this.options.selected.uid))
+			var selected = this.options.get("selected"); // Use getter so we fire the filter
+			if (e.action == "remove" && selected instanceof kendo.data.ObservableObject) {
+				if (selected.uid && !this.getByUid(selected.uid))
 					// Selected record was removed
 					this.options.set("selected", this.options.get("defaultSelected","first"));
 			}
@@ -526,7 +534,7 @@ pi.data.DataSource = {
 		// if (this.options.source === "Everlive.Users") return;
 		this.bind("change", function(e) {
 			if (!this.data().length)
-				this.add( Object.create(this.options.default.toJSON ? this.options.default.toJSON() : this.options.default) );
+				this.add( $.extend({}, this.options.default.toJSON ? this.options.default.toJSON() : this.options.default) );
 		}).trigger("change",{action:"init"});
 	}
 }
@@ -537,6 +545,7 @@ kendo.data.DataSource.prototype.reset = function(defaultValues) {
 	while (this._destroyed.length)
 		this._destroyed.pop();
 	this.options.set("selected", this.options.get("defaultSelected","first"));
+	this.options.get("selected"); // Use getter so we fire the filter
 	return this; // allow chaining
 }
 
