@@ -23,13 +23,32 @@ $(function() {
 				else
 					dataSource.remove(item);
 			});
-			this.sync();
+			if (e.field !== "guid")
+				this.sync();
 		}
+		else if (e.action === "add") {
+			e.items.forEach(function(item,index) {
+				if (item.get("User") !== window.myAccount.get("Id"))
+					// CAUTION: Don't use set("User") so we don't fire an immediate sync
+					item.User = window.myAccount.get("Id");
+			});
+		}
+	}
+	window.food.init = function(e) {
+		$('#FoodPreferences form').each(function(index,element) {
+			var form = $(element).data('kendoValidator');
+			if (form && form.options.dataSource)
+				form.options.dataSource.filter(window.account.getFilter({field:"Priority",operator:"eq",value:index}));
+		});
 	}
 	
 	// Login/Logout
 	window.account.bind("change", function(e) {
-		if (e.action === "remove") {
+		if (e.action === "itemchange") {
+			var value = e.items[0].get(e.field);
+			if (e.field === "Id" && value)
+				window.food.init();
+		} else if (e.action === "remove") {
 			$('#FoodPreferences form').each(function(index,element) {
 				var form = $(element).data('kendoValidator');
 				if (form && form.options.dataSource)
@@ -37,4 +56,7 @@ $(function() {
 			});
 		}
 	});
+	// CAUTION: We don't init datasource on page load, because they're not created until application init.
+	//.trigger("change", {action:"itemchange",field:"Id",items:window.account.data()});
+
 });
