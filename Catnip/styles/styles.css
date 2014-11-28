@@ -2581,6 +2581,11 @@ body {
 .km-android input {
   color: inherit;
 }
+.km-android .km-view-title,
+.km-android .km-navbar .km-hide-title {
+  display: inherit;
+  visibility: visible;
+}
 #drawer {
   /*
         ul{
@@ -2635,14 +2640,17 @@ body {
   text-align: center;
   margin: 0.5em;
 }
+.km-header {
+  background: #000000;
+}
 .km-header .km-navbar {
+  background: #000000 !important;
   height: 10%;
   border: none;
 }
 .km-header .km-navbar .km-view-title {
-  background: #000000;
-  opacity: .5
-			color: #fff !important;
+  opacity: .5;
+  color: #fff !important;
 }
 .km-view-title {
   color: #ffffff;

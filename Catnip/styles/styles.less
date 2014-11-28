@@ -52,6 +52,11 @@ body {
 	input {
 		color: inherit;
 	}
+	.km-view-title,
+	.km-navbar .km-hide-title {
+		display: inherit;
+		visibility: visible;
+	}
 }
 #drawer{
     .km-scroll-container{
@@ -113,12 +118,13 @@ body {
 }
 
 .km-header{
+	background: darken(@base-background, 30%);
 	.km-navbar{
+		background: darken(@base-background, 30%) !important;
 		height: 10%;
 		border:none;
 		.km-view-title{
-			background: darken(@base-background, 30%);
-			opacity: .5
+			opacity: .5;
 			color: #fff !important;
 		}
 	}
