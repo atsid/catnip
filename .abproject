@@ -11,15 +11,15 @@
     "Landscape"
   ],
   "iOSStatusBarStyle": "Default",
-  "AndroidHardwareAcceleration": "false",
-  "BundleVersion": "1.0",
+  "AndroidHardwareAcceleration": "True",
+  "BundleVersion": "0.4",
   "iOSDisplayName": "",
   "iOSDeviceFamily": [
     "1",
     "2"
   ],
   "iOSBackgroundMode": [],
-  "AndroidVersionCode": "1",
+  "AndroidVersionCode": "2",
   "CorePlugins": [
     "org.apache.cordova.console",
     "org.apache.cordova.device-orientation",
