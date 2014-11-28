@@ -2575,11 +2575,8 @@ body {
 }
 /* iOS7 allows you to color the phone's status bar, so you have to leave room for the icons. */
 .km-ios7 > * {
-  margin-top: 20px;
-  margin-bottom: -20px;
-}
-.km-ios7 .km-drawer .km-footer {
-  margin-bottom: 20px;
+  padding-top: 20px;
+  padding-bottom: 1em;
 }
 .km-android input {
   color: inherit;

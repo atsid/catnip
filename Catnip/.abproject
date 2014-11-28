@@ -1,7 +1,7 @@
 {
   "ProjectGuid": "8fa7ef35-175b-40a9-a497-dcef905450f8",
   "ProjectTypeGuids": "{070BCB52-5A75-4F8C-A973-144AF0EAFCC9}",
-  "AppIdentifier": "com.atsid.labs.catnip",
+  "AppIdentifier": "com.atsid.labs.lunch",
   "ProjectName": "Catnip",
   "AndroidPermissions": [
     "android.permission.INTERNET"

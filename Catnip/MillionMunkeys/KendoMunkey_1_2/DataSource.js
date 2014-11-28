@@ -163,7 +163,7 @@ pi.data.DataSource = {
 			read : function() {
 				var that = this, selected = this.dataSource.options.get("selected");
 				Everlive.$.Users.login( 
-					selected.get("Username"),
+					selected.get("Username").toLowerCase(), // Case insensitive login
 					selected.get("Password"))
 					.then(
 						function (data) {
@@ -189,12 +189,12 @@ pi.data.DataSource = {
 				if (!selected.get("Username").length || !selected.get("Password").length)
 					return; // Blank record
 				Everlive.$.Users.register(
-					selected.get("Username"),
+					selected.get("Username").toLowerCase(), // Case insensitive login
 					selected.get("Password"),
 					selected.toJSON(),
 					function (data) {
 						Everlive.$.Users.login(
-							selected.get("Username"),
+							selected.get("Username").toLowerCase(), // Case insensitive login
 							selected.get("Password"),
 							function (data) {
 								that.success(data);
@@ -218,7 +218,7 @@ pi.data.DataSource = {
 				var selected = this.dataSource.options.get("selected");
 				if (selected.get("NewPassword") !== selected.get("Password")) {
 					Everlive.$.Users.changePassword(
-						selected.get("Username"),
+						selected.get("Username").toLowerCase(), // Case insensitive login
 						selected.get("Password"),
 						selected.get("NewPassword"),
 						true,
