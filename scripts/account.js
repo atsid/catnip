@@ -58,6 +58,7 @@ $(function() {
 		}).trigger("change", {field:"selected"});
 		
 	} catch(e) {
+		e.event = "Account Instantiation";
 		(pi||console).log(e);
 	}
 });
