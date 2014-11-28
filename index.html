@@ -85,7 +85,12 @@
 	</head>
 	
 	<body>
-		<div id="login" data-role="view" title="Login" data-user-roles="false">
+		<div id="login" data-role="view" title="Login" data-user-roles="false" data-layout="">
+			<header data-role="header">
+				<nav data-role="navbar">
+					<div data-role="view-title">Lunch?</div>
+				</nav>
+			</header>
 			<form id="LoginForm" method="get" data-source="account">
 				<ul data-role="listview" data-style="inset">
 					<li><label>Email: <input type="email" name="Username" required="required" /></label></li>
