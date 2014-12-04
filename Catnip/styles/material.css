@@ -1,0 +1,89 @@
+.km-ios7 .km-header .km-navbar {
+  padding-top: 10px;
+}
+.km-scroll-wrapper,
+.km-scroll-container,
+.km-scroll-container > * {
+  height: 100%;
+}
+table[role=grid] {
+  height: auto;
+}
+.km-header {
+  color: #ffffff;
+  background: #3f51b5;
+}
+.km-header ul {
+  padding: 0em;
+}
+.km-header #preferences {
+  height: 100px;
+  padding: 0em;
+  margin: 0.25em;
+  margin-top: -110px;
+  text-align: center;
+}
+.km-header #preferences #dailyprefs li.start,
+.km-header #preferences #dailyprefs li.end {
+  width: 49%;
+  display: inline-block;
+  padding: 0.25em;
+  text-align: center;
+}
+.km-header #preferences #dailyprefs li.start > *,
+.km-header #preferences #dailyprefs li.end > * {
+  display: inline-block;
+}
+.km-header #preferences #dailyprefs li.start .k-timepicker,
+.km-header #preferences #dailyprefs li.end .k-timepicker {
+  width: 8em;
+  margin: auto;
+}
+.km-header #preferences #dailyprefs li.food > * {
+  vertical-align: middle;
+}
+.km-header #preferences #dailyprefs li.food .k-multiselect {
+  display: inline-block;
+  width: 70%;
+}
+.km-header #preferences #FoodPreferences form {
+  display: inline-block;
+  width: 32%;
+}
+@media (max-width: 579px) {
+  .km-header #preferences #dailyprefs li > * {
+    display: block;
+  }
+}
+.all-groups .k-grid-header th.k-header {
+  overflow: visible;
+}
+.all-groups td.preference {
+  background-color: #3f51b5;
+  text-indent: -999px;
+  overflow: hidden;
+}
+.all-groups td.available {
+  background-color: rgba(63, 81, 181, 0.5);
+  text-indent: -999px;
+  overflow: hidden;
+}
+.all-groups .group {
+  clear: both;
+}
+.all-groups .group > * {
+  display: inline-block;
+  vertical-align: middle;
+}
+.all-groups .group .group-icon img {
+  max-width: 100px;
+}
+.all-groups .group .details > * {
+  display: inline-block;
+  margin-left: 2em;
+}
+.km-footer {
+  padding: 0.5em;
+  text-align: center;
+  color: #CCC;
+}
