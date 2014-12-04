@@ -1,17 +1,7 @@
 .km-ios7 {
 	.km-header .km-navbar {
-		padding-top: 10px;
+		padding-top: 20px;
 	}
-}
-
-.km-scroll-wrapper,
-.km-scroll-container,
-.km-scroll-container > * {
-	height: 100%;
-}
-
-table[role=grid] {
-	height: auto;
 }
 
 .km-header {
@@ -30,7 +20,7 @@ table[role=grid] {
 		text-align: center;
 		
 		#dailyprefs {
-			li.start, li.end {
+			> li.start, > li.end {
 				width: 49%;
 				display: inline-block;
 				padding: 0.25em;
@@ -44,7 +34,7 @@ table[role=grid] {
 					margin: auto;
 				}
 			}
-			li.food {
+			> li.food {
 				> * {
 					vertical-align: middle;
 				}
@@ -64,7 +54,7 @@ table[role=grid] {
 	
 	@media (max-width:579px) {
 		#preferences {
-			#dailyprefs li {
+			#dailyprefs > li {
 				> * {
 					display: block;
 				}
@@ -74,9 +64,20 @@ table[role=grid] {
 	
 }
 
-.all-groups {
+#LoginForm input {
+	width: 65%;
+}
+
+.all-groups {	
 	.k-grid-header th.k-header {
 		overflow: visible;
+	}
+	
+	td {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		padding: 0.2em 0.4em;
 	}
 	
 	td.preference {
