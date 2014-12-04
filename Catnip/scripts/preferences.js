@@ -28,7 +28,7 @@ $(function() {
 			var $header = $('.km-header #preferences');
 			if (open === true || parseInt($header.css("margin-top")) < 0)
 				$('.km-header #preferences').animate({
-					"margin-top" : "0px"
+					"margin-top" : "20px"
 				});
 			else
 				$('.km-header #preferences').animate({
@@ -61,6 +61,9 @@ $(function() {
 				}
 				if (e.field !== "guid")
 					this.sync();
+			}
+			if (e.action === "sync") {
+				window.allPreferences.read();
 			}
 		});
 		/*

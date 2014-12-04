@@ -74,6 +74,15 @@
 							}
 						});
 						food.init();
+						$('#results').data('kendoMobileView').scroller.setOptions({
+							pullToRefresh: true,
+							pull: function() {
+								window.allPreferences.one("requestEnd", function(e) {
+									$('#results').data('kendoMobileView').scroller.pullHandled();
+								});
+								window.allPreferences.cycle();
+							}
+						});
 					}
 				});
 			});

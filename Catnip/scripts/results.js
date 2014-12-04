@@ -103,7 +103,13 @@ $(function() {
 			}
 		}
 	});
-	window.allPreferences.read();
+	window.allPreferences.cycle = function() {
+		window.allPreferences.read();
+		if (window.allPreferences.timeout)
+			window.clearTimeout(window.allPreferences.timeout);
+		window.allPreferences.timeout = window.setTimeout(window.allPreferences.cycle, 60 * 60); // check every minute
+	}
+	window.allPreferences.cycle();
 	
 	window.results = pi.data.DataSource.create({
 		group: {
