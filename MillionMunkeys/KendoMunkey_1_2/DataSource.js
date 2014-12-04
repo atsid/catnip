@@ -20,6 +20,7 @@ pi.data.DataSource = {
 		else if (options.constructor === Array)
 			options = {data:options};
 		pi.data.DataSource.configureTransport(options);
+		pi.data.DataSource.expand(options);
 		pi.data.DataSource.configureDebug(options);
 		pi.data.DataSource.everliveAuthentication(options);
 		pi.data.DataSource.configurePaging(options);
@@ -100,8 +101,19 @@ pi.data.DataSource = {
 			}
 		}
 	},
-	beforeSend: function (xhr) {
-		xhr.setRequestHeader("X-Everlive-Debug", true);
+	expand: function(options) {
+		if (!options.expand)
+			return;
+		if (options.type === "everlive" && !options.transport.read)
+			options.transport.read = {};
+		if (options.transport.read.beforeSend)
+			var beforeSend = options.transport.read.beforeSend;
+		options.transport.read.beforeSend = function(xhr) {
+			xhr.setRequestHeader("X-Everlive-Expand", JSON.stringify(options.expand));
+			// chain with existing functions
+			if (beforeSend)
+				beforeSend(xhr);
+		}
 	},
 	configureDebug : function(options) {
 		if (options.debug && options.transport) {
@@ -127,7 +139,14 @@ pi.data.DataSource = {
 				}
 				if (!options.transport[method])
 					options.transport[method] = {};
-				options.transport[method].beforeSend = pi.data.DataSource.beforeSend;
+				if (options.transport[method].beforeSend)
+					var beforeSend = options.transport[method].beforeSend;
+				options.transport[method].beforeSend = function(xhr) {
+					xhr.setRequestHeader("X-Everlive-Debug", true);
+					// chain with existing functions
+					if (beforeSend)
+						beforeSend(xhr);
+				}
 			});
 		}
 	},
