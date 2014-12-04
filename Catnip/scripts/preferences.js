@@ -24,6 +24,19 @@ $(function() {
 				"EndTime": (new Date()).setTimeString($('#dailyprefs input[name=EndTime]').attr('max'))
 			}
 		});
+		window.preferences.open = function(open) {
+			var $header = $('.km-header #preferences');
+			if (open === true || parseInt($header.css("margin-top")) < 0)
+				$('.km-header #preferences').animate({
+					"margin-top" : "0px"
+				});
+			else
+				$('.km-header #preferences').animate({
+					"margin-top" : "-110px"
+				});
+		}
+		
+		
 		// If defaulting to yesterday's preferences, update the Date field, and clear 'Id' to fire the create method.
 		window.myPreferences = window.preferences.options.get("selected");
 		if (window.myPreferences.get("Date") !== config.get("today")) {
@@ -69,7 +82,7 @@ $(function() {
 					// NOTE: Immediately add me to the mix, just for logging in today.
 					window.preferences.one("requestEnd", function(e) {
 						// NOTE: If no record found, we'll create one, then save it.
-						if (!e.response.Result.length) {
+						if (e.response && e.response.Result && !e.response.Result.length) {
 							// Don't use set("User") to avoid a double-POST.
 							window.myPreferences.User = value;
 							window.preferences.sync();

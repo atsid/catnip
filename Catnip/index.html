@@ -5,13 +5,13 @@
 		<title>Lunch?</title>
 		<!-- Kendo Styles -->
         <link rel="stylesheet" type="text/css" href="kendo.2014.3.1119/styles/kendo.common.min.css" />
-        <link rel="stylesheet" type="text/css" href="kendo.2014.3.1119/styles/kendo.default.min.css" />
-        <link rel="stylesheet" type="text/css" href="kendo.2014.3.1119/styles/kendo.mobile.common.min.css" />
-        <link rel="stylesheet" type="text/css" href="kendo.2014.3.1119/styles/kendo.mobile.all.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo.2014.3.1119/styles/kendo.dataviz.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo.2014.3.1119/styles/kendo.dataviz.material.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo.2014.3.1119/styles/kendo.material.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo.2014.3.1119/styles/kendo.material.mobile.min.css" />
 
 		<!-- Local Styles -->
-		<link rel="stylesheet" type="text/css" href="styles/index.css" />
-        <link rel="stylesheet/less" type="text/css" href="styles/styles.less" />
+        <link rel="stylesheet/less" type="text/css" href="styles/material.less" />
 		
 		<!--- Cordova - Loaded on mobile apps only -->
         <script type="text/javascript" src="cordova.js"></script>
@@ -56,7 +56,7 @@
 		<script type="text/javascript">
 			$(function() {
 				window.app = new kendo.mobile.Application(document.body,{
-					layout: "android-layout",
+					layout: "material-design",
 					init: function(e) {
 						for (var layout in this.pane.viewEngine.layouts) {
 							this.pane.viewEngine.layouts[layout].bind("show", account.verify);
@@ -108,22 +108,130 @@
 			</form>
 		</div>
 
-        <div id="results" data-role="view" data-title="Where?" data-user-roles="true">
-            <div class="all-groups">
-            </div>
-        </div>
-        <div id="results_detail" data-role="view" data-title="Where?" data-user-roles="true">
-            <div class="img">
-                <img src="img/color-table.png"/>
-            </div>
-            <div class="details">
-                <span class="genre"></span>
-                <span class="time"></span>
-                <div class="scroll-list" data-role="scroller">
-                    <ul class="people" data-role="listview"></ul>
-                </div>
-            </div>
-        </div>
+		<div id="results" data-role="view" data-user-roles="true">
+			<div data-role="header">
+					<ul id="preferences">
+						<li>
+							<!-- Time Preferences -->
+							<ul>
+								<form id="dailyprefs" data-source="preferences" data-storage="localStorage">
+									<li class="start">
+										<label for="StartTime">Earliest I can leave: </label>
+										<input name="StartTime" type="datetime" data-role="timepicker" data-format="h:mm tt" value="12:00" min="10:30" max="15:00" />
+									</li>
+									
+									<li class="end">
+										<label for="EndTime">Latest I can be back: </label>
+										<input name="EndTime" type="datetime" data-role="timepicker" data-format="h:mm tt" value="13:00" min="11:00" max="16:00" />
+									</li>
+									<li class="food">
+										<label for="FoodCategories">Food Choices: </label>
+										<select name="FoodCategories" placeholder="Pick food choice(s)..." data-role="multiselect" data-max-selected-items="3" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
+									</li>
+								</form>
+							</ul>
+						</li>
+						<!--
+						<li id="FoodPreferences">
+							<form id="Lunch.Priority0" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:0})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:0})#" data-change="food.onChange">
+								<select name="FoodCategory" placeholder="Enter food choice..." data-role="combobox" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
+							</form>
+							<form id="Lunch.Priority1" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:1})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:1})#" data-change="food.onChange">
+								<select name="FoodCategory" placeholder="Enter food choice..." data-role="combobox" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
+							</form>
+							<form id="Lunch.Priority2" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:2})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:2})#" data-change="food.onChange">
+								<select name="FoodCategory" placeholder="Enter food choice..." data-role="combobox" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
+							</form>
+						</li>
+						-->
+					</ul>
+				<div data-role="navbar">
+					<div data-role="view-title" onclick="preferences.open()">Lunch?</div>
+				</div>
+			</div>
+			<!--
+			<div id="map" data-role="map" style="height: 30%">
+				
+			</div>
+			-->
+			<div class="all-groups">
+			</div>
+			<div data-role="footer">
+				<form id="Logout" data-align="right" method="delete" data-source="account">
+					<span data-bind="text:Username"></span>
+					<button type="submit">Logout</button>
+				</form>
+			</div>
+		</div>
+		
+    	<div id="results1" data-role="view" data-user-roles="true">
+			<div data-role="header">
+				<div data-role="navbar">
+					<div data-role="view-title">Lunch?</div>
+					<form id="Logout" data-align="right" method="delete" data-source="account">
+						<button type="submit">Logout</button>
+					</form>
+				</div>
+			</div>
+			<div id="main" data-role="splitter" data-orientation="horizontal">
+				<div id="preferences" data-width="20%" data-collapsible="false" resizeable="true">
+					<ul data-role="listview" data-type="group">
+						<li>
+							<!-- Time Preferences -->
+							<ul>
+								<form id="dailyprefs" data-source="preferences" data-storage="localStorage">
+									<li>
+										<label for="startTime">Earliest I can leave</label>
+										<input name="StartTime" type="datetime" data-role="timepicker" data-format="h:mm tt" value="12:00" min="10:30" max="15:00" />
+									</li>
+									
+									<li>
+										<label for="endTime">Latest I can be back</label>
+										<input name="EndTime" type="datetime" data-role="timepicker" data-format="h:mm tt" value="13:00" min="11:00" max="16:00" />
+									</li>
+								</form>
+							</ul>
+						</li>
+						<li id="FoodPreferences">
+							<!-- Food Preferences -->
+							<form id="Lunch.Priority0" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:0})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:0})#" data-change="food.onChange">
+								<select name="FoodCategory" placeholder="Enter food choice..." data-role="combobox" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
+							</form>
+							<form id="Lunch.Priority1" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:1})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:1})#" data-change="food.onChange">
+								<select name="FoodCategory" placeholder="Enter food choice..." data-role="combobox" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
+							</form>
+							<form id="Lunch.Priority2" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:2})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:2})#" data-change="food.onChange">
+								<select name="FoodCategory" placeholder="Enter food choice..." data-role="combobox" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
+							</form>
+						</li>
+					</ul>
+				</div>
+				<div id="center" data-role="splitter" data-orientation="vertical" data-collapsible="true">
+					<div id="map" data-role="map" data-width="20%">
+						
+					</div>
+					<div data-role="pane">
+						<div id="results" data-role="view" data-user-roles="true">
+							<div class="all-groups">
+							</div>
+						</div>
+						<div id="results_detail" data-role="view" data-title="Where?" data-user-roles="true">
+							<div class="img">
+								<img src="img/color-table.png"/>
+							</div>
+							<div class="details">
+								<span class="genre"></span>
+								<span class="time"></span>
+								<div class="scroll-list" data-role="scroller">
+									<ul class="people" data-role="listview"></ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 		
         <div id="social-login" data-role="view">
 			<div class="app">
@@ -133,77 +241,6 @@
 				<button id="loginADFS">Login with ADFS</button>
 			</div>
         </div>
-		
-		<!-- Layouts -->
-		
-		<div data-id="ios-layout" data-role="layout">
-			<header data-role="header">
-				<nav data-role="navbar">
-                    <button class="menu-button icon-menu-3">Menu</button>
-					<div data-role="view-title">Lunch?</div>
-				</nav>
-			</header>
-			<footer data-role="footer">
-		        <div data-role="tabstrip">
-					<!-- <a data-icon="home" href="login.html">Login</a>
-                    <a data-icon="recents" href="preferences.html">Daily Preferences</a>
-                    <a data-icon="cart" href="food.html">Food Preferences</a>
-                    <a data-icon="search" href="results.html">Results</a> -->
-				</div>
-	        </footer>
-		</div>
-		
-		<div data-id="android-layout" data-role="layout">
-			<header data-role="header">
-				<nav data-role="navbar">
-					<a data-role="button" class="menu-button" data-rel="drawer" href="#drawer" data-align="left">&lt;</a>
-					<div data-role="view-title">Lunch?</div>
-				</nav>
-			</header>
-		</div>
-		<div data-role="drawer" id="drawer">
-            <div data-role="view-title">Daily Prefs</div>
-			<ul data-role="listview" data-type="group">
-				<li>
-					<!-- Time Preferences -->
-					<ul>
-						<form id="dailyprefs" data-source="preferences" data-storage="localStorage">
-							<li>
-								<label for="startTime">Earliest I can leave</label>
-								<input name="StartTime" type="datetime" data-role="timepicker" data-format="h:mm tt" value="12:00" min="10:30" max="15:00" />
-							</li>
-							
-							<li>
-								<label for="endTime">Latest I can be back</label>
-								<input name="EndTime" type="datetime" data-role="timepicker" data-format="h:mm tt" value="13:00" min="11:00" max="16:00" />
-							</li>
-						</form>
-					</ul>
-				</li>
-				<li id="FoodPreferences">
-					<!-- Food Preferences -->
-					<form id="Lunch.Priority0" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:0})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:0})#" data-change="food.onChange">
-						<select name="FoodCategory" placeholder="Enter food choice..." data-role="combobox" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
-					</form>
-					<form id="Lunch.Priority1" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:1})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:1})#" data-change="food.onChange">
-						<select name="FoodCategory" placeholder="Enter food choice..." data-role="combobox" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
-					</form>
-					<form id="Lunch.Priority2" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:2})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:2})#" data-change="food.onChange">
-						<select name="FoodCategory" placeholder="Enter food choice..." data-role="combobox" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
-					</form>
-				</li>
-			</ul>
-			<div data-role="footer">
-				<ul data-role="listview" data-type="group">
-					<li>
-						<form action="#" id="Logout" method="delete" data-source="account">
-							<div class="account" data-bind="text:Email"></div>
-							<button type="submit">Logout</button>
-						</form>
-					</li>
-				</ul>
-			</div>
-		</div>
 		
 	</body>
 </html>
