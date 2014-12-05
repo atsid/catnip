@@ -66,40 +66,45 @@ $(function() {
 			"FoodCategories": true
 		},
 		requestEnd: function(e) {
-			if (e.response && e.response.Result) {
-				/*
-				e.response.Result.forEach(function(item, index) {
-					item.set("DisplayName", item.User.DisplayName);
-				});
-				*/
-				var food = {}, results = [];
-				e.response.Result.forEach(function(daily,index) {
-					daily.FoodCategories.forEach(function(pref,index) {
-						if (!food[pref.Name])
-							food[pref.Name] = { min: daily.StartTimeCode, max: daily.EndTimeCode, users:{} };
-						if (daily.StartTimeCode < food[pref.Name].min)
-							food[pref.Name].min = daily.StartTimeCode;
-						if (daily.EndTimeCode > food[pref.Name].max)
-							food[pref.Name].max = daily.EndTimeCode;
-						food[pref.Name].users[daily.User.Id] = 1;
+			try {
+				if (e.response && e.response.Result) {
+					/*
+					e.response.Result.forEach(function(item, index) {
+						item.set("DisplayName", item.User.DisplayName);
 					});
-				});
-				for (var pref in food) {
+					*/
+					var food = {}, results = [];
 					e.response.Result.forEach(function(daily,index) {
-						var record = {
-							User: daily.User.Id,
-							DisplayName: daily.User.DisplayName,
-							Food: pref,
-							Preference: food[pref].users[daily.User.Id] // CAUTION: Could be null
-						};
-						for (var timecode=parseInt(food[pref].min); timecode<food[pref].max; timecode=(timecode%100) ? timecode+=70 : timecode+=30) {
-							if (daily.StartTimeCode <= timecode && daily.EndTimeCode > timecode)
-								record["utc"+timecode] = record.Preference ? "preference" : "available";
-						}
-						results.push(record);
+						daily.FoodCategories.forEach(function(pref,index) {
+							if (!food[pref.Name])
+								food[pref.Name] = { min: daily.StartTimeCode, max: daily.EndTimeCode, users:{} };
+							if (daily.StartTimeCode < food[pref.Name].min)
+								food[pref.Name].min = daily.StartTimeCode;
+							if (daily.EndTimeCode > food[pref.Name].max)
+								food[pref.Name].max = daily.EndTimeCode;
+							food[pref.Name].users[daily.User.Id] = 1;
+						});
 					});
+					for (var pref in food) {
+						e.response.Result.forEach(function(daily,index) {
+							if (!daily.User)
+								return;
+							var record = {
+								User: daily.User.Id,
+								DisplayName: daily.User.DisplayName,
+								Food: pref,
+								Preference: food[pref].users[daily.User.Id] // CAUTION: Could be null
+							};
+							for (var timecode=parseInt(daily.StartTimeCode); timecode<daily.EndTimeCode; timecode=(timecode%100) ? timecode+=70 : timecode+=30)
+								record["utc"+timecode] = record.Preference ? "preference" : "available";
+							results.push(record);
+						});
+					}
+					window.results.data(results);
 				}
-				window.results.data(results);
+			} catch(e) {
+				e.event = "Processing All Preferences";
+				(pi||console).log(e);
 			}
 		}
 	});
@@ -107,7 +112,7 @@ $(function() {
 		window.allPreferences.read();
 		if (window.allPreferences.timeout)
 			window.clearTimeout(window.allPreferences.timeout);
-		window.allPreferences.timeout = window.setTimeout(window.allPreferences.cycle, 60 * 60); // check every minute
+		window.allPreferences.timeout = window.setTimeout(window.allPreferences.cycle, 5 * 60 * 1000); // check every minute
 	}
 	window.allPreferences.cycle();
 	

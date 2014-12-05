@@ -12,14 +12,14 @@
   ],
   "iOSStatusBarStyle": "Default",
   "AndroidHardwareAcceleration": "True",
-  "BundleVersion": "1.0",
+  "BundleVersion": "1.1",
   "iOSDisplayName": "",
   "iOSDeviceFamily": [
     "1",
     "2"
   ],
   "iOSBackgroundMode": [],
-  "AndroidVersionCode": "3",
+  "AndroidVersionCode": "4",
   "CorePlugins": [
     "org.apache.cordova.console",
     "org.apache.cordova.device-orientation",
