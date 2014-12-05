@@ -68,32 +68,41 @@ $(function() {
 		requestEnd: function(e) {
 			try {
 				if (e.response && e.response.Result) {
-					var food = {}, results = [], undecided = true;
+					var food = {}, results = [], styles = [], undecided = true;
 					e.response.Result.forEach(function(daily,index) {
 						daily.FoodCategories.forEach(function(pref,index) {
 							undecided = false;
 							if (!food[pref.Name])
-								food[pref.Name] = {};
-							food[pref.Name][daily.User.Id] = 1;
+								food[pref.Name] = { Users: {}, Name: pref.Name, Color: pref.Color, RGB: pref.RGB };
+							food[pref.Name].Users[daily.User.Id] = 1;
 						});
 					});
 					if (undecided)
-						food["Undecided"] = {}
+						food["Undecided"] = { Users: {}, Name: "Undecided", Color: "Silver", RGB: [192,192,192] };
 					for (var pref in food) {
+						pref = food[pref];
+						if (pref.RGB) {
+							styles.push("td."+pref.Name+".preference {background-color: rgba("+pref.RGB.join()+",1)}");
+							styles.push("td."+pref.Name+".available {background-color: rgba("+pref.RGB.join()+",0.5)}");
+						}
 						e.response.Result.forEach(function(daily,index) {
 							if (!daily.User)
 								return;
 							var record = {
 								User: daily.User.Id,
 								DisplayName: daily.User.DisplayName,
-								Food: pref,
-								Preference: food[pref][daily.User.Id] // CAUTION: Could be null
+								Preference: pref.Users[daily.User.Id], // CAUTION: Could be null
+								Food: pref.Name
 							};
 							for (var timecode=parseInt(daily.StartTimeCode); timecode<daily.EndTimeCode; timecode=(timecode%100) ? timecode+=70 : timecode+=30)
 								record["utc"+timecode] = record.Preference ? "preference" : "available";
 							results.push(record);
 						});
 					}
+					var styleBlock = $('style#LunchColors');
+					if (!styleBlock.length)
+						styleBlock = $(document.head).append('<style id="LunchColors">').children("#LunchColors");
+					styleBlock.empty().text(styles.join("\n"));
 					window.results.data(results);
 				}
 			} catch(e) {
