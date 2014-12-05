@@ -1,5 +1,14 @@
 .km-ios7 .km-header .km-navbar {
-  padding-top: 20px;
+  margin-top: 20px;
+}
+.km-switch .km-switch-handle {
+  background-color: #e5e5e5;
+  border: 1px solid #e5e5e5;
+}
+.km-switch .km-switch-label-on,
+.km-switch .km-switch-label-off {
+  background: #FFF;
+  line-height: 2em;
 }
 .km-header {
   color: #ffffff;
@@ -9,25 +18,29 @@
   padding: 0em;
 }
 .km-header #preferences {
-  height: 100px;
   padding: 0em;
-  margin: 0.25em;
-  margin-top: -110px;
+  margin: 20px 0.25em 0px;
   text-align: center;
 }
 .km-header #preferences #dailyprefs > li.start,
-.km-header #preferences #dailyprefs > li.end {
+.km-header #preferences #dailyprefs > li.end,
+.km-header #preferences #dailyprefs > li.optout,
+.km-header #preferences #dailyprefs > li.brought {
   width: 49%;
   display: inline-block;
   padding: 0.25em;
   text-align: center;
 }
 .km-header #preferences #dailyprefs > li.start > *,
-.km-header #preferences #dailyprefs > li.end > * {
+.km-header #preferences #dailyprefs > li.end > *,
+.km-header #preferences #dailyprefs > li.optout > *,
+.km-header #preferences #dailyprefs > li.brought > * {
   display: inline-block;
 }
 .km-header #preferences #dailyprefs > li.start .k-timepicker,
-.km-header #preferences #dailyprefs > li.end .k-timepicker {
+.km-header #preferences #dailyprefs > li.end .k-timepicker,
+.km-header #preferences #dailyprefs > li.optout .k-timepicker,
+.km-header #preferences #dailyprefs > li.brought .k-timepicker {
   width: 8em;
   margin: auto;
 }
