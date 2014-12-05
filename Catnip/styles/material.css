@@ -59,6 +59,15 @@
   text-overflow: ellipsis;
   padding: 0.2em 0.4em;
   border-width: 1px 0px 0px 1px;
+  /* Maroon */
+  /* Saddle Brown */
+  /* Forest Green */
+  /* Thai Flag Blue */
+  /* Chinese Flag Yellow */
+  /* Italian Flag Red */
+  /* Wheat */
+  /* Dark Turquoise */
+  /* Silver */
 }
 .all-groups td.preference {
   background-color: #3f51b5;
@@ -69,6 +78,60 @@
   background-color: rgba(63, 81, 181, 0.5);
   text-indent: -999px;
   overflow: hidden;
+}
+.all-groups td.BBQ.preference {
+  background-color: #800000;
+}
+.all-groups td.BBQ.available {
+  background-color: rgba(128, 0, 0, 0.5);
+}
+.all-groups td.Burger.preference {
+  background-color: #8b4513;
+}
+.all-groups td.Burger.available {
+  background-color: rgba(139, 69, 19, 0.5);
+}
+.all-groups td.Salad.preference {
+  background-color: #228b22;
+}
+.all-groups td.Salad.available {
+  background-color: rgba(34, 139, 34, 0.5);
+}
+.all-groups td.Thai.preference {
+  background-color: #0000ff;
+}
+.all-groups td.Thai.available {
+  background-color: rgba(0, 0, 255, 0.5);
+}
+.all-groups td.Chinese.preference {
+  background-color: #ffb30f;
+}
+.all-groups td.Chinese.available {
+  background-color: rgba(255, 179, 15, 0.5);
+}
+.all-groups td.Italian.preference {
+  background-color: #ce2b37;
+}
+.all-groups td.Italian.available {
+  background-color: rgba(206, 43, 55, 0.5);
+}
+.all-groups td.Sandwich.preference {
+  background-color: #f5deb3;
+}
+.all-groups td.Sandwich.available {
+  background-color: rgba(245, 222, 179, 0.5);
+}
+.all-groups td.Sushi.preference {
+  background-color: #00ced1;
+}
+.all-groups td.Sushi.available {
+  background-color: rgba(0, 206, 209, 0.5);
+}
+.all-groups td.Undecided.preference {
+  background-color: #c0c0c0;
+}
+.all-groups td.Undecided.available {
+  background-color: rgba(192, 192, 192, 0.5);
 }
 .all-groups .group {
   clear: both;

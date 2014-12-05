@@ -68,23 +68,17 @@ $(function() {
 		requestEnd: function(e) {
 			try {
 				if (e.response && e.response.Result) {
-					/*
-					e.response.Result.forEach(function(item, index) {
-						item.set("DisplayName", item.User.DisplayName);
-					});
-					*/
-					var food = {}, results = [];
+					var food = {}, results = [], undecided = true;
 					e.response.Result.forEach(function(daily,index) {
 						daily.FoodCategories.forEach(function(pref,index) {
+							undecided = false;
 							if (!food[pref.Name])
-								food[pref.Name] = { min: daily.StartTimeCode, max: daily.EndTimeCode, users:{} };
-							if (daily.StartTimeCode < food[pref.Name].min)
-								food[pref.Name].min = daily.StartTimeCode;
-							if (daily.EndTimeCode > food[pref.Name].max)
-								food[pref.Name].max = daily.EndTimeCode;
-							food[pref.Name].users[daily.User.Id] = 1;
+								food[pref.Name] = {};
+							food[pref.Name][daily.User.Id] = 1;
 						});
 					});
+					if (undecided)
+						food["Undecided"] = {}
 					for (var pref in food) {
 						e.response.Result.forEach(function(daily,index) {
 							if (!daily.User)
@@ -93,7 +87,7 @@ $(function() {
 								User: daily.User.Id,
 								DisplayName: daily.User.DisplayName,
 								Food: pref,
-								Preference: food[pref].users[daily.User.Id] // CAUTION: Could be null
+								Preference: food[pref][daily.User.Id] // CAUTION: Could be null
 							};
 							for (var timecode=parseInt(daily.StartTimeCode); timecode<daily.EndTimeCode; timecode=(timecode%100) ? timecode+=70 : timecode+=30)
 								record["utc"+timecode] = record.Preference ? "preference" : "available";
@@ -135,19 +129,19 @@ $(function() {
 	$('.all-groups').kendoGrid({
 		dataSource : window.results,
 		columns : [
-			{ field: "Food", title: "", hidden:true, aggregate: ["count"], groupHeaderTemplate: "#=value# (#=aggregates.Preference.sum# preferred)" },
+			{ field: "Food", title: "", hidden:true, aggregate: ["count"], groupHeaderTemplate: "#=value# (#=(aggregates.Preference.sum||0)# preferred)" },
 			{ field: "DisplayName", title: "Name", width: "30%" },
-			$.extend({ field: "utc1530", title: "&nbsp;", attributes: {class: "#=data.utc1530#"} }, column),
-			$.extend({ field: "utc1600", title: "11a", attributes: {class: "#=data.utc1600#"} }, column),
-			$.extend({ field: "utc1630", title: "&nbsp;", attributes: {class: "#=data.utc1630#"} }, column),
-			$.extend({ field: "utc1700", title: "12p", attributes: {class: "#=data.utc1700#"} }, column),
-			$.extend({ field: "utc1730", title: "&nbsp;", attributes: {class: "#=data.utc1730#"} }, column),
-			$.extend({ field: "utc1800", title: "1p", attributes: {class: "#=data.utc1800#"} }, column),
-			$.extend({ field: "utc1830", title: "&nbsp;", attributes: {class: "#=data.utc1830#"} }, column),
-			$.extend({ field: "utc1900", title: "2p", attributes: {class: "#=data.utc1900#"} }, column),
-			$.extend({ field: "utc1930", title: "&nbsp;", attributes: {class: "#=data.utc1930#"} }, column),
-			$.extend({ field: "utc2000", title: "3p", attributes: {class: "#=data.utc2000#"} }, column),
-			$.extend({ field: "utc2030", title: "&nbsp;", attributes: {class: "#=data.utc2030#"} }, column),
+			$.extend({ field: "utc1530", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1530#"} }, column),
+			$.extend({ field: "utc1600", title: "11a", attributes: {class: "#=data.Food# #=data.utc1600#"} }, column),
+			$.extend({ field: "utc1630", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1630#"} }, column),
+			$.extend({ field: "utc1700", title: "12p", attributes: {class: "#=data.Food# #=data.utc1700#"} }, column),
+			$.extend({ field: "utc1730", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1730#"} }, column),
+			$.extend({ field: "utc1800", title: "1p", attributes: {class: "#=data.Food# #=data.utc1800#"} }, column),
+			$.extend({ field: "utc1830", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1830#"} }, column),
+			$.extend({ field: "utc1900", title: "2p", attributes: {class: "#=data.Food# #=data.utc1900#"} }, column),
+			$.extend({ field: "utc1930", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1930#"} }, column),
+			$.extend({ field: "utc2000", title: "3p", attributes: {class: "#=data.Food# #=data.utc2000#"} }, column),
+			$.extend({ field: "utc2030", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc2030#"} }, column),
 		]
 	});
 	
