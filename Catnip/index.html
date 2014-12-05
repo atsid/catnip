@@ -74,15 +74,6 @@
 							}
 						});
 						food.init();
-						$('#results').data('kendoMobileView').scroller.setOptions({
-							pullToRefresh: true,
-							pull: function() {
-								window.allPreferences.one("requestEnd", function(e) {
-									$('#results').data('kendoMobileView').scroller.pullHandled();
-								});
-								window.allPreferences.cycle();
-							}
-						});
 					}
 				});
 			});
@@ -117,13 +108,13 @@
 			</form>
 		</div>
 
-		<div id="results" data-role="view" data-user-roles="true">
+		<div id="results" data-role="view" data-user-roles="true" data-init="results.initView">
 			<div data-role="header">
 					<ul id="preferences">
 						<li>
 							<!-- Time Preferences -->
 							<ul>
-								<form id="dailyprefs" data-source="preferences" data-storage="localStorage">
+								<form id="dailyprefs" data-source="preferences">
 									<li class="start">
 										<label for="StartTime">Earliest I can leave: </label>
 										<input name="StartTime" type="datetime" data-role="timepicker" data-format="h:mm tt" value="12:00" min="10:30" max="15:00" />
@@ -137,25 +128,21 @@
 										<label for="FoodCategories">Food Choices: </label>
 										<select name="FoodCategories" placeholder="Pick food choice(s)..." data-role="multiselect" data-max-selected-items="3" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
 									</li>
+									<li class="brought">
+										<label>
+											I brought:
+											<input name="Brought" data-role="switch" data-on-label="Yes" data-off-label="No" type="checkbox" />
+										</label>
+									</li>
 								</form>
 							</ul>
 						</li>
-						<!--
-						<li id="FoodPreferences">
-							<form id="Lunch.Priority0" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:0})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:0})#" data-change="food.onChange">
-								<select name="FoodCategory" placeholder="Enter food choice..." data-role="combobox" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
-							</form>
-							<form id="Lunch.Priority1" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:1})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:1})#" data-change="food.onChange">
-								<select name="FoodCategory" placeholder="Enter food choice..." data-role="combobox" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
-							</form>
-							<form id="Lunch.Priority2" data-source="Everlive.DailyFoodPreferences" data-storage="localStorage" data-filter="#=account.getFilter({field:'Priority',operator:'eq',value:2})#" data-server-filtering="true" data-default="#=food.getDefaultPreferences({Priority:2})#" data-change="food.onChange">
-								<select name="FoodCategory" placeholder="Enter food choice..." data-role="combobox" data-value-field="Id" data-text-field="Name" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
-							</form>
-						</li>
-						-->
 					</ul>
 				<div data-role="navbar">
 					<div data-role="view-title" onclick="preferences.open()">Lunch?</div>
+					<form id="in" data-align="right" data-source="preferences">
+						<input name="In" data-role="switch" data-on-label="Yes" data-off-label="No" type="checkbox" />
+					</form>
 				</div>
 			</div>
 			<!--

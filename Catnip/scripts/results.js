@@ -1,158 +1,175 @@
 $(function() {
-	
-	$("#map").kendoMap({
-		center: [35.2681, -97.7448],
-		zoom: ($(window).width() >= 768) ? 4 :  ($(window).width() >= 500) ? 3.5 : 3,
-		layers: [{
-			type: "shape",
-			dataSource: {
-				type: "geojson",
-				transport: {
-					read: "scripts/geojson/gz_2010_us_states_20m.json"
+	try {
+		/*
+		$("#map").kendoMap({
+			center: [35.2681, -97.7448],
+			zoom: ($(window).width() >= 768) ? 4 :  ($(window).width() >= 500) ? 3.5 : 3,
+			layers: [{
+				type: "shape",
+				dataSource: {
+					type: "geojson",
+					transport: {
+						read: "scripts/geojson/gz_2010_us_states_20m.json"
+					}
+				},
+				style: {
+					fill: {
+						opacity: 0.7
+					}
+				}
+			}]
+		});
+		*/
+		
+		window.allPreferences = pi.data.DataSource.create({
+			source: "Everlive.DailyPreferences",
+			schema: {
+				model: {
+					id : "Id",
+					fields: {
+						Id: "string",
+						Name: "string",
+						Food: "string",
+						StartTimeCode: "string",
+						EndTimeCode: "string"
+					}
 				}
 			},
-			style: {
-				fill: {
-					opacity: 0.7
-				}
-			}
-		}]
-	});
-	
-	window.allPreferences = pi.data.DataSource.create({
-		/*
-		data: [
-			{ Id: "11", name: "Kris", food: "Sandwiches", preferred: 1, startTimeCode: "1600", endTimeCode: "1800" },
-			{ Id: "12", name: "Gary", food: "Sandwiches", preferred: null, startTimeCode: "1600", endTimeCode: "2000" },
-			{ Id: "13", name: "Chris", food: "Sandwiches", preferred: null, startTimeCode: "1600", endTimeCode: "2000" },
-			{ Id: "14", name: "Jason", food: "Sandwiches", preferred: 1, startTimeCode: "1700", endTimeCode: "1800" },
-			{ Id: "15", name: "Pete", food: "Sandwiches", preferred: null, startTimeCode: "1700", endTimeCode: "1900" },
-			{ Id: "16", name: "Yoshi", food: "Sandwiches", preferred: null, startTimeCode: "1730", endTimeCode: "1900" },
-			
-			{ Id: "21", name: "Kris", food: "Salad", preferred: null, startTimeCode: "1600", endTimeCode: "1800" },
-			{ Id: "22", name: "Gary", food: "Salad", preferred: 1, startTimeCode: "1600", endTimeCode: "2000" },
-			{ Id: "23", name: "Chris", food: "Salad", preferred: null, startTimeCode: "1600", endTimeCode: "2000" },
-			{ Id: "24", name: "Jason", food: "Salad", preferred: null, startTimeCode: "1700", endTimeCode: "1800" },
-			{ Id: "25", name: "Pete", food: "Salad", preferred: 1, startTimeCode: "1700", endTimeCode: "1900" },
-			{ Id: "26", name: "Yoshi", food: "Salad", preferred: null, startTimeCode: "1730", endTimeCode: "1900" },
-			{ Id: "27", name: "Derek", food: "Salad", preferred: null, startTimeCode: "1800", endTimeCode: "2000" },
-			
-			{ Id: "31", name: "Gary", food: "BBQ", preferred: null, startTimeCode: "1600", endTimeCode: "2000" },
-			{ Id: "32", name: "Chris", food: "BBQ", preferred: null, startTimeCode: "1600", endTimeCode: "2000" },
-			{ Id: "33", name: "Pete", food: "BBQ", preferred: null, startTimeCode: "1700", endTimeCode: "1900" },
-			{ Id: "34", name: "Yoshi", food: "BBQ", preferred: null, startTimeCode: "1730", endTimeCode: "1900" },
-			{ Id: "35", name: "Derek", food: "BBQ", preferred: 1, startTimeCode: "1800", endTimeCode: "2000" },
-		],
-		*/
-		source: "Everlive.DailyPreferences",
-		schema: {
-			model: {
-				id : "Id",
-				fields: {
-					Id: "string",
-					Name: "string",
-					Food: "string",
-					StartTimeCode: "string",
-					EndTimeCode: "string"
-				}
-			}
-		},
-		serverFiltering: true,
-		filter: [
-			{ field: "Date", operator: "eq", value: config.get("today") }
-		],
-		expand: {
-			"User": true,
-			"FoodCategories": true
-		},
-		requestEnd: function(e) {
-			try {
-				if (e.response && e.response.Result) {
-					var food = {}, results = [], styles = [], undecided = true;
-					e.response.Result.forEach(function(daily,index) {
-						daily.FoodCategories.forEach(function(pref,index) {
-							undecided = false;
-							if (!food[pref.Name])
-								food[pref.Name] = { Users: {}, Name: pref.Name, Color: pref.Color, RGB: pref.RGB };
-							food[pref.Name].Users[daily.User.Id] = 1;
-						});
-					});
-					if (undecided)
-						food["Undecided"] = { Users: {}, Name: "Undecided", Color: "Silver", RGB: [192,192,192] };
-					for (var pref in food) {
-						pref = food[pref];
-						if (pref.RGB) {
-							styles.push("td."+pref.Name+".preference {background-color: rgba("+pref.RGB.join()+",1)}");
-							styles.push("td."+pref.Name+".available {background-color: rgba("+pref.RGB.join()+",0.5)}");
-						}
+			serverFiltering: true,
+			filter: [
+				{ field: "Date", operator: "eq", value: config.get("today") },
+				{ field: "In", operator: "neq", value: false }
+			],
+			expand: {
+				"User": true,
+				"FoodCategories": true
+			},
+			requestEnd: function(e) {
+				try {
+					if (e.response && e.response.Result) {
+						var food = {}, results = [], styles = [], undecided = true;
 						e.response.Result.forEach(function(daily,index) {
-							if (!daily.User)
-								return;
-							var record = {
-								User: daily.User.Id,
-								DisplayName: daily.User.DisplayName,
-								Preference: pref.Users[daily.User.Id], // CAUTION: Could be null
-								Food: pref.Name
-							};
-							for (var timecode=parseInt(daily.StartTimeCode); timecode<daily.EndTimeCode; timecode=(timecode%100) ? timecode+=70 : timecode+=30)
-								record["utc"+timecode] = record.Preference ? "preference" : "available";
-							results.push(record);
+							if (daily.Brought) {
+								undecided = false;
+								if (!food.Brought)
+									food.Brought = { Users: {}, Name: "Brought", Color: "Silver", RGB: [192,192,192] };
+								food.Brought.Users[daily.User.Id] = 1;
+							} else {
+								daily.FoodCategories.forEach(function(pref,index) {
+									undecided = false;
+									if (!food[pref.Name])
+										food[pref.Name] = { Users: {}, Name: pref.Name, Color: pref.Color, RGB: pref.RGB };
+									food[pref.Name].Users[daily.User.Id] = 1;
+								});
+							}
 						});
+						if (undecided)
+							food["Undecided"] = { Users: {}, Name: "Undecided", Color: "Silver", RGB: [192,192,192] };
+						for (var pref in food) {
+							pref = food[pref];
+							if (pref.RGB) {
+								styles.push("td."+pref.Name+".preference {background-color: rgba("+pref.RGB.join()+",1)}");
+								styles.push("td."+pref.Name+".available {background-color: rgba("+pref.RGB.join()+",0.5)}");
+							}
+							e.response.Result.forEach(function(daily,index) {
+								if (!daily.User)
+									return;
+								if (!daily.In)
+									return;
+								if ((pref.Name !== "Brought" && daily.Brought) || (pref.Name === "Brought" && !daily.Brought))
+									return;
+								var record = {
+									User: daily.User.Id,
+									DisplayName: daily.User.DisplayName,
+									Preference: pref.Users[daily.User.Id], // CAUTION: Could be null
+									Food: pref.Name
+								};
+								for (var timecode=parseInt(daily.StartTimeCode); timecode<daily.EndTimeCode; timecode=(timecode%100) ? timecode+=70 : timecode+=30)
+									record["utc"+timecode] = record.Preference ? "preference" : "available";
+								results.push(record);
+							});
+						}
+						var styleBlock = $('style#LunchColors');
+						if (!styleBlock.length)
+							styleBlock = $(document.head).append('<style id="LunchColors">').children("#LunchColors");
+						styleBlock.empty().text(styles.join("\n"));
+						window.results.data(results);
 					}
-					var styleBlock = $('style#LunchColors');
-					if (!styleBlock.length)
-						styleBlock = $(document.head).append('<style id="LunchColors">').children("#LunchColors");
-					styleBlock.empty().text(styles.join("\n"));
-					window.results.data(results);
+				} catch(e) {
+					e.event = "Processing All Preferences";
+					(pi||console).log(e);
 				}
-			} catch(e) {
-				e.event = "Processing All Preferences";
-				(pi||console).log(e);
 			}
+		});
+		window.allPreferences.cycle = function() {
+			window.allPreferences.read();
+			if (window.allPreferences.timeout)
+				window.clearTimeout(window.allPreferences.timeout);
+			window.allPreferences.timeout = window.setTimeout(window.allPreferences.cycle, 5 * 60 * 1000); // check every minute
 		}
-	});
-	window.allPreferences.cycle = function() {
-		window.allPreferences.read();
-		if (window.allPreferences.timeout)
-			window.clearTimeout(window.allPreferences.timeout);
-		window.allPreferences.timeout = window.setTimeout(window.allPreferences.cycle, 5 * 60 * 1000); // check every minute
-	}
-	window.allPreferences.cycle();
-	
-	window.results = pi.data.DataSource.create({
-		group: {
-			field: "Food", aggregates: [
-				{ field: "DisplayName", aggregate: "count" },
-				{ field: "Preference", aggregate: "sum" }
+		window.allPreferences.cycle();
+		
+		window.results = pi.data.DataSource.create({
+			group: {
+				field: "Food", aggregates: [
+					{ field: "DisplayName", aggregate: "count" },
+					{ field: "Preference", aggregate: "sum" }
+				]
+			},
+			change: function(e) {
+				try {
+					if (e.items && !e.items.length)
+						window.preferences.open(true);
+				} catch(e) {
+					e.event = "Result Change";
+					(pi||console).log(e);
+				}
+			}
+		});
+		window.results.initView = function(e) {
+			e.view.one("show", function(e) {
+				try {
+					e.view.scroller.setOptions({
+						pullToRefresh: true,
+						pull: function() {
+							window.allPreferences.one("requestEnd", function(e) {
+								$('#results').data('kendoMobileView').scroller.pullHandled();
+							});
+							window.allPreferences.cycle();
+						}
+					});
+				} catch(e) {
+					e.event = "Result View Initialization";
+					(pi||console).log(e);
+				}
+			});
+		}
+		
+		var column = {
+			width: "6%"
+		};
+		$('.all-groups').kendoGrid({
+			dataSource : window.results,
+			columns : [
+				{ field: "Food", title: "", hidden:true, aggregate: ["count"], groupHeaderTemplate: "#=value# (#=(aggregates.Preference.sum||0)# preferred)" },
+				{ field: "DisplayName", title: "Name", width: "30%" },
+				$.extend({ field: "utc1530", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1530#"} }, column),
+				$.extend({ field: "utc1600", title: "11a", attributes: {class: "#=data.Food# #=data.utc1600#"} }, column),
+				$.extend({ field: "utc1630", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1630#"} }, column),
+				$.extend({ field: "utc1700", title: "12p", attributes: {class: "#=data.Food# #=data.utc1700#"} }, column),
+				$.extend({ field: "utc1730", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1730#"} }, column),
+				$.extend({ field: "utc1800", title: "1p", attributes: {class: "#=data.Food# #=data.utc1800#"} }, column),
+				$.extend({ field: "utc1830", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1830#"} }, column),
+				$.extend({ field: "utc1900", title: "2p", attributes: {class: "#=data.Food# #=data.utc1900#"} }, column),
+				$.extend({ field: "utc1930", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1930#"} }, column),
+				$.extend({ field: "utc2000", title: "3p", attributes: {class: "#=data.Food# #=data.utc2000#"} }, column),
+				$.extend({ field: "utc2030", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc2030#"} }, column),
 			]
-		},
-		change: function(e) {
-			if (e.items && !e.items.length)
-				window.preferences.open(true);
-		}
-	});
-	
-	var column = {
-		width: "6%"
-	};
-	$('.all-groups').kendoGrid({
-		dataSource : window.results,
-		columns : [
-			{ field: "Food", title: "", hidden:true, aggregate: ["count"], groupHeaderTemplate: "#=value# (#=(aggregates.Preference.sum||0)# preferred)" },
-			{ field: "DisplayName", title: "Name", width: "30%" },
-			$.extend({ field: "utc1530", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1530#"} }, column),
-			$.extend({ field: "utc1600", title: "11a", attributes: {class: "#=data.Food# #=data.utc1600#"} }, column),
-			$.extend({ field: "utc1630", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1630#"} }, column),
-			$.extend({ field: "utc1700", title: "12p", attributes: {class: "#=data.Food# #=data.utc1700#"} }, column),
-			$.extend({ field: "utc1730", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1730#"} }, column),
-			$.extend({ field: "utc1800", title: "1p", attributes: {class: "#=data.Food# #=data.utc1800#"} }, column),
-			$.extend({ field: "utc1830", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1830#"} }, column),
-			$.extend({ field: "utc1900", title: "2p", attributes: {class: "#=data.Food# #=data.utc1900#"} }, column),
-			$.extend({ field: "utc1930", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1930#"} }, column),
-			$.extend({ field: "utc2000", title: "3p", attributes: {class: "#=data.Food# #=data.utc2000#"} }, column),
-			$.extend({ field: "utc2030", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc2030#"} }, column),
-		]
-	});
+		});
+	} catch(e) {
+		e.event = "Results Instantiation";
+		(pi||console).log(e);
+	}
 	
 	/*
 	var theData = {};

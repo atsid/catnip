@@ -1,6 +1,17 @@
 .km-ios7 {
 	.km-header .km-navbar {
-		padding-top: 20px;
+		margin-top: 20px;
+	}
+}
+
+.km-switch {
+	.km-switch-handle {
+		background-color: #e5e5e5;
+		border: 1px solid #e5e5e5;
+	}
+	.km-switch-label-on, .km-switch-label-off {
+		background: #FFF;
+		line-height: 2em;
 	}
 }
 
@@ -13,14 +24,12 @@
 	}
 	
 	#preferences {
-		height: 100px;
 		padding: 0em;
-		margin: 0.25em;
-		margin-top: -110px;
+		margin: 20px 0.25em 0px;
 		text-align: center;
 		
 		#dailyprefs {
-			> li.start, > li.end {
+			> li.start, > li.end, > li.optout, > li.brought {
 				width: 49%;
 				display: inline-block;
 				padding: 0.25em;
