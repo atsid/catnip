@@ -46,6 +46,9 @@ $(function() {
 		}
 		
 		window.account.options.bind("change", function(e) {
+			if (e.action === "remove") {
+				delete window.myAccount;
+			}
 			if (e.field === "selected") {
 				window.myAccount = this.get(e.field);
 				if (window.myAccount instanceof kendo.data.ObservableObject) {
