@@ -21,94 +21,6 @@ $(function() {
 		});
 		*/
 		
-		window.allPreferences = pi.data.DataSource.create({
-			source: "Everlive.DailyPreferences",
-			schema: {
-				model: {
-					id : "Id",
-					fields: {
-						Id: "string",
-						Name: "string",
-						Food: "string",
-						StartTimeCode: "string",
-						EndTimeCode: "string"
-					}
-				}
-			},
-			serverFiltering: true,
-			filter: [
-				{ field: "Date", operator: "eq", value: config.get("today") },
-				{ field: "In", operator: "neq", value: false }
-			],
-			expand: {
-				"User": true,
-				"FoodCategories": true
-			},
-			requestEnd: function(e) {
-				try {
-					if (e.response && e.response.Result) {
-						var food = {}, results = [], styles = [], undecided = true;
-						e.response.Result.forEach(function(daily,index) {
-							if (daily.Brought) {
-								undecided = false;
-								if (!food.Brought)
-									food.Brought = { Users: {}, Name: "Brought", Color: "Silver", RGB: [192,192,192] };
-								food.Brought.Users[daily.User.Id] = 1;
-							} else {
-								daily.FoodCategories.forEach(function(pref,index) {
-									undecided = false;
-									if (!food[pref.Name])
-										food[pref.Name] = { Users: {}, Name: pref.Name, Color: pref.Color, RGB: pref.RGB };
-									food[pref.Name].Users[daily.User.Id] = 1;
-								});
-							}
-						});
-						if (undecided)
-							food["Undecided"] = { Users: {}, Name: "Undecided", Color: "Silver", RGB: [192,192,192] };
-						for (var pref in food) {
-							pref = food[pref];
-							if (pref.RGB) {
-								styles.push("td."+pref.Name+".preference {background-color: rgba("+pref.RGB.join()+",1)}");
-								styles.push("td."+pref.Name+".available {background-color: rgba("+pref.RGB.join()+",0.5)}");
-							}
-							e.response.Result.forEach(function(daily,index) {
-								if (!daily.User)
-									return;
-								if (!daily.In)
-									return;
-								if ((pref.Name !== "Brought" && daily.Brought) || (pref.Name === "Brought" && !daily.Brought))
-									return;
-								var record = {
-									User: daily.User.Id,
-									DisplayName: daily.User.DisplayName,
-									Preference: pref.Users[daily.User.Id], // CAUTION: Could be null
-									Food: pref.Name
-								};
-								for (var timecode=parseInt(daily.StartTimeCode); timecode<daily.EndTimeCode; timecode=(timecode%100) ? timecode+=70 : timecode+=30)
-									record["utc"+timecode] = record.Preference ? "preference" : "available";
-								results.push(record);
-							});
-						}
-						var styleBlock = $('style#LunchColors');
-						if (!styleBlock.length)
-							styleBlock = $(document.head).append('<style id="LunchColors">').children("#LunchColors");
-						styleBlock.empty().text(styles.join("\n"));
-						window.results.data(results);
-					}
-				} catch(e) {
-					e.event = "Processing All Preferences";
-					(pi||console).log(e);
-				}
-			}
-		});
-		window.allPreferences.cycle = function() {
-			window.allPreferences.read();
-			if (window.allPreferences.timeout)
-				window.clearTimeout(window.allPreferences.timeout);
-			window.allPreferences.timeout = window.setTimeout(window.allPreferences.cycle, 5 * 60 * 1000); // check every minute
-		}
-		window.allPreferences.cycle();
-		
 		window.results = pi.data.DataSource.create({
 			group: {
 				field: "Food", aggregates: [
@@ -132,12 +44,44 @@ $(function() {
 					e.view.scroller.setOptions({
 						pullToRefresh: true,
 						pull: function() {
-							window.allPreferences.one("requestEnd", function(e) {
+							window.preferences.one("requestEnd", function(e) {
 								$('#results').data('kendoMobileView').scroller.pullHandled();
 							});
-							window.allPreferences.cycle();
+							window.preferences.cycle();
 						}
 					});
+					window.preferences.options.bind("change", function(e) {
+						if (e.field === "enabled") {
+							var enabled = this.get(e.field,true);
+							$('#dailyprefs [name=StartTime]').data("kendoTimePicker").enable(enabled);
+							$('#dailyprefs [name=EndTime]').data("kendoTimePicker").enable(enabled);
+							$('#dailyprefs [name=Brought]').data("kendoMobileSwitch").enable(enabled);
+							$('#dailyprefs [name=FoodCategories]').data("kendoMultiSelect").enable(enabled);
+							window.preferences.open(enabled);
+						}
+					}).trigger("change", { field: "enabled" });
+					$('.all-groups').kendoGrid({
+						dataSource : window.results,
+						columns : [
+							{ field: "Food", title: "", hidden:true, aggregate: ["count"], groupHeaderTemplate: "#=value# (#=(aggregates.Preference.sum||0)# preferred)" },
+							{ field: "DisplayName", title: "Name", width: "30%" },
+							{ field: "utc1530", title: "&nbsp;", width: "6%", attributes: {class: "#=data.Food# #=data.utc1530#"} },
+							{ field: "utc1600", title: "11a", width: "6%", attributes: {class: "#=data.Food# #=data.utc1600#"} },
+							{ field: "utc1630", title: "&nbsp;", width: "6%", attributes: {class: "#=data.Food# #=data.utc1630#"} },
+							{ field: "utc1700", title: "12p", width: "6%", attributes: {class: "#=data.Food# #=data.utc1700#"} },
+							{ field: "utc1730", title: "&nbsp;", width: "6%", attributes: {class: "#=data.Food# #=data.utc1730#"} },
+							{ field: "utc1800", title: "1p", width: "6%", attributes: {class: "#=data.Food# #=data.utc1800#"} },
+							{ field: "utc1830", title: "&nbsp;", width: "6%", attributes: {class: "#=data.Food# #=data.utc1830#"} },
+							{ field: "utc1900", title: "2p", width: "6%", attributes: {class: "#=data.Food# #=data.utc1900#"} },
+							{ field: "utc1930", title: "&nbsp;", width: "6%", attributes: {class: "#=data.Food# #=data.utc1930#"} },
+							{ field: "utc2000", title: "3p", width: "6%", attributes: {class: "#=data.Food# #=data.utc2000#"} },
+							{ field: "utc2030", title: "&nbsp;", width: "6%", attributes: {class: "#=data.Food# #=data.utc2030#"} },
+						]
+					});
+					window.results.bind("change", function(e) {
+						if (!this.view().length)
+							$(".all-groups .k-grid-content tbody").empty().append('<tr><td colspan="13">Nothing yet.</td></tr>');
+					}).trigger("change");
 				} catch(e) {
 					e.event = "Result View Initialization";
 					(pi||console).log(e);
@@ -145,27 +89,6 @@ $(function() {
 			});
 		}
 		
-		var column = {
-			width: "6%"
-		};
-		$('.all-groups').kendoGrid({
-			dataSource : window.results,
-			columns : [
-				{ field: "Food", title: "", hidden:true, aggregate: ["count"], groupHeaderTemplate: "#=value# (#=(aggregates.Preference.sum||0)# preferred)" },
-				{ field: "DisplayName", title: "Name", width: "30%" },
-				$.extend({ field: "utc1530", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1530#"} }, column),
-				$.extend({ field: "utc1600", title: "11a", attributes: {class: "#=data.Food# #=data.utc1600#"} }, column),
-				$.extend({ field: "utc1630", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1630#"} }, column),
-				$.extend({ field: "utc1700", title: "12p", attributes: {class: "#=data.Food# #=data.utc1700#"} }, column),
-				$.extend({ field: "utc1730", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1730#"} }, column),
-				$.extend({ field: "utc1800", title: "1p", attributes: {class: "#=data.Food# #=data.utc1800#"} }, column),
-				$.extend({ field: "utc1830", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1830#"} }, column),
-				$.extend({ field: "utc1900", title: "2p", attributes: {class: "#=data.Food# #=data.utc1900#"} }, column),
-				$.extend({ field: "utc1930", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc1930#"} }, column),
-				$.extend({ field: "utc2000", title: "3p", attributes: {class: "#=data.Food# #=data.utc2000#"} }, column),
-				$.extend({ field: "utc2030", title: "&nbsp;", attributes: {class: "#=data.Food# #=data.utc2030#"} }, column),
-			]
-		});
 	} catch(e) {
 		e.event = "Results Instantiation";
 		(pi||console).log(e);

@@ -35,12 +35,12 @@ $(function() {
 			
 			if (window.myAccount)
 				return [
-					{field: 'User', operator: 'eq', value: window.myAccount.get("Id") || ""},
+					{field: 'User.Id', operator: 'eq', value: window.myAccount.get("Id") || ""},
 					{field: 'Date', operator: 'eq', value: config.get("today")}
 				].concat(filter);
 			else
 				return [
-					{field: 'User', operator: 'eq', value: ""},
+					{field: 'User.Id', operator: 'eq', value: ""},
 					{field: 'Date', operator: 'eq', value: config.get("today")}
 				].concat(filter);
 		}
