@@ -51,20 +51,25 @@ $(function() {
 			debug: false,
 			serverFiltering: false,
 			expand: { User: true },
+			/*
+			requestEnd: function(e) {
+				if (e.response && e.response.Result) {
+					// unstringify
+					e.response.Result.forEach(function(item,index) {
+						if (typeof(item.StartTime) === "string")
+							item.StartTime = new Date(item.StartTime);
+						if (typeof(item.EndTime) === "string")
+							item.EndTime = new Date(item.EndTime);
+						if (typeof(item.Brought) === "string")
+							item.Brought = (item.Brought === "true") ? true : false;
+						if (typeof(item.In) === "string")
+							item.In = (item.In === "true") ? true : false;
+					});
+				}
+			},
+			*/
 			change: function(e) {
 				try {
-					if ( (e.type === "read" || e.action === "itemchange") && e.items) {
-						e.items.forEach(function(item,index) {
-							if (typeof(item.StartTime) === "string")
-								item.StartTime = new Date(item.StartTime);
-							if (typeof(item.EndTime) === "string")
-								item.EndTime = new Date(item.EndTime);
-							if (typeof(item.Brought) === "string")
-								item.Brought = (item.Brought === "true") ? true : false;
-							if (typeof(item.In) === "string")
-								item.In = (item.In === "true") ? true : false;
-						});
-					}
 					if (e.action === "itemchange") {
 						if (e.field === "In") {
 							e.items.forEach(function(item,index) {
@@ -128,7 +133,7 @@ $(function() {
 		
 		window.preferences.myPreferences = function(e) {
 			try{
-				if (e.items) {
+				if (e.action !== "itemchange" && e.items) {
 					this.unbind("change", window.preferences.myPreferences);
 					// WARNING: Don't use filter because even local filter fires requestEnd for an endless loop!
 					// this.filter({field:"User.Id",operator:"eq",value:window.myAccount.get("Id")});
@@ -162,7 +167,7 @@ $(function() {
 							window.myPreferences.set("id", "");
 						}
 						this.options.set("enabled", window.myPreferences.get("In"));
-						if (this.hasChanges())
+						if (window.myPreferences.dirty)
 							this.sync();
 					}
 				}
@@ -194,54 +199,53 @@ $(function() {
 		
 		window.preferences.results = function(e) {
 			try {
-				if (e.items) {
-					var food = {}, results = [], undecided = true;
-					e.items.forEach(function(daily,index) {
+				var food = {}, results = [], undecided = true;
+				this.view().forEach(function(daily,index) {
+					if (!daily.User || typeof(daily.User) === "string")
+						return;
+					if (!daily.In)
+						return;
+					if (daily.Brought) {
+						// undecided = false; // CAUTION: Brought shouldn't affect undecided.
+						if (!food.Brought)
+							food.Brought = {};
+						food.Brought[daily.User.Id] = 1;
+					} else if (daily.FoodCategories) {
+						daily.FoodCategories.forEach(function(id,index) {
+							undecided = false;
+							var record = window.food.get(id);
+							if (record) {
+								food[record.Name] = food[record.Name] || {};
+								food[record.Name][daily.User.Id] = 1;
+							} else {
+								window.food.read(); // Maybe we're out of date
+							}
+						});
+					}
+				});
+				if (undecided)
+					food["Undecided"] = {};
+				// Build results
+				for (var pref in food) {
+					this.view().forEach(function(daily,index) {
 						if (!daily.User || typeof(daily.User) === "string")
 							return;
 						if (!daily.In)
 							return;
-						if (daily.Brought) {
-							// undecided = false; // CAUTION: Brought shouldn't affect undecided.
-							if (!food.Brought)
-								food.Brought = {};
-							food.Brought[daily.User.Id] = 1;
-						} else if (daily.FoodCategories) {
-							daily.FoodCategories.forEach(function(id,index) {
-								undecided = false;
-								var record = window.food.get(id);
-								if (record) {
-									food[record.Name] = food[record.Name] || {};
-									food[record.Name][daily.User.Id] = 1;
-								} else {
-									window.food.read(); // Maybe we're out of date
-								}
-							});
-						}
+						if ((pref !== "Brought" && daily.Brought) || (pref === "Brought" && !daily.Brought))
+							return;
+						var record = {
+							User: daily.User.Id,
+							DisplayName: daily.User.DisplayName,
+							Preference: food[pref][daily.User.Id], // CAUTION: Could be null
+							Food: pref
+						};
+						for (var timecode=parseInt(daily.StartTimeCode); timecode<daily.EndTimeCode; timecode=(timecode%100) ? timecode+=70 : timecode+=30)
+							record["utc"+timecode] = record.Preference ? "preference" : "available";
+						results.push(record);
 					});
-					if (undecided)
-						food["Undecided"] = {};
-					for (var pref in food) {
-						e.items.forEach(function(daily,index) {
-							if (!daily.User || typeof(daily.User) === "string")
-								return;
-							if (!daily.In)
-								return;
-							if ((pref !== "Brought" && daily.Brought) || (pref === "Brought" && !daily.Brought))
-								return;
-							var record = {
-								User: daily.User.Id,
-								DisplayName: daily.User.DisplayName,
-								Preference: food[pref][daily.User.Id], // CAUTION: Could be null
-								Food: pref
-							};
-							for (var timecode=parseInt(daily.StartTimeCode); timecode<daily.EndTimeCode; timecode=(timecode%100) ? timecode+=70 : timecode+=30)
-								record["utc"+timecode] = record.Preference ? "preference" : "available";
-							results.push(record);
-						});
-					}
-					window.results.data(results);
 				}
+				window.results.data(results);
 			} catch(e) {
 				e.event = "Processing All Preferences";
 				(pi||console).log(e);
@@ -251,7 +255,7 @@ $(function() {
 
 		if (window.myAccount && window.myAccount.Id) {
 			window.preferences.trigger("requestEnd", { type: "read" });
-			window.preferences.trigger("change", { items: window.preferences.data() });
+			window.preferences.trigger("change", { type: "read", items: window.preferences.data() });
 			window.preferences.cycle();
 		}
 		
@@ -261,8 +265,10 @@ $(function() {
 				if (e.action === "itemchange") {
 					var value = e.items[0].get(e.field);
 					if (e.field === "Id" && value)
-						window.preferences.read();
+						window.preferences.cycle();
 				} else if (e.action === "remove") {
+					if (window.preferences.timeout)
+						window.clearTimeout(window.preferences.timeout);
 					window.preferences.reset();
 				}
 			} catch(e) {
