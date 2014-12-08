@@ -112,14 +112,17 @@ $(function() {
 				open = false;
 			else if (typeof(open) === "undefined" && parseInt($header.css("margin-top")) < 0)
 				open = true;
-			if (open)
+			if (open) {
 				$('.km-header #preferences').animate({
 					"margin-top" : "20px"
 				});
-			else
+				$('#opener .k-icon').removeClass("k-i-collapse").addClass("k-i-expand");
+			} else {
 				$('.km-header #preferences').animate({
 					"margin-top" : -$header.height()+"px"
 				});
+				$('#opener .k-icon').removeClass("k-i-expand").addClass("k-i-collapse");
+			}
 		}
 		window.preferences.cycle = function() {
 			if (window.preferences.hasChanges())
