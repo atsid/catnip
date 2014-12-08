@@ -60,6 +60,11 @@ $(function() {
 							window.preferences.open(enabled);
 						}
 					}).trigger("change", { field: "enabled" });
+					var multiselect = $('#dailyprefs [name=FoodCategories]').data("kendoMultiSelect");
+					multiselect.input.bind("focus", function(e) {
+						// e.currentTarget.blur();
+						// multiselect.open();
+					});
 					$('.all-groups').kendoGrid({
 						dataSource : window.results,
 						columns : [
