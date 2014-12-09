@@ -23,15 +23,34 @@ $(function() {
 		
 		window.results = pi.data.DataSource.create({
 			group: {
-				field: "Food", aggregates: [
+				field: "Food",
+				aggregates: [
 					{ field: "DisplayName", aggregate: "count" },
 					{ field: "Preference", aggregate: "sum" }
 				]
 			},
-			change: function(e) {
+			change : function(e) {
 				try {
-					if (e.items && !e.items.length)
-						window.preferences.open(true);
+					if (e.items) {
+						var brought, optout;
+						e.items.forEach(function(group,index) {
+							group.items.forEach(function(item,index) {
+								if (item.StartTimeCode && item.EndTimeCode)
+									for (var timecode=parseInt(item.StartTimeCode); timecode<item.EndTimeCode; timecode=(timecode%100) ? timecode+=70 : timecode+=30)
+										item["utc"+timecode] = item.Preference ? "preference" : "available";
+							});
+							if (group.value === "Brought")
+								brought = index;
+							else if (group.value === "Out")
+								optout = index;
+						});
+						if (brought >= 0)
+							e.items.push(e.items.splice(brought,1)[0]);
+						if (brought < optout)
+							optout--;
+						if (optout >= 0)
+							e.items.push(e.items.splice(optout,1)[0]);
+					}
 				} catch(e) {
 					e.event = "Result Change";
 					(pi||console).log(e);
@@ -63,7 +82,7 @@ $(function() {
 					$('.all-groups').kendoGrid({
 						dataSource : window.results,
 						columns : [
-							{ field: "Food", title: "", hidden:true, aggregate: ["count"], groupHeaderTemplate: "#=value# (#=(aggregates.Preference.sum||0)# preferred)" },
+							{ field: "Food", title: "", hidden:true, aggregate: ["count"], groupHeaderTemplate: "#=value# #=aggregates.Preference.sum?'('+aggregates.Preference.sum+' preferred)':''#" },
 							{ field: "DisplayName", title: "Name", width: "30%" },
 							{ field: "utc1530", title: "&nbsp;", width: "6%", attributes: {class: "#=data.Food# #=data.utc1530#"} },
 							{ field: "utc1600", title: "11a", width: "6%", attributes: {class: "#=data.Food# #=data.utc1600#"} },

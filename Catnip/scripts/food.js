@@ -5,6 +5,7 @@ $(function() {
 			method: "get",
 			source: "Everlive.FoodCategories",
 			storage: "localStorage",
+			sort: { field: "Name", dir: "asc" },
 			change: function(e) {
 				try {
 					var styles = [

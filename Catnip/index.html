@@ -70,7 +70,12 @@
 						});
 						pi.console.bind("change", function(e) {
 							if (e.action === "add") {
-								alert(e.items[0].message);
+								var message = e.items[0].message;
+								if (e.items[0].event)
+									message = e.items[0].event + "\n" + message;
+								if (e.items[0].stack)
+									message = message + "\n" + e.items[0].stack.match(/\((.*\/)?(.*)\)/)[2];
+								alert(message);
 							}
 						});
 					}
@@ -125,7 +130,7 @@
 									</li>
 									<li class="food">
 										<label for="FoodCategories">Food Choices: </label>
-										<select name="FoodCategories" placeholder="Pick food choice(s)..." data-role="multiselect" data-max-selected-items="3" data-value-field="Id" data-text-field="Name" data-height="125" data-source="Everlive.FoodCategories" data-storage="localStorage"></select>
+										<select name="FoodCategories" placeholder="Pick food choice(s)..." data-role="multiselect" data-max-selected-items="3" data-value-field="Id" data-text-field="Name" data-height="125" data-source="food"></select>
 									</li>
 									<li class="brought">
 										<label>
