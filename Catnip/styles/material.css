@@ -108,6 +108,11 @@
   display: inline-block;
   margin-left: 2em;
 }
+#lastsync {
+  padding: 1em;
+  font-size: 0.8em;
+  text-align: center;
+}
 .km-footer {
   padding: 0.5em;
   text-align: center;

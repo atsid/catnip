@@ -427,7 +427,8 @@ pi.data.DataSource = {
 		if (e && e.items) {
 			for (var i=0; i<e.items.length; i++)
 				if (typeof(e.items[i].guid) == "undefined")
-					e.items[i].set("guid", e.items[i].uid); // Use set() so it is marked as dirty.
+					// CAUTION: Using set() is causing too many database sync issues for tables with shared data.
+					e.items[i].guid = e.items[i].uid;
 				else if (e.items[i].uid != e.items[i].guid)
 					e.items[i].uid = e.items[i].guid;
 		}

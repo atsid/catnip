@@ -140,7 +140,7 @@
 				<div data-role="navbar">
 					<div data-role="view-title" onclick="preferences.open()">Lunch?</div>
 					<form id="in" data-align="right" data-source="preferences">
-						<input name="In" data-role="switch" data-on-label="Yes" data-off-label="No" type="checkbox" />
+						<input name="OptOut" data-role="switch" data-on-label="No" data-off-label="Yes" type="checkbox" />
 					</form>
 				</div>
 				<div id="opener" onclick="preferences.open()"><span class="k-icon k-i-arrow-s"></span></div>
@@ -152,6 +152,7 @@
 			-->
 			<div class="all-groups">
 			</div>
+			<div id="lastsync"></div>
 			<div data-role="footer">
 				<form id="Logout" data-align="right" method="delete" data-source="account">
 					<span data-bind="text:Username"></span>
