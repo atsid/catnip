@@ -51,20 +51,15 @@ $(function() {
 						}
 					});
 					window.preferences.options.bind("change", function(e) {
-						if (e.field === "enabled") {
-							var enabled = this.get(e.field,true);
-							$('#dailyprefs [name=StartTime]').data("kendoTimePicker").enable(enabled);
-							$('#dailyprefs [name=EndTime]').data("kendoTimePicker").enable(enabled);
-							$('#dailyprefs [name=Brought]').data("kendoMobileSwitch").enable(enabled);
-							$('#dailyprefs [name=FoodCategories]').data("kendoMultiSelect").enable(enabled);
-							window.preferences.open(enabled);
+						if (e.field === "disabled") {
+							var disabled = this.get(e.field,false);
+							$('#dailyprefs [name=StartTime]').data("kendoTimePicker").enable(!disabled);
+							$('#dailyprefs [name=EndTime]').data("kendoTimePicker").enable(!disabled);
+							$('#dailyprefs [name=Brought]').data("kendoMobileSwitch").enable(!disabled);
+							$('#dailyprefs [name=FoodCategories]').data("kendoMultiSelect").enable(!disabled);
+							window.preferences.open(!disabled);
 						}
-					}).trigger("change", { field: "enabled" });
-					var multiselect = $('#dailyprefs [name=FoodCategories]').data("kendoMultiSelect");
-					multiselect.input.bind("focus", function(e) {
-						// e.currentTarget.blur();
-						// multiselect.open();
-					});
+					}).trigger("change", { field: "disabled" });
 					$('.all-groups').kendoGrid({
 						dataSource : window.results,
 						columns : [
