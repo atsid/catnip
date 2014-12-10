@@ -59,6 +59,7 @@ $(function() {
 							case "OptOut":
 								e.items.forEach(function(item,index) {
 									window.preferences.options.set("disabled", !!item[e.field]);
+									window.preferences.open(!item[e.field]);
 									item.ModifiedAt = new Date();
 								});
 								this.sync();
@@ -193,6 +194,8 @@ $(function() {
 						window.myPreferences = this.options.set("selected", serverPreferences);
 					}
 					this.options.set("disabled", !!window.myPreferences.get("OptOut"));
+					// Always start closed
+					window.preferences.open(false);
 				}
 			} catch(e) {
 				e.event = "Find myPreferences";
