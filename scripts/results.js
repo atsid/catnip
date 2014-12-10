@@ -76,6 +76,10 @@ $(function() {
 							$('#dailyprefs [name=EndTime]').data("kendoTimePicker").enable(!disabled);
 							$('#dailyprefs [name=Brought]').data("kendoMobileSwitch").enable(!disabled);
 							$('#dailyprefs [name=FoodCategories]').data("kendoMultiSelect").enable(!disabled);
+							if (disabled)
+								$('#opener').animate({height:"0px"});
+							else
+								$('#opener').animate({height:"18px"});
 						}
 					}).trigger("change", { field: "disabled" });
 					$('.all-groups').kendoGrid({

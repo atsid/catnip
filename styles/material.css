@@ -24,6 +24,7 @@
   background-color: #3f51b5;
   border-radius: 0px 0px 40px 40px;
   top: 19px;
+  overflow: hidden;
 }
 .km-header ul {
   padding: 0em;
