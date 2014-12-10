@@ -10,7 +10,7 @@ configdb = pi.data.DataSource.create({
 		server : {
 			results : "https://catnip-ats.herokuapp.com/results"
 		},
-		version : "1.3.2",
+		version : "1.3.3",
 		everlive : {
 			apiKey : "kD5Tly50Vf6nm8kn",
 			scheme : "http"
