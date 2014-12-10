@@ -2,7 +2,7 @@
 Date.prototype.toSortString = function() {
 	return this.getFullYear() + ("0"+(this.getMonth()+1)).substr(-2) + ("0"+this.getDate()).substr(-2);
 }
-config = pi.data.DataSource.create({
+configdb = pi.data.DataSource.create({
 	id : "Catnip.Config",
 	// storage : "localStorage",
 	default : {
@@ -10,7 +10,7 @@ config = pi.data.DataSource.create({
 		server : {
 			results : "https://catnip-ats.herokuapp.com/results"
 		},
-		version : "1.3.1",
+		version : "1.3.2",
 		everlive : {
 			apiKey : "kD5Tly50Vf6nm8kn",
 			scheme : "http"
@@ -23,7 +23,7 @@ config = pi.data.DataSource.create({
 	}
 });
 // This call will fire the JIT handler for selected.
-config = config.options.get("selected");
+config = configdb.options.get("selected");
 
 // Init Everlive connection
 Everlive.init(config.get("everlive").toJSON());
