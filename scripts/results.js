@@ -69,6 +69,15 @@ $(function() {
 							window.preferences.cycle();
 						}
 					});
+					e.view.header.kendoTouch({
+						enableSwipe: true,
+						swipe: function(e) {
+							if (e.direction === "up")
+								window.preferences.open(false);
+							else if (e.direction === "down")
+								window.preferences.open(true);
+						}
+					});
 					window.preferences.options.bind("change", function(e) {
 						if (e.field === "disabled") {
 							var disabled = this.get(e.field,false);
