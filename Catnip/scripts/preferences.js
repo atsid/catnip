@@ -195,7 +195,7 @@ $(function() {
 					}
 					this.options.set("disabled", !!window.myPreferences.get("OptOut"));
 					// Always start closed
-					window.preferences.open(false);
+					// window.preferences.open(false);
 				}
 			} catch(e) {
 				e.event = "Find myPreferences";

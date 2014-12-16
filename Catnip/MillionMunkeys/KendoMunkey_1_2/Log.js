@@ -20,24 +20,25 @@ pi.log = function(message, type, category) {
         if (message.modal && modal.alert)
             modal.alert(message.title||message.event||message.category||"",message.message,(message.type=="error")?"sad":"happy");
         // Concatenate all details for console.log
-        switch (message.type.toLowerCase()) {
-            case "error":
-            case "e":
-                message.message="[ERROR] "+message.message;
-                break;
-            case "info":
-            case "i":
-                message.message="[INFO] "+message.message;
-                break;
-            case "warning":
-            case "w":
-                message.message="[WARNING] "+message.message;
-                break;
-            case "debug":
-            case "d":
-                message.message="[DEBUG] "+message.message;
-                break;
-        }
+		if (message.message)
+			switch (message.type.toLowerCase()) {
+				case "error":
+				case "e":
+					message.message="[ERROR] "+message.message;
+					break;
+				case "info":
+				case "i":
+					message.message="[INFO] "+message.message;
+					break;
+				case "warning":
+				case "w":
+					message.message="[WARNING] "+message.message;
+					break;
+				case "debug":
+				case "d":
+					message.message="[DEBUG] "+message.message;
+					break;
+			}
         if (message.category.length)
             message.message = message.category.toUpperCase() + ": " + message.message;
         

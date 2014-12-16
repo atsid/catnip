@@ -71,6 +71,8 @@
 						});
 						pi.console.bind("change", function(e) {
 							if (e.action === "add") {
+								if (!e.items[0].message && navigator && navigator.onLine === false)
+									e.items[0].message = "Not connected to the internet. We will try again later.";
 								var message = e.items[0].message;
 								if (e.items[0].event)
 									message = e.items[0].event + "\n" + message;
@@ -100,7 +102,7 @@
 				<ul data-role="listview" data-style="inset">
 					<li><label>Email: <input type="email" name="Username" required="required" /></label></li>
 					<li><label>Password: <input type="password" name="Password" required="required" /></label></li>
-					<li><button type="submit">Login</button>
+					<li class="actions"><button type="submit" data-align="right">Login</button>
 				</ul>
 			</form>
 		</div>
@@ -162,7 +164,7 @@
 			<div data-role="footer">
 				<form id="Logout" data-align="right" method="delete" data-source="account">
 					<span data-bind="text:Username"></span>
-					<button type="submit">Logout</button>
+					<button type="submit" data-align="right">Logout</button>
 				</form>
 				<form id="version" data-source="configdb"><span data-bind="text:version"></span></form>
 			</div>

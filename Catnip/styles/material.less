@@ -86,8 +86,69 @@
 	
 }
 
-#LoginForm input {
-	width: 65%;
+.km-content {
+	
+	.km-widget {
+		background-color: transparent;
+	}
+	
+	.km-list > li,
+	.km-listinset > li:first-child,
+	.km-listgroupinset .km-list > li:first-child {
+		border-width: 0px;
+	}
+	
+	.km-list {
+		> li {
+			background: transparent;
+		}
+		input[type=password],
+		input[type=search],
+		input[type=number],
+		input[type=tel],
+		input[type=url],
+		input[type=email],
+		input[type=month],
+		input[type=color],
+		input[type=week],
+		input[type=date],
+		input[type=time],
+		input[type=datetime],
+		input[type=datetime-local],
+		input[type=text]:not(.k-input),
+		select:not([multiple]),
+		.k-dropdown-wrap,
+		textarea {
+			border-bottom: 1px solid rgba(68,68,68,0.2);
+			padding-bottom: 0px;
+		}
+		label {
+			line-height: 1.6em;
+		}
+		button {
+			font-weight: bold;
+			color: #3f51b5;
+			font-size: 1em;
+			border: none;
+			background: transparent;
+		}
+	
+		li.actions {
+			text-align: right;
+			padding-top: 1.5em;
+		}
+	}
+}
+
+#login {
+	.km-content {
+		border-top: 1px solid rgba(68,68,68,0.2);
+		background-color: #f2f2f2;
+	}
+	#LoginForm input {
+		width: 65%;
+		right: 0.7em;
+	}
 }
 
 .all-groups {	
@@ -140,9 +201,10 @@
 
 
 .km-footer {
-	padding: 0.5em;
+	padding: 0.7em;
 	text-align: center;
-	color: #CCC;
+	border-top: 1px solid rgba(68,68,68,0.2);
+	background-color: #f2f2f2;
 }
 #version {
 	position: absolute;
