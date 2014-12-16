@@ -24,9 +24,9 @@ $(function() {
 		window.account.verify = function(e) {
 			var layout = this, roles = $(e.view.element).attr("data-user-roles");
 			if (roles === "false" && myAccount.get("access_token"))
-				app.pane.history.length ? app.replace("#results") : app.navigate("#results");
+				app.pane.history.length ? app.replace("#results", "overlay:down") : app.navigate("#results", "overlay:down");
 			else if (roles === "true" && !myAccount.get("access_token"))
-				app.pane.history.length ? app.replace("#login") : app.navigate("#login");
+				app.pane.history.length ? app.replace("#login", "overlay:down reverse") : app.navigate("#login", "overlay:down reverse");
 		}
 		window.account.getFilter = function(filter) {
 			filter = filter || [];

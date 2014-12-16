@@ -118,6 +118,11 @@ $(function() {
 					(pi||console).log(e);
 				}
 			});
+			e.view.bind("show", function(e) {
+				setTimeout(function() {
+					window.preferences.open(false);
+				},1500);
+			});
 		}
 		
 	} catch(e) {
