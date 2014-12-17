@@ -1,6 +1,36 @@
 .km-ios7 .km-header .km-navbar {
   margin-top: 20px;
 }
+.km-list input[type=password],
+.km-list input[type=search],
+.km-list input[type=number],
+.km-list input[type=tel],
+.km-list input[type=url],
+.km-list input[type=email],
+.km-list input[type=month],
+.km-list input[type=color],
+.km-list input[type=week],
+.km-list input[type=date],
+.km-list input[type=time],
+.km-list input[type=datetime],
+.km-list input[type=datetime-local],
+.km-list input[type=text]:not(.k-input),
+.km-list select:not([multiple]),
+.km-list .k-dropdown-wrap,
+.km-list textarea {
+  border-bottom: 1px solid rgba(68, 68, 68, 0.2);
+  padding-bottom: 0px;
+}
+.km-list label {
+  line-height: 1.6em;
+}
+button {
+  font-weight: bold;
+  color: #3f51b5;
+  font-size: 1em;
+  border: none;
+  background: transparent;
+}
 .km-switch .km-switch-handle {
   background-color: #e5e5e5;
   border: 1px solid #e5e5e5;
@@ -13,64 +43,9 @@
 .km-header {
   color: #ffffff;
   background: #3f51b5;
-  margin-bottom: 20px;
-}
-.km-header #opener {
-  position: relative;
-  width: 130px;
-  height: 18px;
-  margin: -20px auto 0px;
-  text-align: center;
-  background-color: #3f51b5;
-  border-radius: 0px 0px 40px 40px;
-  top: 19px;
-  overflow: hidden;
 }
 .km-header ul {
   padding: 0em;
-}
-.km-header #preferences {
-  padding: 0em;
-  margin: 20px 0.25em 0px;
-  text-align: center;
-}
-.km-header #preferences #dailyprefs > li.start,
-.km-header #preferences #dailyprefs > li.end,
-.km-header #preferences #dailyprefs > li.optout,
-.km-header #preferences #dailyprefs > li.brought {
-  width: 49%;
-  display: inline-block;
-  padding: 0.25em;
-  text-align: center;
-}
-.km-header #preferences #dailyprefs > li.start > *,
-.km-header #preferences #dailyprefs > li.end > *,
-.km-header #preferences #dailyprefs > li.optout > *,
-.km-header #preferences #dailyprefs > li.brought > * {
-  display: inline-block;
-}
-.km-header #preferences #dailyprefs > li.start .k-timepicker,
-.km-header #preferences #dailyprefs > li.end .k-timepicker,
-.km-header #preferences #dailyprefs > li.optout .k-timepicker,
-.km-header #preferences #dailyprefs > li.brought .k-timepicker {
-  width: 8em;
-  margin: auto;
-}
-.km-header #preferences #dailyprefs > li.food > * {
-  vertical-align: middle;
-}
-.km-header #preferences #dailyprefs > li.food .k-multiselect {
-  display: inline-block;
-  width: 70%;
-}
-.km-header #preferences #FoodPreferences form {
-  display: inline-block;
-  width: 32%;
-}
-@media (max-width: 579px) {
-  .km-header #preferences #dailyprefs > li > * {
-    display: block;
-  }
 }
 .km-content .km-widget {
   background-color: transparent;
@@ -83,96 +58,29 @@
 .km-content .km-list > li {
   background: transparent;
 }
-.km-content .km-list input[type=password],
-.km-content .km-list input[type=search],
-.km-content .km-list input[type=number],
-.km-content .km-list input[type=tel],
-.km-content .km-list input[type=url],
-.km-content .km-list input[type=email],
-.km-content .km-list input[type=month],
-.km-content .km-list input[type=color],
-.km-content .km-list input[type=week],
-.km-content .km-list input[type=date],
-.km-content .km-list input[type=time],
-.km-content .km-list input[type=datetime],
-.km-content .km-list input[type=datetime-local],
-.km-content .km-list input[type=text]:not(.k-input),
-.km-content .km-list select:not([multiple]),
-.km-content .km-list .k-dropdown-wrap,
-.km-content .km-list textarea {
-  border-bottom: 1px solid rgba(68, 68, 68, 0.2);
-  padding-bottom: 0px;
-}
-.km-content .km-list label {
-  line-height: 1.6em;
-}
-.km-content .km-list button {
-  font-weight: bold;
-  color: #3f51b5;
-  font-size: 1em;
-  border: none;
-  background: transparent;
-}
-.km-content .km-list li.actions {
-  text-align: right;
-  padding-top: 1.5em;
-}
-#login .km-content {
-  border-top: 1px solid rgba(68, 68, 68, 0.2);
-  background-color: #f2f2f2;
-}
-#login #LoginForm input {
-  width: 65%;
-  right: 0.7em;
-}
-.all-groups .k-grid-header th.k-header {
-  overflow: visible;
-}
-.all-groups td {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 0.2em 0.4em;
-  border-width: 1px 0px 0px 1px;
-}
-.all-groups td.preference {
-  background-color: #3f51b5;
-  text-indent: -999px;
-  overflow: hidden;
-}
-.all-groups td.available {
-  background-color: rgba(63, 81, 181, 0.5);
-  text-indent: -999px;
-  overflow: hidden;
-}
-.all-groups .group {
-  clear: both;
-}
-.all-groups .group > * {
-  display: inline-block;
-  vertical-align: middle;
-}
-.all-groups .group .group-icon img {
-  max-width: 100px;
-}
-.all-groups .group .details > * {
-  display: inline-block;
-  margin-left: 2em;
-}
-#lastsync {
-  padding: 1em;
-  font-size: 0.8em;
-  text-align: center;
-}
 .km-footer {
+  height: 2.5em;
   padding: 0.7em;
   text-align: center;
   border-top: 1px solid rgba(68, 68, 68, 0.2);
   background-color: #f2f2f2;
 }
-#version {
+.km-footer .actions {
+  padding: 0;
+  height: 100%;
+  position: absolute;
+  right: 1em;
+  bottom: 0;
+}
+.km-footer .actions button {
+  display: inline-block;
+  height: 100%;
+  padding: 0.7em 1em;
+}
+.km-footer #version {
   position: absolute;
   font-size: 0.7em;
+  height: auto;
   bottom: 0px;
   left: auto;
 }

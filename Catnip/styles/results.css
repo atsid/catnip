@@ -1,0 +1,99 @@
+#results .km-header {
+  margin-bottom: 20px;
+}
+#results .km-header #opener {
+  position: relative;
+  width: 130px;
+  height: 18px;
+  margin: -20px auto 0px;
+  text-align: center;
+  background-color: #3f51b5;
+  border-radius: 0px 0px 40px 40px;
+  top: 19px;
+  overflow: hidden;
+}
+#results .km-header #preferences {
+  padding: 0em;
+  margin: 20px 0.25em 0px;
+  text-align: center;
+}
+#results .km-header #preferences #dailyprefs > li.start,
+#results .km-header #preferences #dailyprefs > li.end,
+#results .km-header #preferences #dailyprefs > li.optout,
+#results .km-header #preferences #dailyprefs > li.brought {
+  width: 49%;
+  display: inline-block;
+  padding: 0.25em;
+  text-align: center;
+}
+#results .km-header #preferences #dailyprefs > li.start > *,
+#results .km-header #preferences #dailyprefs > li.end > *,
+#results .km-header #preferences #dailyprefs > li.optout > *,
+#results .km-header #preferences #dailyprefs > li.brought > * {
+  display: inline-block;
+}
+#results .km-header #preferences #dailyprefs > li.start .k-timepicker,
+#results .km-header #preferences #dailyprefs > li.end .k-timepicker,
+#results .km-header #preferences #dailyprefs > li.optout .k-timepicker,
+#results .km-header #preferences #dailyprefs > li.brought .k-timepicker {
+  width: 8em;
+  margin: auto;
+}
+#results .km-header #preferences #dailyprefs > li.food > * {
+  vertical-align: middle;
+}
+#results .km-header #preferences #dailyprefs > li.food .k-multiselect {
+  display: inline-block;
+  width: 70%;
+}
+#results .km-header #preferences #FoodPreferences form {
+  display: inline-block;
+  width: 32%;
+}
+@media (max-width: 579px) {
+  #results .km-header #preferences #dailyprefs > li > * {
+    display: block;
+  }
+}
+#results #Logout {
+  height: 100%;
+}
+.all-groups .k-grid-header th.k-header {
+  overflow: visible;
+}
+.all-groups td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0.2em 0.4em;
+  border-width: 1px 0px 0px 1px;
+}
+.all-groups td.preference {
+  background-color: #3f51b5;
+  text-indent: -999px;
+  overflow: hidden;
+}
+.all-groups td.available {
+  background-color: rgba(63, 81, 181, 0.5);
+  text-indent: -999px;
+  overflow: hidden;
+}
+.all-groups .group {
+  clear: both;
+}
+.all-groups .group > * {
+  display: inline-block;
+  vertical-align: middle;
+}
+.all-groups .group .group-icon img {
+  max-width: 100px;
+}
+.all-groups .group .details > * {
+  display: inline-block;
+  margin-left: 2em;
+}
+#lastsync {
+  padding: 1em;
+  font-size: 0.8em;
+  text-align: center;
+}

@@ -1,0 +1,115 @@
+#results {
+	.km-header {
+		margin-bottom: 20px;
+		
+		#opener {
+			position: relative;
+			width: 130px;
+			height: 18px;
+			margin: -20px auto 0px;
+			text-align: center;
+			background-color: #3f51b5;
+			border-radius: 0px 0px 40px 40px;
+			top: 19px;
+			overflow: hidden;
+		}
+		
+		#preferences {
+			padding: 0em;
+			margin: 20px 0.25em 0px;
+			text-align: center;
+			
+			#dailyprefs {
+				> li.start, > li.end, > li.optout, > li.brought {
+					width: 49%;
+					display: inline-block;
+					padding: 0.25em;
+					text-align: center;
+					
+					> * {
+						display: inline-block;
+					}
+					.k-timepicker {
+						width: 8em;
+						margin: auto;
+					}
+				}
+				> li.food {
+					> * {
+						vertical-align: middle;
+					}
+					.k-multiselect {
+						display: inline-block;
+						width: 70%;
+					}
+				}
+			}
+			#FoodPreferences {
+				form {
+					display: inline-block;
+					width: 32%;
+				}
+			}
+		}
+		
+		@media (max-width:579px) {
+			#preferences #dailyprefs > li > * {
+				display: block;
+			}
+		}
+		
+	}
+	
+	#Logout {
+		height: 100%;
+	}
+}
+
+.all-groups {
+	.k-grid-header th.k-header {
+		overflow: visible;
+	}
+	
+	td {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		padding: 0.2em 0.4em;
+		border-width: 1px 0px 0px 1px;
+		
+		&.preference {
+			background-color: rgb(63, 81, 181);
+			text-indent: -999px;
+			overflow: hidden;
+		}
+		&.available {
+			background-color: rgba(63, 81, 181, 0.5);
+			text-indent: -999px;
+			overflow: hidden;
+		}
+	}
+	
+	.group {
+		clear: both;
+		
+		> * {
+			display: inline-block;
+			vertical-align: middle;
+		}
+		.group-icon img {
+			max-width: 100px;
+		}
+		.details {
+			> * {
+				display: inline-block;
+				margin-left: 2em;
+			}
+		}
+	}
+}
+
+#lastsync {
+	padding: 1em;
+	font-size: 0.8em;
+	text-align: center;
+}
