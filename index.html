@@ -12,6 +12,8 @@
 
 		<!-- Local Styles -->
         <link rel="stylesheet/less" type="text/css" href="styles/material.less" />
+        <link rel="stylesheet/less" type="text/css" href="styles/account.less" />
+        <link rel="stylesheet/less" type="text/css" href="styles/results.less" />
 		
 		<!--- Cordova - Loaded on mobile apps only -->
         <script type="text/javascript" src="cordova.js"></script>
@@ -102,9 +104,13 @@
 				<ul data-role="listview" data-style="inset">
 					<li><label>Email: <input type="email" name="Username" required="required" /></label></li>
 					<li><label>Password: <input type="password" name="Password" required="required" /></label></li>
-					<li class="actions"><button type="submit" data-align="right">Login</button>
 				</ul>
 			</form>
+			<footer data-role="footer">
+				<div class="actions">
+					<button onclick="$('#LoginForm').submit();">Login</button>
+				</div>
+			</footer>
 		</div>
 		
 		<div id="logout" data-role="view" title="Login" data-user-roles="true">

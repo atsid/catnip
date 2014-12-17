@@ -4,6 +4,39 @@
 	}
 }
 
+.km-list {
+	input[type=password],
+	input[type=search],
+	input[type=number],
+	input[type=tel],
+	input[type=url],
+	input[type=email],
+	input[type=month],
+	input[type=color],
+	input[type=week],
+	input[type=date],
+	input[type=time],
+	input[type=datetime],
+	input[type=datetime-local],
+	input[type=text]:not(.k-input),
+	select:not([multiple]),
+	.k-dropdown-wrap,
+	textarea {
+		border-bottom: 1px solid rgba(68,68,68,0.2);
+		padding-bottom: 0px;
+	}
+	label {
+		line-height: 1.6em;
+	}
+}
+button {
+	font-weight: bold;
+	color: #3f51b5;
+	font-size: 1em;
+	border: none;
+	background: transparent;
+}
+
 .km-switch {
 	.km-switch-handle {
 		background-color: #e5e5e5;
@@ -18,76 +51,13 @@
 .km-header {
 	color: rgb(255, 255, 255);
 	background: rgb(63, 81, 181);
-	margin-bottom: 20px;
-	
-	#opener {
-		position: relative;
-		width: 130px;
-		height: 18px;
-		margin: -20px auto 0px;
-		text-align: center;
-		background-color: #3f51b5;
-		border-radius: 0px 0px 40px 40px;
-		top: 19px;
-		overflow: hidden;
-	}
 	
 	ul {
 		padding: 0em;
 	}
-	
-	#preferences {
-		padding: 0em;
-		margin: 20px 0.25em 0px;
-		text-align: center;
-		
-		#dailyprefs {
-			> li.start, > li.end, > li.optout, > li.brought {
-				width: 49%;
-				display: inline-block;
-				padding: 0.25em;
-				text-align: center;
-				
-				> * {
-					display: inline-block;
-				}
-				.k-timepicker {
-					width: 8em;
-					margin: auto;
-				}
-			}
-			> li.food {
-				> * {
-					vertical-align: middle;
-				}
-				.k-multiselect {
-					display: inline-block;
-					width: 70%;
-				}
-			}
-		}
-		#FoodPreferences {
-			form {
-				display: inline-block;
-				width: 32%;
-			}
-		}
-	}
-	
-	@media (max-width:579px) {
-		#preferences {
-			#dailyprefs > li {
-				> * {
-					display: block;
-				}
-			}
-		}
-	}
-	
 }
 
 .km-content {
-	
 	.km-widget {
 		background-color: transparent;
 	}
@@ -98,117 +68,36 @@
 		border-width: 0px;
 	}
 	
-	.km-list {
-		> li {
-			background: transparent;
-		}
-		input[type=password],
-		input[type=search],
-		input[type=number],
-		input[type=tel],
-		input[type=url],
-		input[type=email],
-		input[type=month],
-		input[type=color],
-		input[type=week],
-		input[type=date],
-		input[type=time],
-		input[type=datetime],
-		input[type=datetime-local],
-		input[type=text]:not(.k-input),
-		select:not([multiple]),
-		.k-dropdown-wrap,
-		textarea {
-			border-bottom: 1px solid rgba(68,68,68,0.2);
-			padding-bottom: 0px;
-		}
-		label {
-			line-height: 1.6em;
-		}
-		button {
-			font-weight: bold;
-			color: #3f51b5;
-			font-size: 1em;
-			border: none;
-			background: transparent;
-		}
-	
-		li.actions {
-			text-align: right;
-			padding-top: 1.5em;
-		}
+	.km-list > li {
+		background: transparent;
 	}
 }
-
-#login {
-	.km-content {
-		border-top: 1px solid rgba(68,68,68,0.2);
-		background-color: #f2f2f2;
-	}
-	#LoginForm input {
-		width: 65%;
-		right: 0.7em;
-	}
-}
-
-.all-groups {	
-	.k-grid-header th.k-header {
-		overflow: visible;
-	}
-	
-	td {
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		padding: 0.2em 0.4em;
-		border-width: 1px 0px 0px 1px;
-		&.preference {
-			background-color: rgb(63, 81, 181);
-			text-indent: -999px;
-			overflow: hidden;
-		}
-		&.available {
-			background-color: rgba(63, 81, 181, 0.5);
-			text-indent: -999px;
-			overflow: hidden;
-		}
-	}
-	
-	.group {
-		clear: both;
-		
-		> * {
-			display: inline-block;
-			vertical-align: middle;
-		}
-		.group-icon img {
-			max-width: 100px;
-		}
-		.details {
-			> * {
-				display: inline-block;
-				margin-left: 2em;
-			}
-		}
-	}
-}
-
-#lastsync {
-	padding: 1em;
-	font-size: 0.8em;
-	text-align: center;
-}
-
 
 .km-footer {
+	height: 2.5em;
 	padding: 0.7em;
 	text-align: center;
 	border-top: 1px solid rgba(68,68,68,0.2);
 	background-color: #f2f2f2;
-}
-#version {
-	position: absolute;
-	font-size: 0.7em;
-	bottom: 0px;
-	left: auto;
+	
+	.actions {
+		padding: 0;
+		height: 100%;
+		position: absolute;
+		right: 1em;
+		bottom: 0;
+		
+		button {
+			display: inline-block;
+			height: 100%;
+			padding: 0.7em 1em;
+		}
+	}
+	#version {
+		position: absolute;
+		font-size: 0.7em;
+		height: auto;
+		bottom: 0px;
+		left: auto;
+	}
 }
