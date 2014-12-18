@@ -291,7 +291,7 @@ $(function() {
 			}
 		});
 		
-							
+		
 		// Login/Logout
 		window.account.bind("change", function(e) {
 			try {

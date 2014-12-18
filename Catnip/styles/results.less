@@ -60,8 +60,44 @@
 		
 	}
 	
-	#Logout {
-		height: 100%;
+	.km-content {
+		.km-widget {
+			background-color: transparent;
+		}
+		
+		.km-list > li,
+		.km-listinset > li:first-child,
+		.km-listgroupinset .km-list > li:first-child {
+			border-width: 0px;
+		}
+		
+		.km-list > li {
+			background: transparent;
+		}
+	}
+	
+	.km-footer {
+		padding: 0.5em;
+		
+		.actions {
+			position: relative;
+			text-align: center;
+			
+			.km-button {
+				background: transparent;
+				border: none;
+				font-weight: bold;
+				padding-bottom: 0;
+			}
+		}
+		
+		.opener {
+			position: absolute;
+			width: 100%;
+			text-align: center;
+			top: -0.2em;
+			left: 0em;
+		}
 	}
 }
 

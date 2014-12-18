@@ -55,8 +55,36 @@
     display: block;
   }
 }
-#results #Logout {
-  height: 100%;
+#results .km-content .km-widget {
+  background-color: transparent;
+}
+#results .km-content .km-list > li,
+#results .km-content .km-listinset > li:first-child,
+#results .km-content .km-listgroupinset .km-list > li:first-child {
+  border-width: 0px;
+}
+#results .km-content .km-list > li {
+  background: transparent;
+}
+#results .km-footer {
+  padding: 0.5em;
+}
+#results .km-footer .actions {
+  position: relative;
+  text-align: center;
+}
+#results .km-footer .actions .km-button {
+  background: transparent;
+  border: none;
+  font-weight: bold;
+  padding-bottom: 0;
+}
+#results .km-footer .opener {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: -0.2em;
+  left: 0em;
 }
 .all-groups .k-grid-header th.k-header {
   overflow: visible;

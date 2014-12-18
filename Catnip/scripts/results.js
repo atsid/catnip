@@ -119,9 +119,13 @@ $(function() {
 				}
 			});
 			e.view.bind("show", function(e) {
+				$('#opener').animate({height:"18px"});
 				setTimeout(function() {
 					window.preferences.open(false);
 				},1500);
+			});
+			e.view.bind("beforeHide", function(e) {
+				$('#opener').animate({height:"0px"});
 			});
 		}
 		

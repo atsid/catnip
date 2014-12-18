@@ -1,3 +1,6 @@
+@blue: #3f51b5;
+@grey: #f2f2f2;
+
 .km-ios7 {
 	.km-header .km-navbar {
 		margin-top: 20px;
@@ -5,6 +8,15 @@
 }
 
 .km-list {
+	&:not(.km-virtual-list) {
+		> li:first-child {
+			border-top-width: 1px;
+		}
+		> li:last-child {
+			border-bottom-width: 1px;
+		}
+	}
+	
 	input[type=password],
 	input[type=search],
 	input[type=number],
@@ -24,26 +36,54 @@
 	textarea {
 		border-bottom: 1px solid rgba(68,68,68,0.2);
 		padding-bottom: 0px;
+		
+		&[disabled] {
+			color: rgba(68,68,68,0.5);
+		}
 	}
 	label {
 		line-height: 1.6em;
+		vertical-align: bottom;
+		display: block;
+	}
+	.k-invalid-msg {
+		position: relative;
+		float: right;
+		margin: 0em;
+		width: 70%;
 	}
 }
+
+.km-listgroupinset {
+	margin: 0em 1em;
+}
+
 button {
 	font-weight: bold;
-	color: #3f51b5;
+	color: @blue;
 	font-size: 1em;
 	border: none;
 	background: transparent;
 }
 
+.k-multiselect-wrap > ul > .k-button {
+	border-radius: 1em;
+	padding: 0.2em 0.25em 0.15em 0.75em;
+}
 .km-switch {
+	width: 5em;
+	border-radius: 2em;
+	
+	.km-switch-container {
+		background: #fff;
+		padding: 0.2em 2.1em 0.2em 0.1em;
+	}
 	.km-switch-handle {
-		background-color: #e5e5e5;
-		border: 1px solid #e5e5e5;
+		background-color: rgba(229, 229, 229, 1);
+		border: 0.5px solid rgba(229, 229, 229, 0.5);
+		border-radius: 2em;
 	}
 	.km-switch-label-on, .km-switch-label-off {
-		background: #FFF;
 		line-height: 2em;
 	}
 }
@@ -52,45 +92,39 @@ button {
 	color: rgb(255, 255, 255);
 	background: rgb(63, 81, 181);
 	
+	.km-view-title, .km-dialog-title {
+		line-height: 2em;
+		margin: 0.25em;
+	}
+	
 	ul {
 		padding: 0em;
 	}
 }
 
-.km-content {
-	.km-widget {
-		background-color: transparent;
-	}
-	
-	.km-list > li,
-	.km-listinset > li:first-child,
-	.km-listgroupinset .km-list > li:first-child {
-		border-width: 0px;
-	}
-	
-	.km-list > li {
-		background: transparent;
-	}
-}
-
 .km-footer {
-	height: 2.5em;
+	min-height: 2.5em;
 	padding: 0.7em;
-	text-align: center;
 	border-top: 1px solid rgba(68,68,68,0.2);
-	background-color: #f2f2f2;
+	background-color: @grey;
 	
 	.actions {
 		padding: 0;
-		height: 100%;
+		height: auto;
 		position: absolute;
-		right: 1em;
-		bottom: 0;
+		right: 0em;
+		bottom: 0em;
+		
+		&[data-align=left] {
+			left: 0em;
+		}
 		
 		button {
 			display: inline-block;
 			height: 100%;
 			padding: 0.7em 1em;
+			vertical-align: bottom;
+			color: @blue;
 		}
 	}
 	#version {

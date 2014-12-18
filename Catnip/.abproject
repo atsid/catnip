@@ -27,10 +27,13 @@
     "com.phonegap.plugins.PushPlugin",
     "org.apache.cordova.camera",
     "org.apache.cordova.console",
+    "org.apache.cordova.device",
     "org.apache.cordova.device-orientation",
     "org.apache.cordova.dialogs",
     "org.apache.cordova.file",
     "org.apache.cordova.file-transfer",
+    "org.apache.cordova.geolocation",
+    "org.apache.cordova.globalization",
     "org.apache.cordova.keyboard",
     "org.apache.cordova.network-information",
     "org.apache.cordova.splashscreen"
@@ -40,5 +43,8 @@
   "Author": "Pete Oliver-Krueger",
   "Description": "Get together with friends to grab lunch!",
   "FrameworkVersion": "3.5.0",
-  "CordovaPluginVariables": {}
+  "CordovaPluginVariables": {},
+  "projectVersion": "1",
+  "WP8PublisherID": "{2600ad09-2dee-4f3d-b1a8-45f3dbe730ee}",
+  "WP8ProductID": "{279ca375-b1fd-4479-939b-1a720eaf5721}"
 }
