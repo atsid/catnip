@@ -102,25 +102,25 @@
 			</header>
 			<form id="LoginForm" method="get" data-source="account">
 				<ul data-role="listview" data-style="inset">
-					<li><label>Email: <input type="email" name="Username" required="required" /></label></li>
-					<li><label>Password: <input type="password" name="Password" required="required" /></label></li>
+					<li>
+						<label for="Username">Email: </label>
+						<input type="email" name="Username" required="required" />
+						<span class="k-invalid-msg" data-for="Username"></span>
+					</li>
+					<li>
+						<label for="Password">Password: </label>
+						<input type="password" name="Password" required="required" />
+						<div class="k-invalid-msg" data-for="Password"></div>
+					</li>
 				</ul>
 			</form>
 			<footer data-role="footer">
 				<div class="actions">
-					<button onclick="$('#LoginForm').submit();">Login</button>
+					<button data-align="right" onclick="$('#LoginForm').submit();">Login</button>
 				</div>
 			</footer>
 		</div>
 		
-		<div id="logout" data-role="view" title="Login" data-user-roles="true">
-			<form id="Logout" method="delete" data-source="account">
-				<ul data-role="listview" data-style="inset">
-					<li><button type="submit">Logout</button>
-				</ul>
-			</form>
-		</div>
-
 		<div id="results" data-role="view" data-user-roles="true" data-init="results.initView">
 			<div data-role="header">
 					<ul id="preferences">
@@ -142,10 +142,8 @@
 										<select name="FoodCategories" placeholder="Pick food choice(s)..." data-role="multiselect" data-max-selected-items="3" data-value-field="Id" data-text-field="Name" data-height="125" data-source="food"></select>
 									</li>
 									<li class="brought">
-										<label>
-											I brought:
-											<input name="Brought" data-role="switch" data-on-label="Yes" data-off-label="No" type="checkbox" data-type="boolean" />
-										</label>
+										<label for="Brought">I brought: </label>
+										<input name="Brought" data-role="switch" data-on-label="Yes" data-off-label="No" type="checkbox" data-type="boolean" />
 									</li>
 								</form>
 							</ul>
@@ -168,11 +166,74 @@
 			</div>
 			<div id="lastsync"></div>
 			<div data-role="footer">
-				<form id="Logout" data-align="right" method="delete" data-source="account">
-					<span data-bind="text:Username"></span>
-					<button type="submit" data-align="right">Logout</button>
-				</form>
+				<span class="opener"><span class="k-icon k-i-arrow-n"></span></span>
 				<form id="version" data-source="configdb"><span data-bind="text:version"></span></form>
+				<div class="actions">
+					<form class="MyAccount" data-source="account">
+						<button data-role="button" href="#profile" data-transition="overlay:up">
+							<div class="Avatar">
+								<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo }" onload="window.account.onPhotoLoad(event)" />
+							</div>
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div id="profile" data-role="view" data-user-roles="true" data-init="window.account.initView">
+			<header data-role="header">
+				<nav data-role="navbar">
+					<div data-role="view-title">
+						<a href="#results" data-transition="overlay:up reverse">
+							<form class="MyAccount" data-source="account">
+								<div class="Avatar">
+									<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo }" onload="window.account.onPhotoLoad(event)" />
+								</div>
+							</form>
+							<div class="opener"><span class="k-icon k-i-arrow-s"></span></div>
+						</a>
+					</div>
+				</nav>
+			</header>
+			<form id="Profile" class="MyAccount" method="put" data-source="account">
+				<ul data-role="listview" data-style="inset" data-type="group">
+					<li>Profile
+						<ul>
+							<li>
+								<label>
+									<div class="Avatar">
+										<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo }" onload="window.account.onPhotoLoad(event)" />
+									</div>
+									<input type="file" name="Photo" disabled />
+								</label>
+							</li>
+							<li class="DisplayName"><label>Name: <input type="text" name="DisplayName" required /></label></li>
+							<li class="Email"><label>Email: <input type="text" name="Email" disabled /></label></li>
+						</ul>
+					</li>
+					<li>Settings
+						<ul>
+							<li class="Push"><label>Push Notifications? <input name="Push" data-role="switch" type="checkbox" data-type="boolean" /></label></li>
+						</ul>
+					</li>
+					<li><label>Change Password</label>
+						<ul>
+							<li class="OldPassword"><label>Old: <input type="password" name="Password" /></label></li>
+							<li class="Password"><label>New: <input type="password" name="NewPassword" /></label></li>
+							<li class="ConfirmPassword"><label>Confirm: <input type="password" name="ConfirmPassword" /></label></li>
+						</ul>
+					</li>
+				</ul>
+			</form>
+			<div data-role="footer">
+				<div class="actions" data-align="left">
+					<form id="Logout" method="delete" data-source="account">
+						<button type="submit">Logout</button>
+					</form>
+				</div>
+				<div class="actions">
+					<button onclick="$('#Profile').submit();window.app.navigate('#results', 'overlay:up reverse');">Save</button>
+				</div>
 			</div>
 		</div>
 		

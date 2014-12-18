@@ -19,14 +19,11 @@ configdb = pi.data.DataSource.create({
 			scheme : "http",
 			domain : "none"
 		},
-	   today : new Date().toSortString()
+		today : new Date().toSortString()
 	}
 });
 // This call will fire the JIT handler for selected.
 config = configdb.options.get("selected");
-
-// Init Everlive connection
-Everlive.init(config.get("everlive").toJSON());
 
 if (typeof(window.console) != "undefined") { // For IE 8 and below!
 	window.console.log("server: "+JSON.stringify(document.location));
@@ -46,3 +43,6 @@ else if (/localhost/.test(document.location.host)) {
 	window.config.set("scheme", "http");
 	window.config.set("google.domain", "none");
 }
+
+// Init Everlive connection
+Everlive.init(config.get("everlive").toJSON());

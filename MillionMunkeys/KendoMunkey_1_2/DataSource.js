@@ -235,7 +235,7 @@ pi.data.DataSource = {
 			},
 			update : function() {
 				var selected = this.dataSource.options.get("selected");
-				if (selected.get("NewPassword") !== selected.get("Password")) {
+				if ( selected.get("NewPassword") && (selected.get("NewPassword")||"") !== (selected.get("Password")||"") ) {
 					Everlive.$.Users.changePassword(
 						selected.get("Username").toLowerCase(), // Case insensitive login
 						selected.get("Password"),
@@ -247,11 +247,21 @@ pi.data.DataSource = {
 							delete selected.NewPassword;
 						},
 						function (error) {
-							error.type = error.type || "Everlive Account Update Failure";
+							error.type = error.type || "Everlive Password Change Failure";
 							(pi||console).log(error);
 						}
 					);
 				}
+				Everlive.$.Users.updateSingle(
+					selected.toJSON(),
+					function (data) {
+						var data = data;
+					},
+					function (error) {
+						error.type = error.type || "Everlive Account Update Failure";
+						(pi||console).log(error);
+					}
+				);
 			},
 			destroy : function() {
 				var dataSource = this.dataSource;

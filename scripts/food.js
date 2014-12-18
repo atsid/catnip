@@ -30,7 +30,16 @@ $(function() {
 				}
 			}
 		});
-		window.food.read();
+		// Login/Logout
+		window.account.bind("change", function(e) {
+			try {
+				if (e.action === "itemchange" && e.field === "Id" && e.items[0].get(e.field))
+					window.food.read();
+			} catch(e) {
+				e.event = "Food List Account Change";
+				(pi||console).log(e);
+			}
+		});
 	} catch(e) {
 		e.event = "Food Preferences Instantiation";
 		(pi||console).log(e);
