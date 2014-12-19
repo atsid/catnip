@@ -117,7 +117,7 @@ $(function() {
 				$('#opener .k-icon').removeClass("k-i-collapse").addClass("k-i-expand");
 			} else {
 				$('.km-header #preferences').animate({
-					"margin-top" : -$header.height()+"px"
+					"margin-top" : -$header.height()-25+"px"
 				});
 				$('#opener .k-icon').removeClass("k-i-expand").addClass("k-i-collapse");
 			}
