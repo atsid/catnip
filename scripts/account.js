@@ -122,7 +122,11 @@ $(function() {
 				try {
 					if (e.action === "itemchange" && e.items[0] === window.myAccount) {
 						if (e.field === "access_token" && window.myAccount.get("access_token") && window.myAccount.get("Push")) {
-							Everlive.$.push.register({
+							
+							var device = Everlive.$.push.currentDevice();
+							// enable notifications on the device 
+							// this is what invokes the PushPlugin 
+							device.enableNotifications({
 								customParamters: {
 									Groups: e.items[0].Groups
 								},
@@ -140,21 +144,60 @@ $(function() {
 								notificationCallbackAndroid: function() {
 									
 								}
-							}, function() {
-								
-							}, function(e) {
-								window.myAccount.set("Push", false);
-								e.event = "Push Notification Registration";
-								(pi||console).log(e);
-							});
+							}).then(
+								function () {
+									// we have permission, register the device for notifications
+									return device.getRegistration();    
+								},
+								function(e) {
+									// DENIED for some reason
+									e.event = "Enabling Push Notifications";
+									(pi||console).log(e);
+								}
+							).then(
+								function (e) {
+									// this device is already registered - no need to do it again
+									console.log("Device is already registered: " + JSON.stringify(e));
+								},
+								function (e) {
+									// the device is registered, but it's been removed from Everlive
+									// re-register it
+									if (e.code === 801) {
+										// in case we are using the simulator, make a fake token
+										if (!device.pushToken) {
+											device.pushToken = "some token";
+										}
+										return device.register();
+									}
+									else {
+										e.event = "Push Notification Reregistration";
+										(pi||console).log(e);
+									}
+								}
+							).then(
+								function (registration) {
+									if (registration) {
+										// we have successfully registered and turned on push notifications
+										(pi||console).log("Successful Push Notification Registration");
+									}
+									// if there is an existing registration of the device the function will not receive 'registration' parameter
+								},
+								function (e) {
+									e.event = "Check Device Registration Status";
+									(pi||console).log(e);
+								}
+							);
+
 						}
 						else if (e.field === "Push" && window.myAccount.get("Push") !== true) {
-							Everlive.$.push.unregister(function() {
-								
-							}, function(e) {
-								e.event = "Unregister Push Notifications";
-								(pi||console).log(e);
-							});
+							Everlive.$.push.disableNotifications(
+								function() {
+									
+								}, function(e) {
+									e.event = "Unregister Push Notifications";
+									(pi||console).log(e);
+								}
+							);
 						}
 					}
 				} catch(e) {
