@@ -8,7 +8,7 @@ $(function() {
 				dataSource: {
 					type: "geojson",
 					transport: {
-						read: "scripts/geojson/gz_2010_us_states_20m.json"
+						read: "scripts/geojson/gz_2010_us_districts_20m.json"
 					}
 				},
 				style: {
