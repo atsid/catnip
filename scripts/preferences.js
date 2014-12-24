@@ -102,6 +102,12 @@ $(function() {
 					e.event = "Preference Change";
 					(pi||console).log(e);
 				}
+			},
+			error: function(e) {
+				if (e.status === 304 || e.code === 304) {
+					window.account.remove(window.myAccount); // logout
+					window.account.verify({view:window.app.view()});
+				}
 			}
 		});
 		window.preferences.open = function(open) {

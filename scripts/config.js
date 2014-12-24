@@ -10,7 +10,7 @@ configdb = pi.data.DataSource.create({
 		server : {
 			results : "https://catnip-ats.herokuapp.com/results"
 		},
-		version : "1.4.0",
+		version : "1.4.1",
 		everlive : {
 			apiKey : "kD5Tly50Vf6nm8kn",
 			scheme : "http"
@@ -36,6 +36,8 @@ if (/file:\/\//.test(document.location.href) || (document.location.origin && /fi
 }
 // Icenium Simulator
 else if (/app\.icenium\.com/.test(document.location.host)) {
+	if (!("com.phonegap.plugins.PushPlugin.PushNotification" in cordova.define.moduleMap))
+		window.config.set("NoPushNotifications", false);
 	window.config.set("google.domain", "icenium.com");
 }
 // Local Server
