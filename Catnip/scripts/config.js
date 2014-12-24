@@ -37,7 +37,7 @@ if (/file:\/\//.test(document.location.href) || (document.location.origin && /fi
 // Icenium Simulator
 else if (/app\.icenium\.com/.test(document.location.host)) {
 	if (!("com.phonegap.plugins.PushPlugin.PushNotification" in cordova.define.moduleMap))
-		window.config.set("NoPushNotifications", false);
+		window.config.set("NoPushNotifications", true);
 	window.config.set("google.domain", "icenium.com");
 }
 // Local Server
