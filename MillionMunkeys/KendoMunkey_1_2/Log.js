@@ -68,7 +68,7 @@ pi.console.bind("change", function(e) {
 							type : "Error",
 							name : e.items[i].name || "",
 							event : e.items[i].event || "",
-							message : e.items[i].message || "",
+							message : e.items[i].xhr ? JSON.parse(e.xhr.responseText).message : e.items[i].message || "",
 							description : e.items[i].description || "",
 							keys : Object.keys ? Object.keys(e.items[i]) : "",
 							stack : e.items[i].stack || ""
@@ -78,6 +78,16 @@ pi.console.bind("change", function(e) {
                     } else if(e.items[i].toJSON) {
                         this.splice(e.index+i,1,e.items[i].toJSON());
 					*/
+					} else if (e.items[i].xhr) {
+						var xhr = e.items[i].xhr, response = JSON.parse(xhr.responseText);
+						response.status = xhr.status;
+						response.statusText = xhr.statusText;
+						response.readyState = xhr.readyState;
+						if (e.items[i].name)
+							response.name = e.items[i].name;
+						if (e.items[i].event)
+							response.event = e.items[i].event;
+						this.splice(e.index+i,1,response);
 					} else {
 						e.items[i].type = (e.items[i].type != undefined)?e.items[i].type:"";
 						switch (e.items[i].type.toLowerCase()) {

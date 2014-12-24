@@ -72,15 +72,21 @@
 							view: this.view()
 						});
 						pi.console.bind("change", function(e) {
-							if (e.action === "add") {
-								if (!e.items[0].message && navigator && navigator.onLine === false)
-									e.items[0].message = "Not connected to the internet. We will try again later.";
-								var message = e.items[0].message;
-								if (e.items[0].event)
-									message = e.items[0].event + "\n" + message;
-								if (e.items[0].stack)
-									message = message + "\n" + e.items[0].stack.match(/\((.*\/)?(.*)\)/)[2];
-								alert(message);
+							if (e.action === "remove") {
+								if (typeof(e.items[0]) === "object")
+									e.items[0].removed = true;
+							}
+							else if (e.action === "add") {
+								if (typeof(e.items[0]) === "object" && !e.items[0].removed) {
+									if (!e.items[0].message && navigator && navigator.onLine === false)
+										e.items[0].message = "Not connected to the internet. We will try again later.";
+									var message = e.items[0].message;
+									if (e.items[0].event)
+										message = e.items[0].event + "\n" + message;
+									if (e.items[0].stack)
+										message = message + "\n" + e.items[0].stack.match(/\((.*\/)?(.*)\)/)[2];
+									alert(message);
+								}
 							}
 						});
 					}
