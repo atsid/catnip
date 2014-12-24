@@ -46,6 +46,8 @@ $(function() {
 			serverFiltering: false,
 			expand: { User: true },
 			error: function(e) {
+				if (e.xhr && e.xhr.status === 403)
+					return;
 				(pi||console).log({
 					type: "error",
 					message: e.errorThrown,
@@ -102,14 +104,9 @@ $(function() {
 					e.event = "Preference Change";
 					(pi||console).log(e);
 				}
-			},
-			error: function(e) {
-				if (e.status === 304 || e.code === 304) {
-					window.account.remove(window.myAccount); // logout
-					window.account.verify({view:window.app.view()});
-				}
 			}
 		});
+		window.preferences.bind("error", window.account.forbidden);
 		window.preferences.open = function(open) {
 			var $header = $('.km-header #preferences');
 			if (window.preferences.options.get("disabled"))
