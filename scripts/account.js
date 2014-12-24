@@ -37,6 +37,11 @@ $(function() {
 				"access_token" : "" // required blank value to kick of default navigation.
 			}
 		});
+		window.account.forbidden = function(e) {
+			if (e.xhr && e.xhr.status === 403) {
+				window.account.remove(window.account.options.get("selected")); // logout
+			}
+		}
 		window.account.verify = function(e) {
 			try {
 				var layout = this, roles = $(e.view.element).attr("data-user-roles");
@@ -194,7 +199,10 @@ $(function() {
 								);
 	
 							}
-							else if (e.field === "Push" && !window.myAccount.get("Push")) {
+							// case 1: logging out of the system
+							// case 2: Manually turning off Push Notifications
+							else if ( (e.action === "remove" && Everlive.$.push.currentDevice().pushToken )
+										|| ( e.field === "Push" && !window.myAccount.get("Push")) ) {
 								Everlive.$.push.disableNotifications(
 									function() {
 										
