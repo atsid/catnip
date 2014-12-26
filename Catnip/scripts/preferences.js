@@ -22,9 +22,15 @@ $(function() {
 			transport: {
 				read: {
 					beforeSend: function(xhr) {
+						try {
 						xhr.setRequestHeader("X-Everlive-Filter",JSON.stringify({
-							Date : config.get("today")
+								Date : config.get("today"),
+								Group : window.myPreferences.get("Group") || window.myAccount.get("Groups")[0]
 						}));
+						} catch(e) {
+							e.event = "Adding Preferences Filter";
+							(pi||console).log(e);
+					}
 					}
 				},
 				create: {
@@ -46,6 +52,8 @@ $(function() {
 			serverFiltering: false,
 			expand: { User: true },
 			error: function(e) {
+				if (e.xhr && e.xhr.status === 403)
+					return;
 				(pi||console).log({
 					type: "error",
 					message: e.errorThrown,
@@ -96,6 +104,15 @@ $(function() {
 								});
 								this.sync();
 								break;
+							case "Group":
+								e.items.forEach(function(item, index) {
+									item.ModifiedAt = new Date();
+								});
+								this.one("requestEnd", function(e) {
+									this.read();
+								});
+								this.sync();
+								break;
 						}
 					}
 				} catch(e) {
@@ -104,6 +121,7 @@ $(function() {
 				}
 			}
 		});
+		window.preferences.bind("error", window.account.forbidden);
 		window.preferences.open = function(open) {
 			var $header = $('.km-header #preferences');
 			if (window.preferences.options.get("disabled"))
@@ -203,8 +221,6 @@ $(function() {
 			}
 		}
 		
-		/*
-		*/
 		window.preferences.bind("change", function(e) {
 			try {
 				if (e.action === "sync" && e.items)
@@ -329,6 +345,7 @@ $(function() {
 									endTime = (new Date()).setTimeString($('#dailyprefs input[name=EndTime]').attr('max'));
 								window.myPreferences = window.preferences.options.set("selected", window.preferences.add({
 									"User": value,
+									"Group": window.myAccount.get("Groups")[0],
 									"Date": config.get("today"),
 									"StartTime": startTime,
 									"StartTimeCode": startTime.getUTCTimeCode(),

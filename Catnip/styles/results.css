@@ -1,6 +1,10 @@
 #results .km-header {
   margin-bottom: 20px;
 }
+#results .km-header .km-leftitem,
+#results .km-header .km-rightitem {
+  max-width: 35%;
+}
 #results .km-header #opener {
   position: relative;
   width: 130px;
@@ -12,37 +16,58 @@
   top: 19px;
   overflow: hidden;
 }
+#results .km-header #group {
+  width: 100%;
+}
+#results .km-header #group .k-dropdown {
+  max-width: 100%;
+}
+#results .km-header #group .k-dropdown .k-input {
+  color: #fff;
+}
+#results .km-header #group .k-dropdown .k-icon {
+  bottom: -1px;
+  top: auto;
+  position: absolute;
+  right: 10px;
+  transform: rotate(-45deg);
+}
+#results .km-header #group .k-dropdown,
+#results .km-header #group .k-dropdown-wrap {
+  background: transparent;
+  border: none;
+}
 #results .km-header #preferences {
   padding: 0em;
   margin: 20px 0.25em 0px;
   text-align: center;
 }
-#results .km-header #preferences #dailyprefs > li.start,
-#results .km-header #preferences #dailyprefs > li.end,
-#results .km-header #preferences #dailyprefs > li.optout,
-#results .km-header #preferences #dailyprefs > li.brought {
+#results .km-header #preferences li.start,
+#results .km-header #preferences li.end,
+#results .km-header #preferences li.optout,
+#results .km-header #preferences li.brought {
   width: 49%;
   display: inline-block;
   padding: 0.25em;
   text-align: center;
 }
-#results .km-header #preferences #dailyprefs > li.start > *,
-#results .km-header #preferences #dailyprefs > li.end > *,
-#results .km-header #preferences #dailyprefs > li.optout > *,
-#results .km-header #preferences #dailyprefs > li.brought > * {
+#results .km-header #preferences li.start > *,
+#results .km-header #preferences li.end > *,
+#results .km-header #preferences li.optout > *,
+#results .km-header #preferences li.brought > * {
   display: inline-block;
 }
-#results .km-header #preferences #dailyprefs > li.start .k-timepicker,
-#results .km-header #preferences #dailyprefs > li.end .k-timepicker,
-#results .km-header #preferences #dailyprefs > li.optout .k-timepicker,
-#results .km-header #preferences #dailyprefs > li.brought .k-timepicker {
+#results .km-header #preferences li.start .k-timepicker,
+#results .km-header #preferences li.end .k-timepicker,
+#results .km-header #preferences li.optout .k-timepicker,
+#results .km-header #preferences li.brought .k-timepicker {
   width: 8em;
   margin: auto;
 }
-#results .km-header #preferences #dailyprefs > li.food > * {
+#results .km-header #preferences li.food > * {
   vertical-align: middle;
 }
-#results .km-header #preferences #dailyprefs > li.food .k-multiselect {
+#results .km-header #preferences li.food .k-multiselect {
   display: inline-block;
   width: 70%;
 }

@@ -30,6 +30,8 @@ $(function() {
 				}
 			}
 		});
+		window.food.bind("error", window.account.forbidden);
+		
 		// Login/Logout
 		window.account.bind("change", function(e) {
 			try {
