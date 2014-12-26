@@ -15,13 +15,13 @@
   ],
   "iOSStatusBarStyle": "Default",
   "AndroidHardwareAcceleration": "True",
-  "BundleVersion": "1.4.1",
+  "BundleVersion": "1.4.2",
   "iOSDisplayName": "",
   "iOSDeviceFamily": [
     "1",
     "2"
   ],
-  "iOSBackgroundMode": [],
+  "AndroidVersionCode": "13",
   "AndroidVersionCode": "12",
   "CorePlugins": [
     "com.phonegap.plugins.PushPlugin",

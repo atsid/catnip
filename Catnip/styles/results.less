@@ -2,6 +2,10 @@
 	.km-header {
 		margin-bottom: 20px;
 		
+		.km-leftitem, .km-rightitem {
+			max-width:35%;
+		}
+		
 		#opener {
 			position: relative;
 			width: 130px;
@@ -14,13 +18,35 @@
 			overflow: hidden;
 		}
 		
+		#group {
+			max-width: 100%;
+			
+			.k-dropdown {
+				max-width: 100%;
+				
+				.k-input {
+					color: #fff;
+				}
+				.k-icon {
+					bottom: -1px;
+					top: auto;
+					position: absolute;
+					right: 10px;
+					transform: rotate(-45deg);
+				}
+			}
+			.k-dropdown, .k-dropdown-wrap {
+				background: transparent;
+				border: none;
+			}
+		}
+		
 		#preferences {
 			padding: 0em;
 			margin: 20px 0.25em 0px;
 			text-align: center;
 			
-			#dailyprefs {
-				> li.start, > li.end, > li.optout, > li.brought {
+			li.start, li.end, li.optout, li.brought {
 					width: 49%;
 					display: inline-block;
 					padding: 0.25em;
@@ -34,7 +60,7 @@
 						margin: auto;
 					}
 				}
-				> li.food {
+			li.food {
 					> * {
 						vertical-align: middle;
 					}
@@ -43,7 +69,6 @@
 						width: 70%;
 					}
 				}
-			}
 			#FoodPreferences {
 				form {
 					display: inline-block;
