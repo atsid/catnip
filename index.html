@@ -47,6 +47,7 @@
 		<!-- Lunch Code -->
 		<script src="scripts/config.js"></script>
         <script src="scripts/account.js"></script>
+		<script src="scripts/groups.js"></script>
 		<script src="scripts/food.js"></script>
 		<script src="scripts/results.js"></script>
 		<script src="scripts/preferences.js"></script>
@@ -129,11 +130,11 @@
 		
 		<div id="results" data-role="view" data-user-roles="true" data-init="results.initView">
 			<div data-role="header">
+				<form id="dailyprefs" data-source="preferences">
 					<ul id="preferences">
 						<li>
 							<!-- Time Preferences -->
 							<ul>
-								<form id="dailyprefs" data-source="preferences">
 									<li class="start">
 										<label for="StartTime">Earliest I can leave: </label>
 										<input name="StartTime" type="datetime" data-role="timepicker" data-format="h:mm tt" value="12:00" min="10:30" max="15:00" />
@@ -151,17 +152,20 @@
 										<label for="Brought">I brought: </label>
 										<input name="Brought" data-role="switch" data-on-label="Yes" data-off-label="No" type="checkbox" data-type="boolean" />
 									</li>
-								</form>
 							</ul>
 						</li>
 					</ul>
 				<div data-role="navbar">
+						<div id="group" data-align="left">
+							<select name="Group" data-role="dropdownlist" data-type="text" data-value-field="Id" data-text-field="Name" data-source="groups"></select>
+						</div>
 					<div data-role="view-title" onclick="preferences.open()">Lunch?</div>
-					<form id="in" data-align="right" data-source="preferences">
-						<input name="OptOut" data-role="switch" data-on-label="No" data-off-label="Yes" type="checkbox" />
-					</form>
+						<div id="in" data-align="right">
+							<input name="OptOut" data-role="switch" data-type="boolean" data-on-label="No" data-off-label="Yes" type="checkbox" />
 				</div>
+					</div>
 				<div id="opener" onclick="preferences.open()"><span class="k-icon k-i-arrow-s"></span></div>
+				</form>
 			</div>
 			<!--
 			<div id="map" data-role="map" style="height: 30%">
