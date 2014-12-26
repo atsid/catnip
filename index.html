@@ -48,6 +48,7 @@
 		<!-- Lunch Code -->
 		<script src="scripts/config.js"></script>
         <script src="scripts/account.js"></script>
+		<script src="scripts/groups.js"></script>
 		<script src="scripts/food.js"></script>
 		<script src="scripts/results.js"></script>
 		<script src="scripts/preferences.js"></script>
@@ -73,15 +74,21 @@
 							view: this.view()
 						});
 						pi.console.bind("change", function(e) {
-							if (e.action === "add") {
-								if (!e.items[0].message && navigator && navigator.onLine === false)
-									e.items[0].message = "Not connected to the internet. We will try again later.";
-								var message = e.items[0].message;
-								if (e.items[0].event)
-									message = e.items[0].event + "\n" + message;
-								if (e.items[0].stack)
-									message = message + "\n" + e.items[0].stack.match(/\((.*\/)?(.*)\)/)[2];
-								alert(message);
+							if (e.action === "remove") {
+								if (typeof(e.items[0]) === "object")
+									e.items[0].removed = true;
+							}
+							else if (e.action === "add") {
+								if (typeof(e.items[0]) === "object" && !e.items[0].removed) {
+									if (!e.items[0].message && navigator && navigator.onLine === false)
+										e.items[0].message = "Not connected to the internet. We will try again later.";
+									var message = e.items[0].message;
+									if (e.items[0].event)
+										message = e.items[0].event + "\n" + message;
+									if (e.items[0].stack)
+										message = message + "\n" + e.items[0].stack.match(/\((.*\/)?(.*)\)/)[2];
+									alert(message);
+								}
 							}
 						});
 					}
@@ -124,11 +131,11 @@
 		
 		<div id="results" data-role="view" data-user-roles="true" data-init="results.initView">
 			<div data-role="header">
+				<form id="dailyprefs" data-source="preferences">
 					<ul id="preferences">
 						<li>
 							<!-- Time Preferences -->
 							<ul>
-								<form id="dailyprefs" data-source="preferences">
 									<li class="start">
 										<label for="StartTime">Earliest I can leave: </label>
 										<input name="StartTime" type="datetime" data-role="timepicker" data-format="h:mm tt" value="12:00" min="10:30" max="15:00" />
@@ -146,17 +153,20 @@
 										<label for="Brought">I brought: </label>
 										<input name="Brought" data-role="switch" data-on-label="Yes" data-off-label="No" type="checkbox" data-type="boolean" />
 									</li>
-								</form>
 							</ul>
 						</li>
 					</ul>
 				<div data-role="navbar">
+						<div id="group" data-align="left">
+							<select name="Group" data-role="dropdownlist" data-type="text" data-value-field="Id" data-text-field="Name" data-source="groups"></select>
+						</div>
 					<div data-role="view-title" onclick="preferences.open()">Lunch?</div>
-					<form id="in" data-align="right" data-source="preferences">
-						<input name="OptOut" data-role="switch" data-on-label="No" data-off-label="Yes" type="checkbox" />
-					</form>
+						<div id="in" data-align="right">
+							<input name="OptOut" data-role="switch" data-type="boolean" data-on-label="No" data-off-label="Yes" type="checkbox" />
 				</div>
+					</div>
 				<div id="opener" onclick="preferences.open()"><span class="k-icon k-i-arrow-s"></span></div>
+				</form>
 			</div>
 			<div id="map" data-role="map"></div>
 			<div class="all-groups">

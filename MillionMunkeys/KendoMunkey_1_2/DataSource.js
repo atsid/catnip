@@ -252,8 +252,12 @@ pi.data.DataSource = {
 						}
 					);
 				}
+				selected = selected.toJSON();
+				delete selected.principal_id;
+				delete selected.access_token;
+				delete selected.token_type;
 				Everlive.$.Users.updateSingle(
-					selected.toJSON(),
+					selected,
 					function (data) {
 						var data = data;
 					},
