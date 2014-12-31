@@ -48,7 +48,7 @@ $(function() {
 					}
 				}
 			},
-			debug: false,
+			debug: true,
 			serverFiltering: false,
 			expand: { User: true },
 			error: function(e) {
