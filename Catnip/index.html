@@ -40,6 +40,7 @@
     	<script src="MillionMunkeys/KendoMunkey_1_2/ListView.js"></script>
     	<script src="MillionMunkeys/KendoMunkey_1_2/Grid.js"></script>
     	<script src="MillionMunkeys/KendoMunkey_1_2/Touch.js"></script>
+		<!-- script src="MillionMunkeys/KendoMunkey_1_2/File.js"></script -->
 		
         <!-- Less.js -->
         <script src="scripts/less-1.7.5.min.js" type="text/javascript"></script>
@@ -238,7 +239,7 @@
 									<div class="Avatar">
 										<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo }" onload="window.account.onPhotoLoad(event)" />
 									</div>
-									<input type="file" name="Photo" disabled />
+									<input type="image" name="Photo" data-role="photoupload" data-source="Everlive.Files" data-storage="file://com.atsid.labs.lunch/" data-format="jpg,jpeg,png,gif" data-length="3000000" disabled />
 								</label>
 							</li>
 							<li class="DisplayName"><label>Name: <input type="text" name="DisplayName" required /></label></li>
