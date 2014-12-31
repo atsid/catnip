@@ -1,6 +1,15 @@
 .km-ios7 .km-header .km-navbar {
   margin-top: 20px;
 }
+.km-list:not(.km-virtual-list) > li:first-child {
+  border-top-width: 1px;
+}
+.km-list:not(.km-virtual-list) > li:last-child {
+  border-bottom-width: 1px;
+}
+.km-list input[type=image] {
+  display: none;
+}
 .km-list input[type=password],
 .km-list input[type=search],
 .km-list input[type=number],
@@ -20,6 +29,25 @@
 .km-list textarea {
   border-bottom: 1px solid rgba(68, 68, 68, 0.2);
   padding-bottom: 0px;
+}
+.km-list input[type=password][disabled],
+.km-list input[type=search][disabled],
+.km-list input[type=number][disabled],
+.km-list input[type=tel][disabled],
+.km-list input[type=url][disabled],
+.km-list input[type=email][disabled],
+.km-list input[type=month][disabled],
+.km-list input[type=color][disabled],
+.km-list input[type=week][disabled],
+.km-list input[type=date][disabled],
+.km-list input[type=time][disabled],
+.km-list input[type=datetime][disabled],
+.km-list input[type=datetime-local][disabled],
+.km-list input[type=text]:not(.k-input)[disabled],
+.km-list select:not([multiple])[disabled],
+.km-list .k-dropdown-wrap[disabled],
+.km-list textarea[disabled] {
+  color: rgba(68, 68, 68, 0.5);
 }
 .km-list label {
   line-height: 1.6em;
@@ -62,6 +90,9 @@ button {
 .km-switch .km-switch-label-on,
 .km-switch .km-switch-label-off {
   line-height: 2em;
+}
+.km-popup .k-popup .k-list li {
+  padding: 0.5em;
 }
 .km-header {
   color: #ffffff;

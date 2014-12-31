@@ -147,8 +147,11 @@
 				</ul>
 			</form>
 			<footer data-role="footer">
-				<div class="actions">
-					<button data-align="right" onclick="$('#ResetForm').submit();">Reset Password</button>
+				<div class="actions" data-align="left">
+					<button onclick="app.navigate('#login')">Cancel</button>
+				</div>
+				<div class="actions" data-align="right">
+					<button onclick="$('#ResetForm').submit();">Reset Password</button>
 				</div>
 			</footer>
 		</div>
