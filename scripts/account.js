@@ -37,6 +37,23 @@ $(function() {
 				"access_token" : "" // required blank value to kick of default navigation.
 			}
 		});
+        window.account.resetPassword = function (e) {
+            $.ajax({
+                type: "POST",
+                url: "https://api.everlive.com/v1/" + config.get("everlive.apiKey") + "/Users/resetpassword",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    Username: myAccount.get("Username")
+                }),
+                success: function () {
+                    alert("Your password was successfully reset. Please check your email for instructions on choosing a new password.");
+                    app.navigate("#login");
+                },
+                error: function () {
+                    alert("Unfortunately, an error occurred resetting your password.")
+                }
+            });
+        }
 		window.account.forbidden = function(e) {
 			if (e.xhr && e.xhr.status === 403) {
 				window.account.remove(window.account.options.get("selected")); // logout
