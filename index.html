@@ -120,11 +120,35 @@
 						<input type="password" name="Password" required="required" />
 						<div class="k-invalid-msg" data-for="Password"></div>
 					</li>
+                    <li><div>
+                        <a href="#reset">Forgot Your Password?</a>
+                        </div></li>
 				</ul>
 			</form>
 			<footer data-role="footer">
 				<div class="actions">
 					<button data-align="right" onclick="$('#LoginForm').submit();">Login</button>
+				</div>
+			</footer>
+		</div>
+		<div id="reset" data-role="view" title="Password Reset" data-user-roles="false" data-layout="">
+			<header data-role="header">
+				<nav data-role="navbar">
+					<div data-role="view-title">Lunch?</div>
+				</nav>
+			</header>
+			<form id="ResetForm" method="" data-source="account" onsubmit="window.account.resetPassword()">
+				<ul data-role="listview" data-style="inset">
+					<li>
+						<label for="Username">Email: </label>
+						<input type="email" name="Username" required="required" />
+						<span class="k-invalid-msg" data-for="Username"></span>
+					</li>
+				</ul>
+			</form>
+			<footer data-role="footer">
+				<div class="actions">
+					<button data-align="right" onclick="$('#ResetForm').submit();">Reset Password</button>
 				</div>
 			</footer>
 		</div>
