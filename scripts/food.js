@@ -16,8 +16,8 @@ $(function() {
 					];
 					this.data().forEach(function(item,index) {
 						if (item.RGB) {
-							styles.push("td."+item.Name+".preference {background-color: rgba("+item.RGB.join()+",1)}");
-							styles.push("td."+item.Name+".available {background-color: rgba("+item.RGB.join()+",0.5)}");
+							styles.push("td."+item.Name+".preference {background-color: rgba("+item.RGB+",1)}");
+							styles.push("td."+item.Name+".available {background-color: rgba("+item.RGB+",0.5)}");
 						}
 					});
 					var styleBlock = $('style#LunchColors');
