@@ -17,7 +17,7 @@
   overflow: hidden;
 }
 #results .km-header #group {
-  width: 100%;
+  max-width: 100%;
 }
 #results .km-header #group .k-dropdown {
   max-width: 100%;
@@ -36,6 +36,7 @@
 #results .km-header #group .k-dropdown-wrap {
   background: transparent;
   border: none;
+  box-shadow: none;
 }
 #results .km-header #preferences {
   padding: 0em;
