@@ -40,7 +40,7 @@
     	<script src="MillionMunkeys/KendoMunkey_1_2/ListView.js"></script>
     	<script src="MillionMunkeys/KendoMunkey_1_2/Grid.js"></script>
     	<script src="MillionMunkeys/KendoMunkey_1_2/Touch.js"></script>
-		<!-- script src="MillionMunkeys/KendoMunkey_1_2/File.js"></script -->
+		<script src="MillionMunkeys/KendoMunkey_1_2/File.js"></script>
 		
         <!-- Less.js -->
         <script src="scripts/less-1.7.5.min.js" type="text/javascript"></script>
@@ -163,23 +163,23 @@
 						<li>
 							<!-- Time Preferences -->
 							<ul>
-									<li class="start">
-										<label for="StartTime">Earliest I can leave: </label>
-										<input name="StartTime" type="datetime" data-role="timepicker" data-format="h:mm tt" value="12:00" min="10:30" max="15:00" />
-									</li>
-									
-									<li class="end">
-										<label for="EndTime">Latest I can be back: </label>
-										<input name="EndTime" type="datetime" data-role="timepicker" data-format="h:mm tt" value="13:00" min="11:00" max="16:00" />
-									</li>
-									<li class="food">
-										<label for="FoodCategories">Food Choices: </label>
-										<select name="FoodCategories" placeholder="Pick food choice(s)..." data-role="multiselect" data-max-selected-items="3" data-value-field="Id" data-text-field="Name" data-height="125" data-source="food"></select>
-									</li>
-									<li class="brought">
-										<label for="Brought">I brought: </label>
-										<input name="Brought" data-role="switch" data-on-label="Yes" data-off-label="No" type="checkbox" data-type="boolean" />
-									</li>
+								<li class="start">
+									<label for="StartTime">Earliest I can leave: </label>
+									<input name="StartTime" type="datetime" data-role="timepicker" data-format="h:mm tt" value="12:00" min="10:30" max="15:00" />
+								</li>
+								
+								<li class="end">
+									<label for="EndTime">Latest I can be back: </label>
+									<input name="EndTime" type="datetime" data-role="timepicker" data-format="h:mm tt" value="13:00" min="11:00" max="16:00" />
+								</li>
+								<li class="food">
+									<label for="FoodCategories">Food Choices: </label>
+									<select name="FoodCategories" placeholder="Pick food choice(s)..." data-role="multiselect" data-max-selected-items="3" data-value-field="Id" data-text-field="Name" data-height="125" data-source="food"></select>
+								</li>
+								<li class="brought">
+									<label for="Brought">I brought: </label>
+									<input name="Brought" data-role="switch" data-on-label="Yes" data-off-label="No" type="checkbox" data-type="boolean" />
+								</li>
 							</ul>
 						</li>
 					</ul>
