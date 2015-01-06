@@ -136,7 +136,7 @@ $(function() {
 			} else {
 				$('.km-header #preferences').animate({
 					"margin-top" : -$header.height()+"px"
-				});
+				}).find('input.k-input').blur();
 				$('#opener .k-icon').removeClass("k-i-expand").addClass("k-i-collapse");
 			}
 		}
