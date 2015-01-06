@@ -61,9 +61,9 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 		var _this = this;
 		this.input = $(element).attr("type", "hidden");
 		this.input.wrap('<div class="km-photo-upload">');
-		this.cameraButton = this.input.after("<button>Camera</button>").next();
-		this.libraryButton = this.cameraButton.after("<button>Photos</button>").next();
-		this.cameraButton.kendoButton({
+		this.cameraButton = this.input.after('<button>Camera</button>').next();
+		this.libraryButton = this.cameraButton.after('<button>Photos</button>').next();
+		this.cameraButton.kendoMobileButton({
 			icon : "camera",
 			click : function(e) {
 				navigator.camera.getPicture(
@@ -82,7 +82,7 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 				);
 			}
 		});
-		this.libraryButton.kendoButton({
+		this.libraryButton.kendoMobileButton({
 			icon : "organize",
 			click : function(e) {
 				navigator.camera.getPicture( 
