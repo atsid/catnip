@@ -78,6 +78,9 @@ $(function() {
 								window.preferences.open(true);
 						}
 					});
+					$(window).on("resize", function(e) {
+						window.preferences.open(false);
+					});
 					window.preferences.options.bind("change", function(e) {
 						if (e.field === "disabled") {
 							var disabled = this.get(e.field,false);
