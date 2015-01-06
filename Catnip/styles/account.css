@@ -46,6 +46,10 @@
 #profile .km-list {
   font-size: 1em;
 }
+#profile .km-list .km-photo-upload button {
+  margin-left: 0.5em;
+  padding-left: 0.75em;
+}
 #profile .km-list input,
 #profile .km-list .km-photo-upload {
   position: absolute;

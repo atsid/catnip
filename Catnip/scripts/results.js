@@ -122,7 +122,8 @@ $(function() {
 				}
 			});
 			e.view.bind("show", function(e) {
-				$('#opener').animate({height:"18px"});
+				if (!window.preferences.options.get("disabled"))
+					$('#opener').animate({height:"18px"});
 				setTimeout(function() {
 					window.preferences.open(false);
 				},1500);
