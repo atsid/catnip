@@ -50,15 +50,27 @@
 		border-radius: @avatarRadius*2;
 		font-size: @avatarFontSize*2;
 		line-height: @avatarLineHeight*2;
+		
+		img {
+			height: @avatarSize*2;
+		}
 	}
 	.km-list {
 		font-size: 1em;
 		
-		.km-photo-upload button {
-			margin-left: 0.5em;
-			padding-left: 0.75em;
+		.km-photo-upload {
+			button {
+				margin-left: 0.25em;
+				padding-left: 0.75em;
+				margin-bottom: 0.25em;
+				padding-right: 0.25em;
+				height: 2.2em;
+				vertical-align: middle;
+			}
+			button:last-child .km-text {
+				display: none;
+			}
 		}
-		
 		input, .km-photo-upload {
 			position: absolute;
 			top: 50%;
@@ -83,6 +95,7 @@
 		height: @avatarSize;
 		width: @avatarSize;
 		border-radius: @avatarRadius;
+		border: 1px solid rgba(68, 68, 68, 0.2);
 		overflow: hidden;
 		
 		.caption {

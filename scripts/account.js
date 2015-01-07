@@ -92,9 +92,6 @@ $(function() {
 				(pi||console).log(e);
 			}
 		}
-		window.account.onPhotoLoad = function(e) {
-			$(e.target).parents(".Photo").addClass("image");
-		}
 		window.account.getInitials = function(data) {
 			return data.DisplayName.replace(/\b(.)\w*[\s-]*/g, "$1");
 		}
@@ -108,6 +105,12 @@ $(function() {
 							if (e.direction === "down")
 								window.app.navigate("#:back", "overlay:up reverse");
 						}
+					});
+					$(".Avatar img").bind("load", function(e) {
+						$(e.target).parents(".Avatar").addClass("image");
+					});
+					e.view.element.find("[name=Photo]").data("kendoPhotoUpload").bind("change", function(e) {
+						$(".Avatar img").attr("src", e.value || "");
 					});
 				});
 			} catch(e) {
