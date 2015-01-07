@@ -43,12 +43,22 @@
   font-size: 23.333333333333332px;
   line-height: 74px;
 }
+#profile #Profile .Avatar img {
+  height: 70px;
+}
 #profile .km-list {
   font-size: 1em;
 }
 #profile .km-list .km-photo-upload button {
-  margin-left: 0.5em;
+  margin-left: 0.25em;
   padding-left: 0.75em;
+  margin-bottom: 0.25em;
+  padding-right: 0.25em;
+  height: 2.2em;
+  vertical-align: middle;
+}
+#profile .km-list .km-photo-upload button:last-child .km-text {
+  display: none;
 }
 #profile .km-list input,
 #profile .km-list .km-photo-upload {
@@ -71,6 +81,7 @@
   height: 35px;
   width: 35px;
   border-radius: 17.5px;
+  border: 1px solid rgba(68, 68, 68, 0.2);
   overflow: hidden;
 }
 .MyAccount .Avatar .caption {

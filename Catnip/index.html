@@ -211,7 +211,7 @@
 					<form class="MyAccount" data-source="account">
 						<button data-role="button" href="#profile" data-transition="overlay:up">
 							<div class="Avatar">
-								<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo }" onload="window.account.onPhotoLoad(event)" />
+								<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo }" />
 							</div>
 						</button>
 					</form>
@@ -227,7 +227,7 @@
 							<div class="opener"><span class="k-icon k-i-arrow-s"></span></div>
 							<form class="MyAccount" data-source="account">
 								<div class="Avatar">
-									<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo }" onload="window.account.onPhotoLoad(event)" />
+									<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo }" />
 								</div>
 							</form>
 						</a>
@@ -238,12 +238,10 @@
 				<ul data-role="listview" data-style="inset" data-type="group">
 					<li>Profile
 						<ul>
-							<li>
+							<li class="Avatar">
 								<label>
-									<div class="Avatar">
-										<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo }" onload="window.account.onPhotoLoad(event)" />
-									</div>
-									<input type="image" name="Photo" data-role="photoupload" data-source="Everlive.Files" data-storage="file://com.atsid.labs.lunch/" data-format="jpg,jpeg,png,gif" data-length="3000000" disabled />
+									<span class="caption" data-bind="text: Initials"></span>
+									<input type="image" name="Photo" data-bind="attr: { src: Photo }" data-role="photoupload" data-source="Everlive.Files" data-storage="file://com.atsid.labs.lunch/" data-format="jpg,jpeg,png,gif" data-length="3000000" disabled />
 								</label>
 							</li>
 							<li class="DisplayName"><label>Name: <input type="text" name="DisplayName" required /></label></li>
