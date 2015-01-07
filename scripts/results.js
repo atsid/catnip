@@ -78,7 +78,7 @@ $(function() {
 								window.preferences.open(true);
 						}
 					});
-					$(window).on("resize", function(e) {
+					$(window).on("orientationchange", function(e) {
 						window.preferences.open(false);
 					});
 					window.preferences.options.bind("change", function(e) {
