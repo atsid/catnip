@@ -234,14 +234,16 @@
 					</div>
 				</nav>
 			</header>
-			<form id="Profile" class="MyAccount" method="put" data-source="account">
+			<form id="Profile" class="" method="put" data-source="account">
 				<ul data-role="listview" data-style="inset" data-type="group">
 					<li>Profile
 						<ul>
-							<li class="Avatar">
+							<li>
 								<label>
-									<span class="caption" data-bind="text: Initials"></span>
-									<input type="image" name="Photo" data-bind="attr: { src: Photo }" data-role="photoupload" data-source="Everlive.Files" data-storage="file://com.atsid.labs.lunch/" data-format="jpg,jpeg,png,gif" data-length="3000000" disabled />
+									<div class="Avatar">
+										<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo }" />
+									</div>
+									<input type="image" name="Photo" data-bind="attr: { src: Photo }" data-role="photoupload" data-source="Everlive.Files" data-storage="file://com.atsid.labs.lunch/" data-format="jpg,jpeg,png,gif" data-length="3000000" />
 								</label>
 							</li>
 							<li class="DisplayName"><label>Name: <input type="text" name="DisplayName" required /></label></li>

@@ -83,6 +83,12 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 			if (this.element.attr("type") === "file")
 				this.file = this.element;
 		}
+		// img
+		if (this.element.is("img"))
+			this.img = this.element;
+		if (!this.img)
+			this.img = $('<img>').appendTo(this.wrap).attr('src', this.element.attr('src') || this.element.attr('value') || "");
+		// input, part 2
 		if (!this.input) {
 			this.input = $('<input type="image" name="' + options.name + '" />').appendTo(this.wrap);
 			this.input.attr('value', this.element.attr('value')).attr('src', this.element.attr('src'));
@@ -91,11 +97,6 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 				this.element.removeAttr('data-bind');
 			}
 		}
-		// img
-		if (this.element.is("img"))
-			this.img = this.element;
-		if (!this.img)
-			this.img = $('<img>').appendTo(this.wrap).attr('src', this.element.attr('src') || this.element.attr('value') || "");
 		// buttons
 		if (navigator.camera) {
 			if (this.file)
@@ -152,8 +153,12 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 					_this.selectSuccess("");
 				}
 			});
-		} else if (!this.file) {
-			this.file = $('<input type="file" />').appendTo(this.wrap);
+		} else {
+			if (!this.file)
+				this.file = $('<input type="file" />').appendTo(this.wrap);
+			this.file.bind("change", function(e) {
+				_this.selectSuccess($(this).val());
+			});
 		}
 	},
 	/*
@@ -180,6 +185,8 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 		if (this._uri !== uri)
 			this.dirty = true;
 		this._uri = uri;
+		if (this.img)
+			this.img.attr("src", uri);
 		this.trigger("change", {value: uri});
 		if (this.autoupload && this.dirty)
 			this.uploadFile();
