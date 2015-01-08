@@ -36,18 +36,31 @@
   top: -14px;
 }
 #profile #Profile .Avatar {
-  text-align: center;
   width: 70px;
   height: 70px;
   border-radius: 35px;
   font-size: 23.333333333333332px;
   line-height: 74px;
+  position: relative;
+  top: auto;
+  right: auto;
+  margin-top: auto;
 }
 #profile #Profile .Avatar img {
   height: 70px;
 }
+#profile #Profile .Avatar input[type=image] {
+  display: none;
+}
 #profile .km-list {
   font-size: 1em;
+}
+#profile .km-list .km-photo-upload input {
+  position: relative;
+  top: auto;
+  right: auto;
+  margin-top: auto;
+  width: 100%;
 }
 #profile .km-list .km-photo-upload button {
   margin-left: 0.25em;
@@ -72,7 +85,7 @@
 .km-footer .MyAccount .km-button {
   padding: 0.25em;
 }
-.MyAccount .Avatar {
+.Avatar {
   display: inline-block;
   color: #f2f2f2;
   vertical-align: middle;
@@ -84,7 +97,7 @@
   border: 1px solid rgba(68, 68, 68, 0.2);
   overflow: hidden;
 }
-.MyAccount .Avatar .caption {
+.Avatar .caption {
   display: inline-block;
   background-color: #3f51b5;
   width: 100%;
@@ -92,13 +105,13 @@
   text-align: center;
   overflow-wrap: break-word;
 }
-.MyAccount .Avatar img {
+.Avatar img {
   display: none;
   height: 35px;
 }
-.MyAccount .Avatar.image .caption {
+.Avatar.image .caption {
   display: none;
 }
-.MyAccount .Avatar.image img {
+.Avatar.image img {
   display: inline-block;
 }

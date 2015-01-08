@@ -106,7 +106,7 @@ $(function() {
 								window.app.navigate("#:back", "overlay:up reverse");
 						}
 					});
-					$(".Avatar img").bind("load", function(e) {
+					$(".Avatar img, .Avatar input[type=image]").bind("load", function(e) {
 						$(e.target).parents(".Avatar").addClass("image");
 					});
 					e.view.element.find("[name=Photo]").data("kendoPhotoUpload").bind("change", function(e) {

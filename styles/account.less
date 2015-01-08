@@ -44,21 +44,34 @@
 		}
 	}
 	#Profile .Avatar {
-		text-align: center;
 		width: @avatarSize*2;
 		height: @avatarSize*2;
 		border-radius: @avatarRadius*2;
 		font-size: @avatarFontSize*2;
 		line-height: @avatarLineHeight*2;
+		position: relative;
+		top: auto;
+		right: auto;
+		margin-top: auto;
 		
 		img {
 			height: @avatarSize*2;
+		}
+		input[type=image] {
+			display: none;
 		}
 	}
 	.km-list {
 		font-size: 1em;
 		
 		.km-photo-upload {
+			input {
+				position: relative;
+				top: auto;
+				right: auto;
+				margin-top: auto;
+				width: 100%;
+			}
 			button {
 				margin-left: 0.25em;
 				padding-left: 0.75em;
@@ -85,39 +98,37 @@
 .km-footer .MyAccount .km-button {
 	padding: 0.25em;
 }
-.MyAccount {
-	.Avatar {
+.Avatar {
+	display: inline-block;
+	color: @grey;
+	vertical-align: middle;
+	font-size: @avatarFontSize;
+	line-height: @avatarLineHeight;
+	height: @avatarSize;
+	width: @avatarSize;
+	border-radius: @avatarRadius;
+	border: 1px solid rgba(68, 68, 68, 0.2);
+	overflow: hidden;
+	
+	.caption {
 		display: inline-block;
-		color: @grey;
-		vertical-align: middle;
-		font-size: @avatarFontSize;
-		line-height: @avatarLineHeight;
+		background-color: @blue;
+		width: 100%;
+		height: 100%;
+		text-align: center;
+		overflow-wrap: break-word;
+	}
+	img {
+		display: none;
 		height: @avatarSize;
-		width: @avatarSize;
-		border-radius: @avatarRadius;
-		border: 1px solid rgba(68, 68, 68, 0.2);
-		overflow: hidden;
-		
+	}
+	
+	&.image {
 		.caption {
-			display: inline-block;
-			background-color: @blue;
-			width: 100%;
-			height: 100%;
-			text-align: center;
-			overflow-wrap: break-word;
+			display: none;
 		}
 		img {
-			display: none;
-			height: @avatarSize;
-		}
-		
-		&.image {
-			.caption {
-				display: none;
-			}
-			img {
-				display: inline-block;
-			}
+			display: inline-block;
 		}
 	}
 }
