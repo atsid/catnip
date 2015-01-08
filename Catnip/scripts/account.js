@@ -110,7 +110,7 @@ $(function() {
 						$(e.target).parents(".Avatar").addClass("image");
 					});
 					e.view.element.find("[name=Photo]").data("kendoPhotoUpload").bind("change", function(e) {
-						$(".Avatar img").attr("src", e.value || "");
+						$(".Avatar img").attr("src", e.value || "").parents(".Avatar").removeClass("image");
 					});
 				});
 			} catch(e) {

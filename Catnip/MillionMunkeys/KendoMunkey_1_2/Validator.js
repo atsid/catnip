@@ -143,8 +143,10 @@ $(function() {
                 // If you want to do something onSubmit, add a submit handler. This will trigger that, 
                 // as will a button click on a submit button.
                 // CAUTION: Allow uninterrupted return key in textareas.
-                if (e.keyCode == 13 && $(e.target).prop('tagName').toUpperCase() != "TEXTAREA")
+				if (e.keyCode == 13 && $(e.target).prop('tagName').toUpperCase() != "TEXTAREA") {
+					$this.find(":input").blur();
                     $this.trigger("submit");
+				}
             });
         }
 		
