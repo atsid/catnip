@@ -67,13 +67,12 @@ $(function() {
 										if (response && response.result) {
 											window.myDevice = response.result;
 											// we have successfully registered and turned on push notifications
-											(pi||console).log("Successful Push Notification Registration");
+											// (pi||console).log("Successful Push Notification Registration");
 											Everlive.$.push.updateRegistration({
 												"Groups" : window.myAccount.get("Groups"),
 												"LastLogin" : config.get("today")
 											}, function(response) {
-												var response = response;
-												(pi||console).log("Updated Push Notification Registration");
+												// (pi||console).log("Updated Push Notification Registration");
 											}, function(error) {
 												error.event = "Update Push Registration";
 												(pi||console).log(error);

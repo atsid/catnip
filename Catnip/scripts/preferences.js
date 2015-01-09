@@ -135,7 +135,7 @@ $(function() {
 				$('#opener .k-icon').removeClass("k-i-collapse").addClass("k-i-expand");
 			} else {
 				$('.km-header #preferences').animate({
-					"margin-top" : -$header.height()-10+"px"
+					"margin-top" : -$header.height()-((kendo.support.mobileOS.ios && kendo.support.mobileOS.majorVersion >= "7")?10:0)+"px"
 				}).find('input.k-input').blur();
 				$('#opener .k-icon').removeClass("k-i-expand").addClass("k-i-collapse");
 			}

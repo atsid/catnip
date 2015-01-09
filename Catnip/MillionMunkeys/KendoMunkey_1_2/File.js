@@ -16,46 +16,45 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 	dirty : false,
 	init : function(element, options) {
 		pi.ui.Widget.attributeOptions.apply(this, arguments);
-		this.setMaxSize(element, options);
 		this.initDatasource(element, options);
+		this.setMaxSize(element, options);
 		kendo.ui.Widget.fn.init.apply(this, arguments);
 		this.options = pi.observable(this.options);
 		this.render(element,options);
 		$(element).data("kendoPhotoUpload", this);
 	},
-	value : function(newVal) {
-		if (typeof(newVal) !== "undefined")
-			this.input.val(newVal);
-		else
-			return this.input.val();
-	},
-	setMaxSize : function(element, options) {
-		if (!options.maxSize) {
-			if (options.dataSource && typeof(options.dataSource) === "string" && options.dataSource.toLowerCase() === "everlive.files" )
-				// Everlive max is 4MB
-				options.maxSize = 4 * 1000 * 1000;
-			else
-				return;
+	src : function(newSrc) {
+		// CAUTION: A null value has a type of "object"!!
+		if (newSrc) {
+			this._uri = newSrc;
+			this.img.attr("src", (newSrc.length < 1000) ? newSrc : "data:image/jpeg;base64," + newSrc);
+		} else {
+			return this._uri || this.img.attr("src");
 		}
-		// Set string version now
-		if (options.maxSize > 1000000000)
-			options.maxSizeString = Math.floor(options.maxSize * 100 / 1000000000) / 100 + "GB";
-		else if (options.maxSize > 1000000)
-			options.maxSizeString = Math.floor(options.maxSize * 100 / 1000000) / 100 + "MB";
-		else if (options.maxSize > 1000)
-			options.maxSizeString = Math.floor(options.maxSize * 100 / 1000) / 100 + "KB";
-		else
-			options.maxSizeString = options.maxSize + " Bytes";
+	},
+	value : function(newVal) {
+		// CAUTION: A null value has a type of "object"!!
+		if (newVal) {
+			this._value = newVal;
+			if (typeof(newVal) === "object")
+				this.input.val(newVal.id || newVal.Id || "");
+			else
+				this.input.val(newVal);
+		} else {
+			return this._value || this.input.val();
+		}
 	},
 	initDatasource : function(element, options) {
 		if (!options.dataSource)
 			return;
 		if (typeof(options.dataSource) === "string" && options.dataSource.toLowerCase() === "everlive.files" ) {
 			options.name = options.name || $(element).attr("data-name") || $(element).attr("name") || "file";
+			if (!options.maxSize || options.maxSize > 4 * 1000 * 1000)
+				options.maxSize = 4 * 1000 * 1000;
 			
 			var _this = this;
 			if (!options.autoUpload) {
-				this.form = $(element).parent("form").bind("submit", function(e) {
+				this.form = $(element).parents("form").bind("submit", function(e) {
 					if (_this.dirty) {
 						_this.uploadFile();
 						return false; // cancel submit
@@ -65,6 +64,19 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 				});
 			}
 		}
+	},
+	setMaxSize : function(element, options) {
+		if (!options.maxSize)
+			return;
+		// Set string version now
+		if (options.maxSize > 1000000000)
+			options.maxSizeString = Math.floor(options.maxSize * 100 / 1000000000) / 100 + "GB";
+		else if (options.maxSize > 1000000)
+			options.maxSizeString = Math.floor(options.maxSize * 100 / 1000000) / 100 + "MB";
+		else if (options.maxSize > 1000)
+			options.maxSizeString = Math.floor(options.maxSize * 100 / 1000) / 100 + "KB";
+		else
+			options.maxSizeString = options.maxSize + " Bytes";
 	},
 	render : function(element,options) {
 		var _this = this;
@@ -113,7 +125,8 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 						},
 						{
 							sourceType : Camera.PictureSourceType.CAMERA,
-							destinationType : Camera.DestinationType.FILE_URI,
+							destinationType : Camera.DestinationType.DATA_URL,
+							// destinationType : Camera.DestinationType.NATIVE_URI,
 							mediaType : Camera.MediaType.PICTURE,
 							encodingType: Camera.EncodingType.JPEG,
 							correctOrientation : true,
@@ -136,7 +149,8 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 						},
 						{
 							sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
-							destinationType : Camera.DestinationType.FILE_URI,
+							destinationType : Camera.DestinationType.DATA_URL,
+							// destinationType : Camera.DestinationType.NATIVE_URI,
 							mediaType : Camera.MediaType.PICTURE,
 							encodingType: Camera.EncodingType.JPEG,
 							correctOrientation : true,
@@ -182,12 +196,17 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 	},
 	*/
 	selectSuccess: function(uri) {
+		if ( this.options.maxSize) {
+			if ( (uri.length > this.options.maxSize) || (this.file && this.file[0].files.length && this.file[0].files[0].size > this.options.maxSize) ) {
+				this.trigger("error", { message: "The file selected is larger than " + this.options.maxSizeString + ". Please select another." });
+				return;
+			}
+		}
 		if (this._uri !== uri)
 			this.dirty = true;
 		this._uri = uri;
-		if (this.img)
-			this.img.attr("src", uri);
-		this.trigger("change", {value: uri});
+		this.src(uri);
+		this.trigger("change", {src: uri});
 		if (this.autoupload && this.dirty)
 			this.uploadFile();
 	},
@@ -197,15 +216,38 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 	uploadFile : function() {
 		if (!this.dirty)
 			return;
-		if (this._uri) {
+		if (this._uri && this._uri.length > 1000) {
+			var _this = this, file = {
+				"Filename": "photo.jpg",
+				"ContentType": "image/jpeg",
+				"base64": this._uri
+			};
+			
+			Everlive.$.Files.create(file,
+				function(data) {
+					if (data.result) {
+						_this.dirty = false;
+						if (_this.value())
+							Everlive.$.Files.destroySingle({Id: _this.value()});
+						_this.value(data.result);
+						_this._uri = data.result.Uri;
+						_this.src(_this._uri);
+						_this.trigger("change", {src: _this.src(), value: _this.value()})
+						if (!_this.options.autoUpload && _this.form)
+							_this.form.trigger("submit");
+					} else {
+						(pi||console).log("Unknown result: " + JSON.stringify(data));
+					}
+				},
+				this.uploadError);
+		}
+		else if (this._uri) {
 			var _this = this,
 				options = new FileUploadOptions(),
 				ft = new FileTransfer();
-			options.fileKey = "file";
 			options.fileName = this._uri.split("/").pop();
 			options.headers = Everlive.$.buildAuthHeader();
-			options.chunkedMode = false;
-			switch (filename.split(".").pop()) {
+			switch (options.fileName.split(".").pop()) {
 				case "jpg":
 				case "jpeg":
 					options.mimetype = "image/jpeg";
@@ -243,11 +285,15 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 	uploadError : function(e) {
 		var error = {
 			event : "Photo Upload Error",
-			code : e.code,
-			message : e.message || e.response.message || e.code
+			message : e.message || "Photo Upload Error"
+		}
+		if (e.body) {
+			e.body = JSON.parse(e.body);
+			error.code = e.body.code,
+			error.message = e.body.message
 		}
 		if (typeof(FileTransferError) != "undefined") {
-			switch(e.code) {
+			switch(error.code) {
 				case FileTransferError.FILE_NOT_FOUND_ERR:
 					error.message = templates.postcards.fields.sent.upload.missing;
 					break;
