@@ -5,29 +5,23 @@ $(function() {
 			source : "Everlive.Users",
 			storage : "localStorage",
 			template : $("form#Profile"),
-			/*
 			transport: {
 				create: {
 					data: function(data) {
 						// Fix expand for saving data.
-						data.Groups.forEach(function(group,index) {
-							if (typeof(group) === "object" && group.Id)
-								data.Groups[index] = group.Id;
-						})
+						if (typeof(data.Photo) === "object" && data.Photo.Id)
+							data.Groups[index] = data.Photo.Id;
 					}
 				},
 				update: {
 					data: function(data) {
 						// Fix expand for saving data.
-						data.Groups.forEach(function(group,index) {
-							if (typeof(group) === "object" && group.Id)
-								data.Groups[index] = group.Id;
-						})
+						if (typeof(data.Photo) === "object" && data.Photo.Id)
+							data.Groups[index] = data.Photo.Id;
 					}
 				}
 			},
-			expand: { Groups: true },
-			*/
+			expand: { Photo: true },
 			default : {
 				"Id" : "",
 				"Username" : "",
@@ -110,7 +104,9 @@ $(function() {
 						$(e.target).parents(".Avatar").addClass("image");
 					});
 					e.view.element.find("[name=Photo]").data("kendoPhotoUpload").bind("change", function(e) {
-						$(".Avatar img").attr("src", e.value || "").parents(".Avatar").removeClass("image");
+						if (e.src && e.src.length > 1000)
+							e.src = "data:image/jpeg;base64," + e.src;
+						$(".Avatar img").attr("src", e.src || e.value || "").parents(".Avatar").removeClass("image");
 					});
 				});
 			} catch(e) {

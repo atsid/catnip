@@ -184,16 +184,19 @@
 							</ul>
 						</li>
 					</ul>
-				<div data-role="navbar">
+					<div data-role="navbar">
 						<div id="group" data-align="left">
 							<select name="Group" data-role="dropdownlist" data-type="text" data-value-field="Id" data-text-field="Name" data-source="groups"></select>
 						</div>
-					<div data-role="view-title" onclick="preferences.open()">Lunch?</div>
+						<div data-role="view-title" onclick="preferences.open()">Lunch?</div>
 						<div id="in" data-align="right">
 							<input name="OptOut" data-role="switch" data-type="boolean" data-on-label="No" data-off-label="Yes" type="checkbox" />
-				</div>
+						</div>
 					</div>
-				<div id="opener" onclick="preferences.open()"><span class="k-icon k-i-arrow-s"></span></div>
+					<div id="opener" onclick="preferences.open()">
+						<div class="tab"></div>
+						<div class="k-icon k-i-arrow-s"></div>
+					</div>
 				</form>
 			</div>
 			<!--
@@ -243,7 +246,7 @@
 									<div class="Avatar">
 										<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo }" />
 									</div>
-									<input type="image" name="Photo" data-bind="attr: { src: Photo }" data-role="photoupload" data-source="Everlive.Files" data-storage="file://com.atsid.labs.lunch/" data-format="jpg,jpeg,png,gif" data-length="3000000" />
+									<input type="image" name="Photo" data-bind="attr: { src: Photo.Uri },value: Photo" data-role="photoupload" data-source="Everlive.Files" data-storage="file://com.atsid.labs.lunch/" data-format="jpg,jpeg,png,gif" data-length="3000000" />
 								</label>
 							</li>
 							<li class="DisplayName"><label>Name: <input type="text" name="DisplayName" required /></label></li>
