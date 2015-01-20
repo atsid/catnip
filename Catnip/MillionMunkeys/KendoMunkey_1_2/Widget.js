@@ -32,12 +32,19 @@ pi.ui.Widget = {
             for (var i=0, option; i<element[0].attributes.length; i++) {
                 option = element[0].attributes[i].name;
                 if (option.substr(0,5) == "data-") {
-					option = option.substr(5).split("-");
+					switch (option) {
+						case "data-source":
+						case "data-text-field":
+						case "data-value-field":
+							break;
+						default:
+							option = option.substr(5);
+							break;
+					}
+					option = option.split("-");
 					for (var w=1; w<option.length; w++)
 						option[w]=option[w].charAt(0).toUpperCase()+option[w].substr(1);
 					option = option.join("");
-					if (option == "source")
-						option = "dataSource";
 				} else {
 					switch (option) {
 						case "id":
