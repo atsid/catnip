@@ -230,7 +230,7 @@
 							<div class="opener"><span class="k-icon k-i-arrow-s"></span></div>
 							<form class="MyAccount" data-source="account">
 								<div class="Avatar">
-									<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo }" />
+									<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo.Uri }" />
 								</div>
 							</form>
 						</a>
@@ -244,9 +244,9 @@
 							<li>
 								<label>
 									<div class="Avatar">
-										<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo }" />
+										<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo.Uri }" />
 									</div>
-									<input type="image" name="Photo" data-bind="attr: { src: Photo.Uri },value: Photo" data-role="photoupload" data-source="Everlive.Files" data-storage="file://com.atsid.labs.lunch/" data-format="jpg,jpeg,png,gif" data-length="3000000" />
+									<input type="image" name="Photo" data-bind="attr: { src: Photo.Uri },value: Photo" data-type="object" data-role="photoupload" data-source="Everlive.Files" data-storage="file://com.atsid.labs.lunch/" data-format="jpg,jpeg,png,gif" data-length="3000000" />
 								</label>
 							</li>
 							<li class="DisplayName"><label>Name: <input type="text" name="DisplayName" required /></label></li>

@@ -33,15 +33,32 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 		}
 	},
 	value : function(newVal) {
+		var field, bindObj,
+			bind = this.element.attr('data-bind'),
+			type = this.element.attr('data-type') || "string";
+		try {
+			if (bind) {
+				bindObj = JSON.parse( bind.replace(/\b(\w+)\b\s*:/g,"\"$1\":").replace(/:\s*\b([\w\.]+)\b/g,":\"$1\"").replace(/^\s*{?(.*)}?\s*$/, "{$1}") );
+				field = (bindObj && bindObj.value) ? bindObj.value : bind;
+			}
+		} catch(e) {
+			field = bind;
+		}
+		field = field.split(".").pop();
 		// CAUTION: A null value has a type of "object"!!
 		if (newVal) {
 			this._value = newVal;
-			if (typeof(newVal) === "object")
-				this.input.val(newVal.id || newVal.Id || "");
+			if (typeof(newVal) === "object" && field)
+				this.input.val(newVal[field] || "");
 			else
 				this.input.val(newVal);
 		} else {
-			return this._value || this.input.val();
+			if (type === "object")
+				return this._value;
+			else if (typeof(this._value) === "object" && field)
+				return this._value[field];
+			else
+				return this._value || this.input.val();
 		}
 	},
 	initDatasource : function(element, options) {
