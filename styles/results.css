@@ -1,24 +1,28 @@
 #results .km-header {
   margin-bottom: 20px;
 }
+#results .km-header .km-view-title {
+  z-index: 1;
+}
 #results .km-header .km-leftitem,
 #results .km-header .km-rightitem {
   max-width: 35%;
+  z-index: 2;
 }
 #results .km-header #opener {
   position: relative;
   margin: -19px auto 0px;
-  height: 18px;
+  height: 14px;
   /* Trapezoid CSS courtesy of http://css-tricks.com/examples/ShapesOfCSS/ ! */
 }
 #results .km-header #opener .tab {
   display: block;
   margin: 0 auto;
-  border-top: 18px solid #3f51b5;
-  border-left: 18px solid transparent;
-  border-right: 18px solid transparent;
+  border-top: 14px solid #3f51b5;
+  border-left: 28px solid transparent;
+  border-right: 28px solid transparent;
   height: 0;
-  width: 40%;
+  width: 50%;
   position: relative;
   top: 18px;
 }
@@ -50,7 +54,7 @@
 }
 #results .km-header #preferences {
   padding: 0em;
-  margin: 20px 0.25em 0px;
+  margin: 10px 0.25em 20px;
   text-align: center;
 }
 #results .km-header #preferences li.start,
@@ -74,6 +78,12 @@
 #results .km-header #preferences li.brought .k-timepicker {
   width: 8em;
   margin: auto;
+}
+#results .km-header #preferences li.start .k-timepicker input:disabled,
+#results .km-header #preferences li.end .k-timepicker input:disabled,
+#results .km-header #preferences li.optout .k-timepicker input:disabled,
+#results .km-header #preferences li.brought .k-timepicker input:disabled {
+  opacity: 1;
 }
 #results .km-header #preferences li.food > * {
   vertical-align: middle;
@@ -103,19 +113,20 @@
   background: transparent;
 }
 #results .km-footer {
+  background: transparent;
+  border: none;
   padding: 0.5em;
-}
-#results .km-footer .actions {
-  position: relative;
-  text-align: center;
 }
 #results .km-footer .actions .km-button {
   background: transparent;
   border: none;
   font-weight: bold;
   padding-bottom: 0;
+  margin-left: 1em;
+  margin-bottom: 1em;
 }
 #results .km-footer .opener {
+  display: none;
   position: absolute;
   width: 100%;
   text-align: center;

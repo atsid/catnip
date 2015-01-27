@@ -35,22 +35,40 @@
   text-align: center;
   top: -14px;
 }
+#profile #Profile {
+  padding-bottom: 1em;
+}
 #profile #Profile .Avatar {
-  width: 70px;
-  height: 70px;
-  border-radius: 35px;
-  font-size: 23.333333333333332px;
-  line-height: 74px;
-  position: relative;
+  width: 75px;
+  height: 75px;
+  border-radius: 37.5px;
   top: auto;
   right: auto;
   margin-top: auto;
 }
+#profile #Profile .Avatar .caption {
+  font-size: 25px;
+  line-height: 78px;
+}
 #profile #Profile .Avatar img {
-  height: 70px;
+  height: 75px;
 }
 #profile #Profile .Avatar input[type=image] {
   display: none;
+}
+@media (min-width: 370px) {
+  #profile #Profile .Avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+  }
+  #profile #Profile .Avatar .caption {
+    font-size: 33.333333333333336px;
+    line-height: 104px;
+  }
+  #profile #Profile .Avatar img {
+    height: 100px;
+  }
 }
 #profile .km-list {
   font-size: 1em;
@@ -82,36 +100,68 @@
   width: 65%;
   font-size: 1em;
 }
-.km-footer .MyAccount .km-button {
-  padding: 0.25em;
-}
-.Avatar {
+.Avatar,
+.km-footer button.Avatar {
   display: inline-block;
+  position: initial;
   color: #f2f2f2;
   vertical-align: middle;
-  font-size: 11.666666666666666px;
-  line-height: 37px;
-  height: 35px;
-  width: 35px;
-  border-radius: 17.5px;
-  border: 1px solid rgba(68, 68, 68, 0.2);
+  font-size: 16.666666666666668px;
+  line-height: 52px;
+  height: 50px;
+  width: 50px;
+  border: none;
+  /* border: 1px solid rgba(68, 68, 68, 0.2); */
+  border-radius: 25px;
+  padding: 0px;
   overflow: hidden;
 }
-.Avatar .caption {
+.Avatar .caption,
+.km-footer button.Avatar .caption {
   display: inline-block;
+  font-weight: normal;
   background-color: #3f51b5;
   width: 100%;
   height: 100%;
+  line-height: 52px;
   text-align: center;
   overflow-wrap: break-word;
 }
-.Avatar img {
+.Avatar img,
+.km-footer button.Avatar img {
   display: none;
-  height: 35px;
+  height: 50px;
 }
-.Avatar.image .caption {
+.Avatar.image .caption,
+.km-footer button.Avatar.image .caption {
   display: none;
 }
-.Avatar.image img {
+.Avatar.image img,
+.km-footer button.Avatar.image img {
   display: inline-block;
+}
+@media (min-wdith: 370px) {
+  .Avatar,
+  .km-footer button.Avatar {
+    font-size: 20px;
+    line-height: 62px;
+    height: 60px;
+    width: 60px;
+    border-radius: 30px;
+  }
+  .Avatar .caption,
+  .km-footer button.Avatar .caption {
+    line-height: 62px;
+  }
+  .Avatar img,
+  .km-footer button.Avatar img {
+    height: 60px;
+  }
+}
+button.Avatar {
+  box-shadow: rgba(63, 81, 181, 0.7) -1px 3px 8px;
+  margin: 0px 1px 8px 3px;
+}
+button.Avatar:active {
+  box-shadow: none;
 }

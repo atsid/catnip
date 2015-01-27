@@ -1,9 +1,15 @@
-@avatarSize: 35px;
+@avatarSize: 50px;
+@avatarLargeSize: 60px;
 @avatarRadius: @avatarSize/2;
+@avatarLargeRadius: @avatarLargeSize/2;
 @avatarFontSize: @avatarSize/3;
+@avatarLargeFontSize: @avatarLargeSize/3;
 @avatarLineHeight: @avatarSize+2;
+@avatarLargeLineHeight: @avatarLargeSize+2;
 @blue: #3f51b5;
+@blueShadow : rgba(63, 81, 181, 0.7) -1px 3px 8px;
 @grey: #f2f2f2;
+@greyShadow : rgba(68, 68, 68, 0.2) -1px 3px 8px;
 
 #login, #reset {	
 	.km-header {
@@ -43,22 +49,44 @@
 			top: -14px;
 		}
 	}
-	#Profile .Avatar {
-		width: @avatarSize*2;
-		height: @avatarSize*2;
-		border-radius: @avatarRadius*2;
-		font-size: @avatarFontSize*2;
-		line-height: @avatarLineHeight*2;
-		position: relative;
-		top: auto;
-		right: auto;
-		margin-top: auto;
+	#Profile {
+		padding-bottom: 1em;
 		
-		img {
-			height: @avatarSize*2;
+		.Avatar {
+			width: @avatarSize*1.5;
+			height: @avatarSize*1.5;
+			border-radius: @avatarRadius*1.5;
+			top: auto;
+			right: auto;
+			margin-top: auto;
+			
+			.caption {
+				font-size: @avatarFontSize*1.5;
+				line-height: @avatarLineHeight*1.5;
+			}
+			
+			img {
+				height: @avatarSize*1.5;
+			}
+			input[type=image] {
+				display: none;
+			}
 		}
-		input[type=image] {
-			display: none;
+		
+		@media (min-width: 370px) {
+			.Avatar {
+				width: @avatarSize*2;
+				height: @avatarSize*2;
+				border-radius: @avatarRadius*2;
+				
+				.caption {
+					font-size: @avatarFontSize*2;
+					line-height: @avatarLineHeight*2;
+				}
+				img {
+					height: @avatarSize*2;
+				}
+			}
 		}
 	}
 	.km-list {
@@ -95,26 +123,28 @@
 	}
 }
 
-.km-footer .MyAccount .km-button {
-	padding: 0.25em;
-}
-.Avatar {
+.Avatar, .km-footer button.Avatar {
 	display: inline-block;
+	position: initial;
 	color: @grey;
 	vertical-align: middle;
 	font-size: @avatarFontSize;
 	line-height: @avatarLineHeight;
 	height: @avatarSize;
 	width: @avatarSize;
+	border: none;
+	/* border: 1px solid rgba(68, 68, 68, 0.2); */
 	border-radius: @avatarRadius;
-	border: 1px solid rgba(68, 68, 68, 0.2);
+	padding: 0px;
 	overflow: hidden;
 	
 	.caption {
 		display: inline-block;
+		font-weight: normal;
 		background-color: @blue;
 		width: 100%;
 		height: 100%;
+		line-height: @avatarLineHeight;
 		text-align: center;
 		overflow-wrap: break-word;
 	}
@@ -131,4 +161,27 @@
 			display: inline-block;
 		}
 	}
+}
+@media (min-width: 370px) {
+	.Avatar, .km-footer button.Avatar {
+		font-size: @avatarLargeFontSize;
+		line-height: @avatarLargeLineHeight;
+		height: @avatarLargeSize;
+		width: @avatarLargeSize;
+		border-radius: @avatarLargeRadius;
+		
+		.caption {
+			line-height: @avatarLargeLineHeight;
+		}
+		img {
+			height: @avatarLargeSize;
+		}
+	}
+}
+button.Avatar {
+	box-shadow: @blueShadow;
+	margin: 0px 1px 8px 3px;
+}
+button.Avatar:active {
+	box-shadow: none;
 }
