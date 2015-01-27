@@ -13,6 +13,21 @@ $(function() {
 			return ("0"+this.getUTCHours()).substr(-2) + ("0"+this.getUTCMinutes()).substr(-2);
 		}
 		
+		// Override TimePicker functionality
+		var TimePicker = kendo.ui.TimePicker;
+		kendo.ui.TimePicker = TimePicker.extend({
+			init : function(element, options) {
+				var that = this;
+				TimePicker.fn.init.apply(this, arguments);
+				if (kendo.support.mobileOS) {
+					$(this.element[0]).attr("disabled", true).click(function() {
+						that.open();
+					});
+				}
+			}
+		});
+		kendo.ui.roles.timepicker = kendo.ui.TimePicker;
+		
 		// Set configuration
 		window.preferences = pi.data.DataSource.create({
 			id: "Lunch.DailyPreferences",
@@ -130,12 +145,12 @@ $(function() {
 				open = true;
 			if (open) {
 				$('.km-header #preferences').animate({
-					"margin-top" : "20px"
+					"margin-top" : "10px"
 				});
 				$('#opener .k-icon').removeClass("k-i-collapse").addClass("k-i-expand");
 			} else {
 				$('.km-header #preferences').animate({
-					"margin-top" : -$header.height() - ((kendo.support.mobileOS && kendo.support.mobileOS.ios && kendo.support.mobileOS.majorVersion >= "7") ? 10 : 0) + "px"
+					"margin-top" : -$header.height() - ((kendo.support.mobileOS && kendo.support.mobileOS.ios && kendo.support.mobileOS.majorVersion >= "7") ? 30 : 20) + "px"
 				}).find('input.k-input').blur();
 				$('#opener .k-icon').removeClass("k-i-expand").addClass("k-i-collapse");
 			}

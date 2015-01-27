@@ -74,6 +74,11 @@
 							sender: layout,
 							view: this.view()
 						});
+						// Handle adding and removing the "image" classes.
+						$(".Avatar img, .Avatar input[type=image]").bind("load", function(e) {
+							$(e.target).parents(".Avatar").addClass("image");
+						});
+						// Output error messages to alerts for now.
 						pi.console.bind("change", function(e) {
 							if (e.action === "remove") {
 								if (typeof(e.items[0]) === "object")
@@ -208,14 +213,10 @@
 			</div>
 			<div id="lastsync"></div>
 			<div data-role="footer">
-				<span class="opener"><span class="k-icon k-i-arrow-n"></span></span>
-				<form id="version" data-source="configdb"><span data-bind="text:version"></span></form>
-				<div class="actions">
+				<div class="actions" data-align="left">
 					<form class="MyAccount" data-source="account">
-						<button data-role="button" href="#profile" data-transition="overlay:up">
-							<div class="Avatar">
-								<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo }" />
-							</div>
+						<button class="Avatar" data-role="button" href="#profile" data-transition="overlay:up">
+							<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo.Uri }" />
 						</button>
 					</form>
 				</div>
@@ -224,19 +225,22 @@
 		
 		<div id="profile" data-role="view" data-user-roles="true" data-init="window.account.initView">
 			<header data-role="header">
+				<!--
 				<nav data-role="navbar">
 					<div data-role="view-title">
 						<a href="#results" data-transition="overlay:up reverse">
 							<div class="opener"><span class="k-icon k-i-arrow-s"></span></div>
 							<form class="MyAccount" data-source="account">
-								<div class="Avatar">
+								<button class="Avatar" data-role="button" href="#results" data-transition="overlay:up reverse">
 									<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo.Uri }" />
-								</div>
+								</button>
 							</form>
 						</a>
 					</div>
 				</nav>
+				-->
 			</header>
+			<form id="version" data-source="configdb"><span data-bind="text:version"></span></form>
 			<form id="Profile" class="" method="put" data-source="account">
 				<ul data-role="listview" data-style="inset" data-type="group">
 					<li>Profile
@@ -274,7 +278,7 @@
 					</form>
 				</div>
 				<div class="actions">
-					<button onclick="$('#Profile').submit();window.app.navigate('#results', 'overlay:up reverse');">Save</button>
+					<button onclick="$('#Profile').submit();window.app.navigate('#results', 'overlay:up reverse');">Done</button>
 				</div>
 			</div>
 		</div>

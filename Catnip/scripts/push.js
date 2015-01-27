@@ -68,17 +68,26 @@ $(function() {
 											window.myDevice = response.result;
 											// we have successfully registered and turned on push notifications
 											// (pi||console).log("Successful Push Notification Registration");
-											Everlive.$.push.updateRegistration({
-												"Groups" : window.myAccount.get("Groups"),
-												"LastLogin" : config.get("today")
-											}, function(response) {
-												// (pi||console).log("Updated Push Notification Registration");
-											}, function(error) {
-												error.event = "Update Push Registration";
-												(pi||console).log(error);
-											});
-																	}
-										// if there is an existing registration of the device the function will not receive 'registration' parameter
+											
+											window.preferences.bind("requestEnd", function(e) {
+												switch (e.type) {
+													case "read":
+													case "create":
+													case "update":
+														Everlive.$.push.updateRegistration({
+															"Groups" : window.myAccount.get("Groups"),
+															"LastLogin" : config.get("today"),
+															"LastRefresh" : new Date()
+														}, function(response) {
+															// (pi||console).log("Updated Push Notification Registration");
+														}, function(error) {
+															error.event = "Update Push Registration";
+															(pi||console).log(error);
+														});
+														break;
+												}
+											}).trigger("requestEnd", { type: "create", dataSource: window.preferences});
+										}
 									},
 									function (e) {
 										e.event = "Check Device Registration Status";

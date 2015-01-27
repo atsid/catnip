@@ -2,8 +2,8 @@
 @grey: #f2f2f2;
 
 .km-ios7 {
-	.km-header .km-navbar {
-		margin-top: 20px;
+	.km-header {
+		padding-top: 20px;
 	}
 }
 
@@ -110,6 +110,20 @@ button {
 	}
 }
 
+.km-content {
+	#version {
+		position: absolute;
+		font-size: 0.7em;
+		height: auto;
+		width: 100%;
+		text-align: right;
+		top: 0;
+		right: 0;
+		z-index: 0;
+		padding: 1em;
+	}
+}
+
 .km-footer {
 	min-height: 2.5em;
 	padding: 0.7em;
@@ -141,5 +155,8 @@ button {
 		height: auto;
 		bottom: 0px;
 		left: auto;
+		text-align: center;
+		width: 100%;
+		z-index: 0;
 	}
 }

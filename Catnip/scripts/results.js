@@ -59,9 +59,9 @@ $(function() {
 		});
 		window.results.showTab = function(show) {
 			if (show)
-				$('#opener').animate({top:"0px","margin-bottom":"0px",opacity:1});
+				$('#opener').css({opacity:1}).animate({top:"0px","margin-bottom":"0px"});
 			else
-				$('#opener').animate({top:"-18px","margin-bottom":"-18px",opacity:0});
+				$('#opener').animate({top:"-18px","margin-bottom":"-18px"}).css({opacity:0});
 		}
 		window.results.initView = function(e) {
 			e.view.one("show", function(e) {

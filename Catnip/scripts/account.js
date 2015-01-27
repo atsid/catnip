@@ -56,9 +56,10 @@ $(function() {
 		window.account.verify = function(e) {
 			try {
 				var layout = this, roles = $(e.view.element).attr("data-user-roles");
-				if (roles === "false" && myAccount.get("access_token"))
+				// Both access_token and Id are required.
+				if (roles === "false" && myAccount.get("access_token") && myAccount.get("Id"))
 					app.pane.history.length ? app.replace("#results", "overlay:down") : app.navigate("#results", "overlay:down");
-				else if (roles === "true" && !myAccount.get("access_token"))
+				else if (roles === "true" && (!myAccount.get("access_token") || !myAccount.get("Id")))
 					app.pane.history.length ? app.replace("#login", "overlay:down reverse") : app.navigate("#login", "overlay:down reverse");
 			} catch(e) {
 				e.event = "Verify Account Roles";
@@ -99,9 +100,6 @@ $(function() {
 							if (e.direction === "down")
 								window.app.navigate("#:back", "overlay:up reverse");
 						}
-					});
-					$(".Avatar img, .Avatar input[type=image]").bind("load", function(e) {
-						$(e.target).parents(".Avatar").addClass("image");
 					});
 					e.view.element.find("[name=Photo]").data("kendoPhotoUpload").bind("change", function(e) {
 						if (e.src && e.src.length > 1000)
