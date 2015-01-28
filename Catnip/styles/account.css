@@ -132,6 +132,9 @@
 .km-footer button.Avatar img {
   display: none;
   height: 50px;
+  /* This combination of two negative 50% values centers a div wider than its parent! */
+  margin-left: -50%;
+  margin-right: -50%;
 }
 .Avatar.image .caption,
 .km-footer button.Avatar.image .caption {
