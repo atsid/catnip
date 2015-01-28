@@ -24,12 +24,17 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 		$(element).data("kendoPhotoUpload", this);
 	},
 	src : function(newSrc) {
-		// CAUTION: A null value has a type of "object"!!
-		if (newSrc) {
-			this._uri = newSrc;
-			this.img.attr("src", (newSrc.length < 1000) ? newSrc : "data:image/jpeg;base64," + newSrc);
-		} else {
-			return this._uri || this.img.attr("src");
+		try {
+			// CAUTION: A null value has a type of "object"!!
+			if (newSrc || newSrc === "") {
+				this._uri = newSrc;
+				this.img.attr("src", (newSrc.length < 1000) ? newSrc : "data:image/jpeg;base64," + newSrc);
+			} else {
+				return this._uri || this.img.attr("src");
+			}
+		} catch(e) {
+			e.event = "Handle File Source";
+			(pi||console).log(e,"error");
 		}
 	},
 	value : function(newVal) {
@@ -46,7 +51,7 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 		}
 		field = field.split(".").pop();
 		// CAUTION: A null value has a type of "object"!!
-		if (newVal) {
+		if (newVal || newVal === "") {
 			this._value = newVal;
 			if (typeof(newVal) === "object" && field)
 				this.input.val(newVal[field] || "");
@@ -130,6 +135,19 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 		if (navigator.camera) {
 			if (this.file)
 				this.file.hide();
+			var cameraConfig = {
+				destinationType : Camera.DestinationType.DATA_URL,
+				// destinationType : Camera.DestinationType.NATIVE_URI,
+				mediaType : Camera.MediaType.PICTURE,
+				encodingType: Camera.EncodingType.JPEG,
+				correctOrientation : true,
+			};
+			if (this.options.width)
+				cameraConfig.targetWidth = parseInt(this.options.width);
+			if (this.options.height)
+				cameraConfig.targetHeight = parseInt(this.options.height);
+			if (this.options.quality)
+				cameraConfig.quality = parseInt(this.options.quality);
 			this.cameraButton = $('<button>Camera</button>').appendTo(this.wrap).kendoMobileButton({
 				icon : "camera",
 				click : function(e) {
@@ -140,17 +158,9 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 						function() {
 							_this.selectError.apply(_this, arguments);
 						},
-						{
-							sourceType : Camera.PictureSourceType.CAMERA,
-							destinationType : Camera.DestinationType.DATA_URL,
-							// destinationType : Camera.DestinationType.NATIVE_URI,
-							mediaType : Camera.MediaType.PICTURE,
-							encodingType: Camera.EncodingType.JPEG,
-							correctOrientation : true,
-							targetWidth : 100,
-							targetHeight : 100,
-							quality : 100
-						}
+						$.extend({
+							sourceType : Camera.PictureSourceType.CAMERA
+						}, cameraConfig)
 					);
 				}
 			});
@@ -164,24 +174,16 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 						function() {
 							_this.selectError.apply(_this, arguments);
 						},
-						{
-							sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
-							destinationType : Camera.DestinationType.DATA_URL,
-							// destinationType : Camera.DestinationType.NATIVE_URI,
-							mediaType : Camera.MediaType.PICTURE,
-							encodingType: Camera.EncodingType.JPEG,
-							correctOrientation : true,
-							targetWidth : 100,
-							targetHeight : 100,
-							quality : 100
-						}
+						$.extend({
+							sourceType : Camera.PictureSourceType.PHOTOLIBRARY
+						}, cameraConfig)
 					);
 				}
 			});
 			this.deleteButton = $('<button>Delete</button>').appendTo(this.wrap).kendoMobileButton({
 				icon : "delete",
 				click : function(e) {
-					_this.selectSuccess("");
+					_this.uploadSuccess("");
 				}
 			});
 		} else {
@@ -231,6 +233,7 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 		(pi||console).log(error);
 	},
 	uploadFile : function() {
+		var _this = this;
 		if (!this.dirty)
 			return;
 		if (this._uri && this._uri.length > 1000) {
@@ -243,15 +246,7 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 			Everlive.$.Files.create(file,
 				function(data) {
 					if (data.result) {
-						_this.dirty = false;
-						if (_this.value())
-							Everlive.$.Files.destroySingle({Id: _this.value()});
-						_this.value(data.result);
-						_this._uri = data.result.Uri;
-						_this.src(_this._uri);
-						_this.trigger("change", {src: _this.src(), value: _this.value()})
-						if (!_this.options.autoUpload && _this.form)
-							_this.form.trigger("submit");
+						_this.uploadSuccess(data.result);
 					} else {
 						(pi||console).log("Unknown result: " + JSON.stringify(data));
 					}
@@ -279,24 +274,40 @@ pi.mobile.ui.PhotoUpload = kendo.ui.Widget.extend({
 					return;
 			}
 			ft.upload(this._uri, 
-					  Everlive.$.Files.getUploadUrl(), 
-					  _this.uploadSuccess, 
-					  _this.uploadError,
-					  options);
+					Everlive.$.Files.getUploadUrl(),
+					function(r) {
+						var responseCode = r.responseCode;
+						var res = JSON.parse(r.response);
+						if (res.Result && res.Result.length) {
+							_this.uploadSuccess(res.Result[0]);
+						} else {
+							(pi||console).log("Unknown result: " + r.response);
+						}
+					},
+					_this.uploadError,
+					options);
 		}
 	},
-	uploadSuccess : function(r) {
-		var responseCode = r.responseCode;
-		var res = JSON.parse(r.response);
-		if (res.Result && res.Result.length) {
-			// use the Id and the Uri of the uploaded file 
-			this.value(res.Result[0].Id);
-			this._uri = res.Result[0].Uri;
+	uploadSuccess : function(newFile) {
+		try {
+			var oldFile = this.value();
 			this.dirty = false;
-			if (!options.autoUpload && this.form)
+			if (oldFile && oldFile.Id)
+				Everlive.$.Files.destroySingle({Id: oldFile.Id});
+			this.value(newFile);
+			if (newFile.Uri)
+				this._uri = newFile.Uri;
+			else if (newFile.src)
+				this._uri = newFile.src;
+			else
+				this._uri = "";
+			this.src(this._uri);
+			this.trigger("change", {src: this.src(), value: this.value()});
+			if (!this.options.autoUpload && this.form)
 				this.form.trigger("submit");
-		} else {
-			(pi||console).log("Unknown result: " + r.response);
+		} catch(e) {
+			e.event = "Photo Upload Post-Processing";
+			(pi||console).log(e,"error");
 		}
 	},
 	uploadError : function(e) {

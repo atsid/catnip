@@ -11,9 +11,9 @@
         <link rel="stylesheet" type="text/css" href="kendo.2014.3.1119/styles/kendo.material.mobile.min.css" />
 
 		<!-- Local Styles -->
-        <link rel="stylesheet/less" type="text/css" href="styles/material.less" />
-        <link rel="stylesheet/less" type="text/css" href="styles/account.less" />
-        <link rel="stylesheet/less" type="text/css" href="styles/results.less" />
+        <link rel="stylesheet" type="text/css" href="styles/material.css" />
+        <link rel="stylesheet" type="text/css" href="styles/account.css" />
+        <link rel="stylesheet" type="text/css" href="styles/results.css" />
 		
 		<!--- Cordova - Loaded on mobile apps only -->
         <script type="text/javascript" src="cordova.js"></script>
@@ -42,9 +42,10 @@
     	<script src="MillionMunkeys/KendoMunkey_1_2/Touch.js"></script>
 		<script src="MillionMunkeys/KendoMunkey_1_2/File.js"></script>
 		
-        <!-- Less.js -->
+        <!-- Less.js 
         <script src="scripts/less-1.7.5.min.js" type="text/javascript"></script>
-        
+        -->
+		
 		<!-- Lunch Code -->
 		<script src="scripts/config.js"></script>
         <script src="scripts/account.js"></script>
@@ -250,7 +251,7 @@
 									<div class="Avatar">
 										<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo.Uri }" />
 									</div>
-									<input type="image" name="Photo" data-bind="attr: { src: Photo.Uri },value: Photo" data-type="object" data-role="photoupload" data-source="Everlive.Files" data-storage="file://com.atsid.labs.lunch/" data-format="jpg,jpeg,png,gif" data-length="3000000" />
+									<input type="image" name="Photo" data-bind="attr: { src: Photo.Uri },value: Photo" data-type="object" data-role="photoupload" data-source="Everlive.Files" data-format="jpg,jpeg,png,gif" data-length="3000000" data-width="200" data-height="200" data-quality="100" />
 								</label>
 							</li>
 							<li class="DisplayName"><label>Name: <input type="text" name="DisplayName" required /></label></li>
