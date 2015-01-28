@@ -115,6 +115,7 @@
   border-radius: 25px;
   padding: 0px;
   overflow: hidden;
+  text-align: center;
 }
 .Avatar .caption,
 .km-footer button.Avatar .caption {
@@ -140,7 +141,7 @@
 .km-footer button.Avatar.image img {
   display: inline-block;
 }
-@media (min-wdith: 370px) {
+@media (min-width: 370px) {
   .Avatar,
   .km-footer button.Avatar {
     font-size: 20px;
