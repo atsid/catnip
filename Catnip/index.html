@@ -65,20 +65,6 @@
 				window.app = new kendo.mobile.Application(document.body,{
 					layout: "material-design",
 					init: function(e) {
-						for (var layout in this.pane.viewEngine.layouts) {
-							this.pane.viewEngine.layouts[layout].bind("show", account.verify);
-						}
-						var layout = this.pane.viewEngine.layouts[this.pane.viewEngine.layout];
-						// This must be called onInit to make sure that app exists for the handlers.
-						account.verify.call(layout, {
-							layout: layout,
-							sender: layout,
-							view: this.view()
-						});
-						// Handle adding and removing the "image" classes.
-						$(".Avatar img, .Avatar input[type=image]").bind("load", function(e) {
-							$(e.target).parents(".Avatar").addClass("image");
-						});
 						// Output error messages to alerts for now.
 						pi.console.bind("change", function(e) {
 							if (e.action === "remove") {
@@ -97,6 +83,24 @@
 									alert(message);
 								}
 							}
+						});
+						// This must be called onInit to make sure that app exists for the handlers.
+						for (var layout in this.pane.viewEngine.layouts) {
+							this.pane.viewEngine.layouts[layout].bind("show", account.verify);
+						}
+						var layout = this.pane.viewEngine.layouts[this.pane.viewEngine.layout];
+						account.verify.call(layout, {
+							layout: layout,
+							sender: layout,
+							view: this.view()
+						});
+						// Handle adding and removing the "image" classes.
+						$(".Avatar img, .Avatar input[type=image]").bind("load", function(e) {
+							$(e.target).parents(".Avatar").addClass("image");
+						});
+						// If we get stuck on the "loader" use click to make it go away.
+						$(".km-loader").bind("click", function(e) {
+							window.app.hideLoading();
 						});
 					}
 				});

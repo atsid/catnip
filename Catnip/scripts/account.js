@@ -93,6 +93,14 @@ $(function() {
 		
 		window.account.initView = function(e) {
 			try {
+				/*
+				window.account.bind("requestStart", function(e) {
+					window.app.showLoading();
+				}).bind("change", function(e) {
+					window.app.hideLoading();
+				});
+				*/
+
 				e.view.one("show", function(e) {
 					e.view.element.kendoTouch({
 						enableSwipe: true,
@@ -106,6 +114,14 @@ $(function() {
 							e.src = "data:image/jpeg;base64," + e.src;
 						$(".Avatar img").attr("src", e.src || e.value || "").parents(".Avatar").removeClass("image");
 					});
+				});
+				e.view.bind("afterShow", function(e) {
+					// CAUTION: For some reason the datasources get stuck, and every request after the first wouldn't run.
+					window.account._dequeueRequest();
+					window.groups._dequeueRequest();
+					// Now refresh the latest updates from the server
+					window.account.read();
+					window.groups.read();
 				});
 			} catch(e) {
 				e.event = "Initialize Profile View";
@@ -121,12 +137,13 @@ $(function() {
 				if (e.field === "selected") {
 					window.myAccount = this.get(e.field);
 					if (window.myAccount instanceof kendo.data.ObservableObject) {
+						// CAUTION: Trigger off of "Id" change instead of "access_token" because "Id" doesn't exist when "access_token" is first set.
 						window.myAccount.bind("change", function(e) {
-							if (e.field === "access_token" && window.app)
+							if (e.field === "Id" && window.app)
 								window.account.verify({view:window.app.view()});
 							else if (e.field === "DisplayName")
 								this.set("Initials", this.get("DisplayName").replace(/\b(.)\w*[\s-]*/g, "$1") );
-						}).trigger("change", {field:"access_token"});
+						}).trigger("change", {field:"Id"});
 					}
 				}
 			} catch(e) {
