@@ -179,7 +179,7 @@ pi.data.DataSource = {
 					}));
 				}
 			},
-			read : function() {
+			login : function() {
 				var that = this, selected = this.dataSource.options.get("selected");
 				Everlive.$.Users.login( 
 					selected.get("Username").toLowerCase(), // Case insensitive login
@@ -202,6 +202,23 @@ pi.data.DataSource = {
 							(pi||console).log(error);
 						}
 					);
+			},
+			read : function() {
+				var that = this;
+				Everlive.$.Users.currentUser().then(
+					function (data) {
+						if (data.result)
+							that.success(data);
+						else
+							that.login();
+					},
+					function (error) {
+						if (error.errorCode === 301)
+							this.login();
+						else
+							(pi||console).log(error,"error");
+					}
+				);
 			},
 			create : function() {
 				var that = this, selected = this.dataSource.options.get("selected");

@@ -7,6 +7,10 @@
 	}
 }
 
+.km-loader .km-spin {
+	display: none;
+}
+
 .km-list {
 	&:not(.km-virtual-list) {
 		> li:first-child {
@@ -85,11 +89,13 @@ button {
 	.km-switch-handle {
 		background-color: rgba(229, 229, 229, 1);
 		border: 0.5px solid rgba(229, 229, 229, 0.5);
-		border-radius: 2em;
 	}
 	.km-switch-label-on, .km-switch-label-off {
 		line-height: 2em;
 	}
+}
+.km-on-ios .km-switch .km-switch-handle {
+	border-radius: 2em;
 }
 
 .km-popup .k-popup .k-list li {

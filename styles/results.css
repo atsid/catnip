@@ -116,6 +116,7 @@
   background: transparent;
   border: none;
   padding: 0.5em;
+  height: 100px;
 }
 #results .km-footer .actions .km-button {
   background: transparent;
