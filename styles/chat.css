@@ -81,9 +81,7 @@
 }
 #chat {
   z-index: 10;
-  width: 100%;
-  padding-left: 80px;
-  box-sizing: border-box;
+  width: 80%;
 }
 #chat .km-header,
 #chat .km-content,
@@ -98,7 +96,7 @@
 #chat .km-footer {
   height: 0px;
 }
-#chat .actions .km-button {
+#chat .actions {
   margin: 0em 0.5em 0.5em;
 }
 #chat .actions[data-align=right] {

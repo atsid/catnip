@@ -87,6 +87,15 @@ $(function() {
 					$(window).on("orientationchange", function(e) {
 						window.preferences.open(false);
 					});
+					/*
+					$('#toggleChat').bind("click", function(e) {
+						var drawer = $('#chat').data('kendoMobileDrawer');
+						if (drawer.visible)
+							drawer.hide();
+						else
+							drawer.show();
+					});
+					*/
 					window.preferences.options.bind("change", function(e) {
 						if (e.field === "disabled") {
 							var disabled = this.get(e.field,false);
