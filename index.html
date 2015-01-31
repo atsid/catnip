@@ -14,6 +14,7 @@
         <link rel="stylesheet" type="text/css" href="styles/material.css" />
         <link rel="stylesheet" type="text/css" href="styles/account.css" />
         <link rel="stylesheet" type="text/css" href="styles/results.css" />
+        <link rel="stylesheet" type="text/css" href="styles/chat.css" />
 		
 		<!--- Cordova - Loaded on mobile apps only -->
         <script type="text/javascript" src="cordova.js"></script>
@@ -220,9 +221,38 @@
 			<div data-role="footer">
 				<div class="actions" data-align="left">
 					<form class="MyAccount" data-source="account">
-						<button class="Avatar" data-role="button" href="#profile" data-transition="overlay:up">
+						<button class="Avatar round" data-role="button" href="#profile" data-transition="overlay:up">
 							<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo.Uri }" />
 						</button>
+					</form>
+				</div>
+				<div class="actions" data-align="right">
+					<button class="round" data-role="button" href="#chat" data-rel="drawer">
+						<div class="chatbubble right">+</div>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div id="chat" data-role="drawer" data-position="right">
+			<div data-role="header"></div>
+			<div data-role="listview" data-source="chat">
+				<div class="chatbubble" data-bind="Message"></div>
+				<div class="Avatar round" data-role="button">
+					<div class="caption" data-bind="User.Initials"></div>
+					<img data-bind="attr: {src: User.Photo.Uri}" />
+				</div>
+			</div>
+			<div data-role="footer">
+				<div class="actions" data-align="left">
+					<form class="MyAccount" data-source="account">
+						<button class="Avatar round" data-role="button" href="#results">
+							<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo.Uri }" />
+						</button>
+					</form>
+				</div>
+				<div class="actions" data-align="right">
+					<form data-source="chat" data-method="create">
+						<div class="chatbubble left"><textarea name="Message" placeholder="Enter your message"></textarea></div>
 					</form>
 				</div>
 			</div>
