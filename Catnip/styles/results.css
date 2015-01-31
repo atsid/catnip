@@ -101,6 +101,12 @@
     display: block;
   }
 }
+#results .km-content {
+  height: 100%;
+}
+#results .km-content .km-scroll-container {
+  height: 100%;
+}
 #results .km-content .km-widget {
   background-color: transparent;
 }
@@ -116,15 +122,38 @@
   background: transparent;
   border: none;
   padding: 0.5em;
-  height: 100px;
+  height: 70px;
 }
-#results .km-footer .actions .km-button {
+#results .km-footer .actions .km-button:not(.chatbubble) {
   background: transparent;
   border: none;
   font-weight: bold;
   padding-bottom: 0;
-  margin-left: 1em;
-  margin-bottom: 1em;
+  margin: 0em 0.5em 0.5em;
+}
+#results .km-footer .actions .km-button .chatbubble {
+  background-color: #3f51b5;
+  border-color: #f2f2f2;
+  display: inline-block;
+  padding: 0.1em 0.65em;
+  line-height: 1.1em;
+  height: 1em;
+  width: 2em;
+  margin: 0.75em 0.5em;
+}
+#results .km-footer .actions .km-button .chatbubble:before {
+  margin-left: -0.4em;
+  border-left-width: 0.4em;
+  border-right-width: 0.3em;
+  border-bottom-width: 0.5em;
+  border-bottom-color: #f2f2f2;
+}
+#results .km-footer .actions .km-button .chatbubble:after {
+  margin-left: -0.5em;
+  border-left-width: 0.4em;
+  border-right-width: 0.3em;
+  border-bottom-width: 0.5em;
+  border-bottom-color: #3f51b5;
 }
 #results .km-footer .opener {
   display: none;
