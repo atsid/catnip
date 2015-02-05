@@ -13,11 +13,12 @@ $(function() {
 		window.account.bind("change", function(e) {
 			try {
 				if (e.action === "itemchange" && e.field === "Groups" && window.myAccount.get(e.field)) {
-					var groups = window.myAccount.get(e.field), filter = {
-						logic: "or",
-						filters: []
-					}
-					groups.forEach(function(groupId,index) {
+					var myGroups = window.myAccount.get(e.field),
+						filter = {
+							logic: "or",
+							filters: []
+						};
+					myGroups.forEach(function(groupId,index) {
 						filter.filters.push({ field: "Id", operator: "eq", value: groupId });
 					});
 					window.groups.filter(filter);

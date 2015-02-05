@@ -1,10 +1,24 @@
+@roundSize: 50px;
+@roundLargeSize: 60px;
+@roundRadius: @roundSize/2;
+@roundLargeRadius: @roundLargeSize/2;
+@roundFontSize: @roundSize/3;
+@roundLargeFontSize: @roundLargeSize/3;
+@roundLineHeight: @roundSize+2;
+@roundLargeLineHeight: @roundLargeSize+2;
 @blue: #3f51b5;
+@blueShadow : rgba(63, 81, 181, 0.7) -1px 3px 8px;
 @grey: #f2f2f2;
+@greyShadow : rgba(68, 68, 68, 0.2) -1px 3px 8px;
 
 .km-ios7 {
-	.km-header .km-navbar {
-		margin-top: 20px;
+	.km-header {
+		padding-top: 20px;
 	}
+}
+
+.km-loader .km-spin {
+	display: none;
 }
 
 .km-list {
@@ -15,6 +29,10 @@
 		> li:last-child {
 			border-bottom-width: 1px;
 		}
+	}
+	
+	input[type=image] {
+		display: none;
 	}
 	
 	input[type=password],
@@ -81,11 +99,17 @@ button {
 	.km-switch-handle {
 		background-color: rgba(229, 229, 229, 1);
 		border: 0.5px solid rgba(229, 229, 229, 0.5);
-		border-radius: 2em;
 	}
 	.km-switch-label-on, .km-switch-label-off {
 		line-height: 2em;
 	}
+}
+.km-on-ios .km-switch .km-switch-handle {
+	border-radius: 2em;
+}
+
+.km-popup .k-popup .k-list li {
+	padding: 0.5em;
 }
 
 .km-header {
@@ -99,6 +123,20 @@ button {
 	
 	ul {
 		padding: 0em;
+	}
+}
+
+.km-content {
+	#version {
+		position: absolute;
+		font-size: 0.7em;
+		height: auto;
+		width: auto;
+		text-align: right;
+		top: 0;
+		right: 0;
+		z-index: 10;
+		padding: 1em;
 	}
 }
 
@@ -119,7 +157,7 @@ button {
 			left: 0em;
 		}
 		
-		button {
+		button:not(.round) {
 			display: inline-block;
 			height: 100%;
 			padding: 0.7em 1em;
@@ -133,5 +171,98 @@ button {
 		height: auto;
 		bottom: 0px;
 		left: auto;
+		text-align: center;
+		width: 100%;
+		z-index: 0;
 	}
+}
+
+/*
+.km-button.round {
+	width: @roundSize*1.5;
+	height: @roundSize*1.5;
+	border-radius: @roundRadius*1.5;
+	
+	.caption {
+		font-size: @roundFontSize*1.5;
+		line-height: @roundLineHeight*1.5;
+	}
+	
+	img {
+		height: @roundSize*1.5;
+	}
+}
+@media (min-width: 370px) {
+	.km-button.round {
+		width: @roundSize*2;
+		height: @roundSize*2;
+		border-radius: @roundRadius*2;
+		
+		.caption {
+			font-size: @roundFontSize*2;
+			line-height: @roundLineHeight*2;
+		}
+		img {
+			height: @roundSize*2;
+		}
+	}
+}
+*/
+
+.km-button.round {
+	display: inline-block;
+	position: initial;
+	color: @grey;
+	vertical-align: middle;
+	font-size: @roundFontSize;
+	line-height: @roundLineHeight;
+	height: @roundSize;
+	width: @roundSize;
+	border: none;
+	/* border: 1px solid rgba(68, 68, 68, 0.2); */
+	border-radius: @roundRadius;
+	padding: 0px;
+	overflow: hidden;
+	text-align: center;
+	
+	.km-text {
+		display: inline-block;
+		font-weight: normal;
+		background-color: @blue;
+		width: 100%;
+		height: 100%;
+		line-height: @roundLineHeight;
+		text-align: center;
+		overflow-wrap: break-word;
+	}
+	img {
+		height: @roundSize;
+		/* This combination of two negative 50% values centers a div wider than its parent! */
+		margin-left: -50%;
+		margin-right: -50%;
+	}
+}
+@media (min-width: 370px) {
+	.km-button.round {
+		font-size: @roundLargeFontSize;
+		line-height: @roundLargeLineHeight;
+		height: @roundLargeSize;
+		width: @roundLargeSize;
+		border-radius: @roundLargeRadius;
+		
+		.km-text {
+			font-size: @roundLargeFontSize;
+			line-height: @roundLargeLineHeight;
+		}
+		img {
+			height: @roundLargeSize;
+		}
+	}
+}
+.km-button.round {
+	box-shadow: @blueShadow;
+	margin: 0px 1px 8px 3px;
+}
+.km-button.round:active {
+	box-shadow: none;
 }

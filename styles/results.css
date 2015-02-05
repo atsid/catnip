@@ -1,23 +1,37 @@
 #results .km-header {
   margin-bottom: 20px;
 }
+#results .km-header .km-view-title {
+  z-index: 1;
+}
 #results .km-header .km-leftitem,
 #results .km-header .km-rightitem {
   max-width: 35%;
+  z-index: 2;
 }
 #results .km-header #opener {
   position: relative;
-  width: 130px;
-  height: 18px;
-  margin: -20px auto 0px;
-  text-align: center;
-  background-color: #3f51b5;
-  border-radius: 0px 0px 40px 40px;
-  top: 19px;
-  overflow: hidden;
+  margin: -19px auto 0px;
+  height: 14px;
+  /* Trapezoid CSS courtesy of http://css-tricks.com/examples/ShapesOfCSS/ ! */
+}
+#results .km-header #opener .tab {
+  display: block;
+  margin: 0 auto;
+  border-top: 14px solid #3f51b5;
+  border-left: 28px solid transparent;
+  border-right: 28px solid transparent;
+  height: 0;
+  width: 50%;
+  position: relative;
+  top: 18px;
+}
+#results .km-header #opener .k-icon {
+  display: block;
+  margin: 0 auto;
 }
 #results .km-header #group {
-  width: 100%;
+  max-width: 100%;
 }
 #results .km-header #group .k-dropdown {
   max-width: 100%;
@@ -36,10 +50,11 @@
 #results .km-header #group .k-dropdown-wrap {
   background: transparent;
   border: none;
+  box-shadow: none;
 }
 #results .km-header #preferences {
   padding: 0em;
-  margin: 20px 0.25em 0px;
+  margin: 10px 0.25em 20px;
   text-align: center;
 }
 #results .km-header #preferences li.start,
@@ -64,6 +79,12 @@
   width: 8em;
   margin: auto;
 }
+#results .km-header #preferences li.start .k-timepicker input:disabled,
+#results .km-header #preferences li.end .k-timepicker input:disabled,
+#results .km-header #preferences li.optout .k-timepicker input:disabled,
+#results .km-header #preferences li.brought .k-timepicker input:disabled {
+  opacity: 1;
+}
 #results .km-header #preferences li.food > * {
   vertical-align: middle;
 }
@@ -80,6 +101,12 @@
     display: block;
   }
 }
+#results .km-content {
+  height: 100%;
+}
+#results .km-content .km-scroll-container {
+  height: 100%;
+}
 #results .km-content .km-widget {
   background-color: transparent;
 }
@@ -92,19 +119,44 @@
   background: transparent;
 }
 #results .km-footer {
+  background: transparent;
+  border: none;
   padding: 0.5em;
+  height: 70px;
 }
-#results .km-footer .actions {
-  position: relative;
-  text-align: center;
-}
-#results .km-footer .actions .km-button {
+#results .km-footer .actions .km-button:not(.chatbubble) {
   background: transparent;
   border: none;
   font-weight: bold;
   padding-bottom: 0;
+  margin: 0em 0.5em 0.5em;
+}
+#results .km-footer .actions .km-button .chatbubble {
+  background-color: #3f51b5;
+  border-color: #f2f2f2;
+  display: inline-block;
+  padding: 0.1em 0.65em;
+  line-height: 1.1em;
+  height: 1em;
+  width: 2em;
+  margin: 0.75em 0.5em;
+}
+#results .km-footer .actions .km-button .chatbubble:before {
+  margin-left: -0.4em;
+  border-left-width: 0.4em;
+  border-right-width: 0.3em;
+  border-bottom-width: 0.5em;
+  border-bottom-color: #f2f2f2;
+}
+#results .km-footer .actions .km-button .chatbubble:after {
+  margin-left: -0.5em;
+  border-left-width: 0.4em;
+  border-right-width: 0.3em;
+  border-bottom-width: 0.5em;
+  border-bottom-color: #3f51b5;
 }
 #results .km-footer .opener {
+  display: none;
   position: absolute;
   width: 100%;
   text-align: center;
