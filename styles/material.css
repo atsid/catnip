@@ -138,7 +138,7 @@ button {
 .km-footer .actions[data-align=left] {
   left: 0em;
 }
-.km-footer .actions button:not(.round) {
+.km-footer .actions button {
   display: inline-block;
   height: 100%;
   padding: 0.7em 1em;
@@ -154,90 +154,4 @@ button {
   text-align: center;
   width: 100%;
   z-index: 0;
-}
-/*
-.km-button.round {
-	width: @roundSize*1.5;
-	height: @roundSize*1.5;
-	border-radius: @roundRadius*1.5;
-	
-	.caption {
-		font-size: @roundFontSize*1.5;
-		line-height: @roundLineHeight*1.5;
-	}
-	
-	img {
-		height: @roundSize*1.5;
-	}
-}
-@media (min-width: 370px) {
-	.km-button.round {
-		width: @roundSize*2;
-		height: @roundSize*2;
-		border-radius: @roundRadius*2;
-		
-		.caption {
-			font-size: @roundFontSize*2;
-			line-height: @roundLineHeight*2;
-		}
-		img {
-			height: @roundSize*2;
-		}
-	}
-}
-*/
-.km-button.round {
-  display: inline-block;
-  position: initial;
-  color: #f2f2f2;
-  vertical-align: middle;
-  font-size: 16.666666666666668px;
-  line-height: 52px;
-  height: 50px;
-  width: 50px;
-  border: none;
-  /* border: 1px solid rgba(68, 68, 68, 0.2); */
-  border-radius: 25px;
-  padding: 0px;
-  overflow: hidden;
-  text-align: center;
-}
-.km-button.round .km-text {
-  display: inline-block;
-  font-weight: normal;
-  background-color: #3f51b5;
-  width: 100%;
-  height: 100%;
-  line-height: 52px;
-  text-align: center;
-  overflow-wrap: break-word;
-}
-.km-button.round img {
-  height: 50px;
-  /* This combination of two negative 50% values centers a div wider than its parent! */
-  margin-left: -50%;
-  margin-right: -50%;
-}
-@media (min-width: 370px) {
-  .km-button.round {
-    font-size: 20px;
-    line-height: 62px;
-    height: 60px;
-    width: 60px;
-    border-radius: 30px;
-  }
-  .km-button.round .km-text {
-    font-size: 20px;
-    line-height: 62px;
-  }
-  .km-button.round img {
-    height: 60px;
-  }
-}
-.km-button.round {
-  box-shadow: rgba(63, 81, 181, 0.7) -1px 3px 8px;
-  margin: 0px 1px 8px 3px;
-}
-.km-button.round:active {
-  box-shadow: none;
 }

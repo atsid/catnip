@@ -1,15 +1,5 @@
-@roundSize: 50px;
-@roundLargeSize: 60px;
-@roundRadius: @roundSize/2;
-@roundLargeRadius: @roundLargeSize/2;
-@roundFontSize: @roundSize/3;
-@roundLargeFontSize: @roundLargeSize/3;
-@roundLineHeight: @roundSize+2;
-@roundLargeLineHeight: @roundLargeSize+2;
 @blue: #3f51b5;
-@blueShadow : rgba(63, 81, 181, 0.7) -1px 3px 8px;
 @grey: #f2f2f2;
-@greyShadow : rgba(68, 68, 68, 0.2) -1px 3px 8px;
 
 .km-ios7 {
 	.km-header {
@@ -157,7 +147,7 @@ button {
 			left: 0em;
 		}
 		
-		button:not(.round) {
+		button {
 			display: inline-block;
 			height: 100%;
 			padding: 0.7em 1em;
@@ -175,94 +165,4 @@ button {
 		width: 100%;
 		z-index: 0;
 	}
-}
-
-/*
-.km-button.round {
-	width: @roundSize*1.5;
-	height: @roundSize*1.5;
-	border-radius: @roundRadius*1.5;
-	
-	.caption {
-		font-size: @roundFontSize*1.5;
-		line-height: @roundLineHeight*1.5;
-	}
-	
-	img {
-		height: @roundSize*1.5;
-	}
-}
-@media (min-width: 370px) {
-	.km-button.round {
-		width: @roundSize*2;
-		height: @roundSize*2;
-		border-radius: @roundRadius*2;
-		
-		.caption {
-			font-size: @roundFontSize*2;
-			line-height: @roundLineHeight*2;
-		}
-		img {
-			height: @roundSize*2;
-		}
-	}
-}
-*/
-
-.km-button.round {
-	display: inline-block;
-	position: initial;
-	color: @grey;
-	vertical-align: middle;
-	font-size: @roundFontSize;
-	line-height: @roundLineHeight;
-	height: @roundSize;
-	width: @roundSize;
-	border: none;
-	/* border: 1px solid rgba(68, 68, 68, 0.2); */
-	border-radius: @roundRadius;
-	padding: 0px;
-	overflow: hidden;
-	text-align: center;
-	
-	.km-text {
-		display: inline-block;
-		font-weight: normal;
-		background-color: @blue;
-		width: 100%;
-		height: 100%;
-		line-height: @roundLineHeight;
-		text-align: center;
-		overflow-wrap: break-word;
-	}
-	img {
-		height: @roundSize;
-		/* This combination of two negative 50% values centers a div wider than its parent! */
-		margin-left: -50%;
-		margin-right: -50%;
-	}
-}
-@media (min-width: 370px) {
-	.km-button.round {
-		font-size: @roundLargeFontSize;
-		line-height: @roundLargeLineHeight;
-		height: @roundLargeSize;
-		width: @roundLargeSize;
-		border-radius: @roundLargeRadius;
-		
-		.km-text {
-			font-size: @roundLargeFontSize;
-			line-height: @roundLargeLineHeight;
-		}
-		img {
-			height: @roundLargeSize;
-		}
-	}
-}
-.km-button.round {
-	box-shadow: @blueShadow;
-	margin: 0px 1px 8px 3px;
-}
-.km-button.round:active {
-	box-shadow: none;
 }
