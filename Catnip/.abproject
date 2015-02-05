@@ -21,7 +21,7 @@
     "1",
     "2"
   ],
-  "AndroidVersionCode": "16",
+  "AndroidVersionCode": "15",
   "CorePlugins": [
     "com.phonegap.plugins.PushPlugin",
     "org.apache.cordova.camera",
