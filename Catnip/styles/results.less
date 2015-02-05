@@ -2,20 +2,35 @@
 	.km-header {
 		margin-bottom: 20px;
 		
+		.km-view-title {
+			z-index: 1;
+		}
 		.km-leftitem, .km-rightitem {
 			max-width:35%;
+			z-index: 2;
 		}
 		
 		#opener {
 			position: relative;
-			width: 130px;
-			height: 18px;
-			margin: -20px auto 0px;
-			text-align: center;
-			background-color: #3f51b5;
-			border-radius: 0px 0px 40px 40px;
-			top: 19px;
-			overflow: hidden;
+			margin: -19px auto 0px;
+			height: 14px;
+			
+			/* Trapezoid CSS courtesy of http://css-tricks.com/examples/ShapesOfCSS/ ! */
+			.tab {
+				display: block;
+				margin: 0 auto;
+				border-top: 14px solid #3f51b5;
+				border-left: 28px solid transparent;
+				border-right: 28px solid transparent;
+				height: 0;
+				width: 50%;
+				position: relative;
+				top: 18px;
+			}
+			.k-icon {
+				display: block;
+				margin: 0 auto;
+			}
 		}
 		
 		#group {
@@ -38,12 +53,13 @@
 			.k-dropdown, .k-dropdown-wrap {
 				background: transparent;
 				border: none;
+				box-shadow: none;
 			}
 		}
 		
 		#preferences {
 			padding: 0em;
-			margin: 20px 0.25em 0px;
+			margin: 10px 0.25em 20px;
 			text-align: center;
 			
 			li.start, li.end, li.optout, li.brought {
@@ -58,6 +74,10 @@
 					.k-timepicker {
 						width: 8em;
 						margin: auto;
+						
+						input:disabled {
+							opacity: 1;
+						}
 					}
 				}
 			li.food {
@@ -86,6 +106,10 @@
 	}
 	
 	.km-content {
+		height: 100%;
+		.km-scroll-container {
+			height: 100%;
+		}
 		.km-widget {
 			background-color: transparent;
 		}
@@ -102,21 +126,48 @@
 	}
 	
 	.km-footer {
+		background: transparent;
+		border: none;
 		padding: 0.5em;
+		height: 70px;
 		
 		.actions {
-			position: relative;
-			text-align: center;
-			
-			.km-button {
+			.km-button:not(.chatbubble) {
 				background: transparent;
 				border: none;
 				font-weight: bold;
 				padding-bottom: 0;
+				margin: 0em 0.5em 0.5em;
+			}
+			.km-button .chatbubble {
+				background-color: #3f51b5;
+				border-color: #f2f2f2;
+				display: inline-block;
+				padding: 0.1em 0.65em;
+				line-height: 1.1em;
+				height: 1em;
+				width: 2em;
+				margin: 0.75em 0.5em;
+				
+				&:before {
+					margin-left: -0.4em;
+					border-left-width: 0.4em;
+					border-right-width: 0.3em;
+					border-bottom-width: 0.5em;
+					border-bottom-color: #f2f2f2;
+				}
+				&:after {
+					margin-left: -0.5em;
+					border-left-width: 0.4em;
+					border-right-width: 0.3em;
+					border-bottom-width: 0.5em;
+					border-bottom-color: #3f51b5;
+				}
 			}
 		}
 		
 		.opener {
+			display: none;
 			position: absolute;
 			width: 100%;
 			text-align: center;

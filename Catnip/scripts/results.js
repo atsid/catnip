@@ -55,6 +55,12 @@ $(function() {
 				}
 			}
 		});
+		window.results.showTab = function(show) {
+			if (show)
+				$('#opener').css({opacity:1}).animate({top:"0px","margin-bottom":"0px"});
+			else
+				$('#opener').animate({top:"-18px","margin-bottom":"-18px"}).css({opacity:0});
+		}
 		window.results.initView = function(e) {
 			e.view.one("show", function(e) {
 				try {
@@ -76,6 +82,18 @@ $(function() {
 								window.preferences.open(true);
 						}
 					});
+					$(window).on("orientationchange", function(e) {
+						window.preferences.open(false);
+					});
+					/*
+					$('#toggleChat').bind("click", function(e) {
+						var drawer = $('#chat').data('kendoMobileDrawer');
+						if (drawer.visible)
+							drawer.hide();
+						else
+							drawer.show();
+					});
+					*/
 					window.preferences.options.bind("change", function(e) {
 						if (e.field === "disabled") {
 							var disabled = this.get(e.field,false);
@@ -84,9 +102,9 @@ $(function() {
 							$('#dailyprefs [name=Brought]').data("kendoMobileSwitch").enable(!disabled);
 							$('#dailyprefs [name=FoodCategories]').data("kendoMultiSelect").enable(!disabled);
 							if (disabled)
-								$('#opener').animate({height:"0px"});
+								window.results.showTab(false);
 							else
-								$('#opener').animate({height:"18px"});
+								window.results.showTab(true);
 						}
 					}).trigger("change", { field: "disabled" });
 					$('.all-groups').kendoGrid({
@@ -117,13 +135,14 @@ $(function() {
 				}
 			});
 			e.view.bind("show", function(e) {
-				$('#opener').animate({height:"18px"});
+				if (!window.preferences.options.get("disabled"))
+					window.results.showTab(true);
 				setTimeout(function() {
 					window.preferences.open(false);
 				},1500);
 			});
 			e.view.bind("beforeHide", function(e) {
-				$('#opener').animate({height:"0px"});
+				window.results.showTab(false);
 			});
 		}
 		

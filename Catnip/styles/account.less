@@ -1,9 +1,15 @@
-@avatarSize: 35px;
+@avatarSize: 50px;
+@avatarLargeSize: 60px;
 @avatarRadius: @avatarSize/2;
+@avatarLargeRadius: @avatarLargeSize/2;
 @avatarFontSize: @avatarSize/3;
+@avatarLargeFontSize: @avatarLargeSize/3;
 @avatarLineHeight: @avatarSize+2;
+@avatarLargeLineHeight: @avatarLargeSize+2;
 @blue: #3f51b5;
+@blueShadow : rgba(63, 81, 181, 0.7) -1px 3px 8px;
 @grey: #f2f2f2;
+@greyShadow : rgba(68, 68, 68, 0.2) -1px 3px 8px;
 
 #login, #reset {	
 	.km-header {
@@ -43,59 +49,143 @@
 			top: -14px;
 		}
 	}
-	#Profile .Avatar {
-		text-align: center;
-		width: @avatarSize*2;
-		height: @avatarSize*2;
-		border-radius: @avatarRadius*2;
-		font-size: @avatarFontSize*2;
-		line-height: @avatarLineHeight*2;
+	#Profile {
+		padding-bottom: 1em;
+		
+		.Avatar {
+			width: @avatarSize*1.5;
+			height: @avatarSize*1.5;
+			border-radius: @avatarRadius*1.5;
+			top: auto;
+			right: auto;
+			margin-top: auto;
+			
+			.caption {
+				font-size: @avatarFontSize*1.5;
+				line-height: @avatarLineHeight*1.5;
+			}
+			
+			img {
+				height: @avatarSize*1.5;
+			}
+			input[type=image] {
+				display: none;
+			}
+		}
+		
+		@media (min-width: 370px) {
+			.Avatar {
+				width: @avatarSize*2;
+				height: @avatarSize*2;
+				border-radius: @avatarRadius*2;
+				
+				.caption {
+					font-size: @avatarFontSize*2;
+					line-height: @avatarLineHeight*2;
+				}
+				img {
+					height: @avatarSize*2;
+				}
+			}
+		}
 	}
 	.km-list {
 		font-size: 1em;
 		
-		input {
+		.km-photo-upload {
+			input {
+				position: relative;
+				top: auto;
+				right: auto;
+				margin-top: auto;
+				width: 100%;
+			}
+			button {
+				margin-left: 0.25em;
+				padding-left: 0.75em;
+				margin-bottom: 0.25em;
+				padding-right: 0.25em;
+				height: 2.2em;
+				vertical-align: middle;
+			}
+			button:last-child .km-text {
+				display: none;
+			}
+		}
+		input, .km-photo-upload {
+			position: absolute;
+			top: 50%;
+			right: 0;
+			margin-top: -1em;
 			width: 65%;
 			font-size: 1em;
 		}
 	}
 }
 
-.km-footer .MyAccount .km-button {
-	padding: 0.25em;
-}
-.MyAccount {
-	.Avatar {
+.Avatar, .km-footer button.Avatar {
+	display: inline-block;
+	position: initial;
+	color: @grey;
+	vertical-align: middle;
+	font-size: @avatarFontSize;
+	line-height: @avatarLineHeight;
+	height: @avatarSize;
+	width: @avatarSize;
+	border: none;
+	border: 1px solid rgba(68, 68, 68, 0.2);
+	border-radius: @avatarRadius;
+	padding: 0px;
+	overflow: hidden;
+	text-align: center;
+	
+	.caption {
 		display: inline-block;
-		color: @grey;
-		vertical-align: middle;
-		font-size: @avatarFontSize;
+		font-weight: normal;
+		background-color: @blue;
+		width: 100%;
+		height: 100%;
 		line-height: @avatarLineHeight;
+		text-align: center;
+		overflow-wrap: break-word;
+	}
+	img {
+		display: none;
 		height: @avatarSize;
-		width: @avatarSize;
-		border-radius: @avatarRadius;
-		overflow: hidden;
-		
+		/* This combination of two negative 50% values centers a div wider than its parent! */
+		margin-left: -50%;
+		margin-right: -50%;
+	}
+	
+	&.image {
 		.caption {
-			display: inline-block;
-			background-color: @blue;
-			width: 100%;
-			height: 100%;
-			text-align: center;
-			overflow-wrap: break-word;
+			display: none;
 		}
 		img {
-			display: none;
-			height: @avatarSize;
-		}
-		
-		&.image {
-			.caption {
-				display: none;
-			}
-			img {
-				display: inline-block;
-			}
+			display: inline-block;
 		}
 	}
+}
+@media (min-width: 370px) {
+	.Avatar, .km-footer button.Avatar {
+		font-size: @avatarLargeFontSize;
+		line-height: @avatarLargeLineHeight;
+		height: @avatarLargeSize;
+		width: @avatarLargeSize;
+		border-radius: @avatarLargeRadius;
+		
+		.caption {
+			line-height: @avatarLargeLineHeight;
+		}
+		img {
+			height: @avatarLargeSize;
+		}
+	}
+}
+button.Avatar {
+	box-shadow: @blueShadow;
+	margin: 0px 1px 8px 3px;
+}
+button.Avatar:active {
+	box-shadow: none;
 }

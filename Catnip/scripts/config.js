@@ -6,11 +6,11 @@ configdb = pi.data.DataSource.create({
 	id : "Lunch.Config",
 	// storage : "localStorage",
 	default : {
-		id : "catnip",
+		id : "com.atsid.labs.lunch",
 		server : {
 			results : "https://catnip-ats.herokuapp.com/results"
 		},
-		version : "2.0.3",
+		version : "1.4.4",
 		everlive : {
 			apiKey : "1V7hKCv6hyKjyPUl",
 			scheme : "http"
