@@ -111,7 +111,7 @@
   height: 50px;
   width: 50px;
   border: none;
-  /* border: 1px solid rgba(68, 68, 68, 0.2); */
+  border: 1px solid rgba(68, 68, 68, 0.2);
   border-radius: 25px;
   padding: 0px;
   overflow: hidden;
