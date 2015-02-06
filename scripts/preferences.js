@@ -217,6 +217,9 @@ $(function() {
 							// CAUTION: If two versions of the same record, don't delete on the server
 							if (serverPreferences.id === window.myPreferences.id)
 								this._destroyed.pop();
+						} else {
+							// Don't try to destroy local records on the server!
+							this._destroyed.empty();
 						}
 						// WARNING: This must come AFTER removing serverPreferences.
 						// There is a bug where the timestamp on the server is less by milliseconds until the next GET.
