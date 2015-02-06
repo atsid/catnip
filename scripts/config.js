@@ -24,6 +24,9 @@ configdb = pi.data.DataSource.create({
 });
 // This call will fire the JIT handler for selected.
 config = configdb.options.get("selected");
+config.getToday = function() {
+	return this.set("today", new Date().toSortString());
+}
 
 if (typeof(window.console) != "undefined") { // For IE 8 and below!
 	window.console.log("server: "+JSON.stringify(document.location));
