@@ -39,7 +39,7 @@ $(function() {
 					beforeSend: function(xhr) {
 						try {
 						xhr.setRequestHeader("X-Everlive-Filter",JSON.stringify({
-								Date : config.get("today"),
+								Date : config.getToday(),
 								Group : window.myPreferences.get("Group") || window.myAccount.get("Groups")[0]
 						}));
 						} catch(e) {
@@ -345,13 +345,13 @@ $(function() {
 									window.myPreferences = window.preferences.options.set("selected", items[i]);
 							}
 							if (window.myPreferences) {
-								if (window.myPreferences.Date !== config.get("today")) {
+								if (window.myPreferences.Date !== config.getToday()) {
 									// If defaulting to yesterday's preferences, update the Date field, and clear 'Id' to fire the create method.
 									var startTime = new Date(), endTime = new Date();
 										startTime.setHours(window.myPreferences.getHours(), window.myPreferences.getMinutes(), 0, 0);
 										endTime.setHours(window.myPreferences.getHours(), window.myPreferences.getMinutes(), 0, 0);
 									window.myPreferences.Group = (typeof(window.groups.options.selected) === "object") ? window.groups.options.selected.Id : window.myAccount.get("Groups")[0],
-									window.myPreferences.Date = config.get("today");
+									window.myPreferences.Date = config.getToday();
 									window.myPreferences.OptOut = true; // Default to "out" so people have to input an answer.
 									window.myPreferences.CreatedAt = null; // WARNING: Don't set these during creation!!
 									window.myPreferences.ModifiedAt = null; // WARNING: Don't set these during creation!!
@@ -370,7 +370,7 @@ $(function() {
 								window.myPreferences = window.preferences.options.set("selected", window.preferences.add({
 									"User": value,
 									"Group": (typeof(window.groups.options.selected) === "object") ? window.groups.options.selected.Id : window.myAccount.get("Groups")[0],
-									"Date": config.get("today"),
+									"Date": config.getToday(),
 									"StartTime": startTime,
 									"StartTimeCode": startTime.getUTCTimeCode(),
 									"EndTime": endTime,

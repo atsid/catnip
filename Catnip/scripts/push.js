@@ -76,7 +76,7 @@ $(function() {
 													case "update":
 														Everlive.$.push.updateRegistration({
 															"Groups" : window.myAccount.get("Groups"),
-															"LastLogin" : config.get("today"),
+															"LastLogin" : config.getToday(),
 															"LastRefresh" : new Date()
 														}, function(response) {
 															// (pi||console).log("Updated Push Notification Registration");
@@ -124,7 +124,7 @@ $(function() {
 								(pi||console).log("Update Push Notification Triggered");
 								Everlive.$.push.updateRegistration({
 									"Groups" : window.myAccount.get("Groups"),
-									"LastLogin" : config.get("today")
+									"LastLogin" : config.getToday()
 								}, function(response) {
 									var response = response;
 									(pi||console).log("Updated Push Notification Registration");

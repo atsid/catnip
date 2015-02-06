@@ -75,12 +75,12 @@ $(function() {
 				if (window.myAccount)
 					return [
 						{field: 'User.Id', operator: 'eq', value: window.myAccount.get("Id") || ""},
-						{field: 'Date', operator: 'eq', value: config.get("today")}
+						{field: 'Date', operator: 'eq', value: config.getToday()}
 					].concat(filter);
 				else
 					return [
 						{field: 'User.Id', operator: 'eq', value: ""},
-						{field: 'Date', operator: 'eq', value: config.get("today")}
+						{field: 'Date', operator: 'eq', value: config.getToday()}
 					].concat(filter);
 			} catch(e) {
 				e.event = "Get Account Filter";
