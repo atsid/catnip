@@ -99,6 +99,46 @@ kendo.mobile.ui.View = pi.mobile.ui.View.extend({
 });
 kendo.mobile.ui.roles.view = kendo.mobile.ui.View;
 
+// Store the original
+pi.mobile.ui.Drawer = kendo.mobile.ui.Drawer;
+// Extend and replace the original
+kendo.mobile.ui.Drawer = pi.mobile.ui.Drawer.extend({
+    init : function(element,options) {
+		if (options.transition) {
+			var transition = options.transition.split(":");
+			if (transition[0] === "overlay") {
+				if (transition.length > 1 && transition[1].replace(/^\s*(.*)\s*$/, "$1") === "blur")
+					this._moveViewTo = this._overlayBlurView;
+				else
+					this._moveViewTo = $.noop;
+			}
+		}
+		pi.mobile.ui.Drawer.fn.init.apply(this,arguments);
+	},
+	_overlayBlurView : function(blur) {
+		if (blur) {
+			this.element.css({background: "rgba(255,255,255,0.5)"});
+			this.currentView.element.css({
+				"filter": "blur(4px)",
+				"-o-filter": "blur(4px)",
+				"-ms-filter": "blur(4px)",
+				"-moz-filter": "blur(4px)",
+				"-webkit-filter": "blur(2px)",
+			});
+		} else {
+			this.element.css({background: "transparent"});
+			this.currentView.element.css({
+				"filter": "none",
+				"-o-filter": "none",
+				"-ms-filter": "none",
+				"-moz-filter": "none",
+				"-webkit-filter": "none",
+			});
+		}
+	}
+});
+kendo.mobile.ui.roles.drawer = kendo.mobile.ui.Drawer;
+
 /* Grid is handled in Grid.js
 // Store the original
 pi.ui.Grid = kendo.ui.Grid;
