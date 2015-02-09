@@ -348,8 +348,8 @@ $(function() {
 								if (window.myPreferences.Date !== config.getToday()) {
 									// If defaulting to yesterday's preferences, update the Date field, and clear 'Id' to fire the create method.
 									var startTime = new Date(), endTime = new Date();
-										startTime.setHours(window.myPreferences.getHours(), window.myPreferences.getMinutes(), 0, 0);
-										endTime.setHours(window.myPreferences.getHours(), window.myPreferences.getMinutes(), 0, 0);
+										startTime.setHours(window.myPreferences.StartTime.getHours(), window.myPreferences.StartTime.getMinutes(), 0, 0);
+										endTime.setHours(window.myPreferences.EndTime.getHours(), window.myPreferences.EndTime.getMinutes(), 0, 0);
 									window.myPreferences.Group = (typeof(window.groups.options.selected) === "object") ? window.groups.options.selected.Id : window.myAccount.get("Groups")[0],
 									window.myPreferences.Date = config.getToday();
 									window.myPreferences.OptOut = true; // Default to "out" so people have to input an answer.
