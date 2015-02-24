@@ -1,18 +1,21 @@
+// Initialize variables
+Date.prototype.setTimeString = function(timeString) {
+	var time = timeString.split(":");
+	this.setHours(time[0]);
+	this.setMinutes(time[1]);
+	this.setSeconds(0);
+	this.setMilliseconds(0);
+	return this;
+}
+Date.prototype.getTimeString = function() {
+	return ("0"+this.getHours()).substr(-2) + ":" + ("0"+this.getMinutes()).substr(-2) + ":" + ("0"+this.getSeconds()).substr(-2);
+}
+Date.prototype.getUTCTimeCode = function() {
+	return ("0"+this.getUTCHours()).substr(-2) + ("0"+this.getUTCMinutes()).substr(-2);
+}
+
 $(function() {
 	try {
-		// Initialize variables
-		Date.prototype.setTimeString = function(timeString) {
-			var time = timeString.split(":");
-			this.setHours(time[0]);
-			this.setMinutes(time[1]);
-			this.setSeconds(0);
-			this.setMilliseconds(0);
-			return this;
-		}
-		Date.prototype.getUTCTimeCode = function() {
-			return ("0"+this.getUTCHours()).substr(-2) + ("0"+this.getUTCMinutes()).substr(-2);
-		}
-		
 		// Override TimePicker functionality
 		var TimePicker = kendo.ui.TimePicker;
 		kendo.ui.TimePicker = TimePicker.extend({
