@@ -11,7 +11,7 @@ $(function() {
 					beforeSend: function(xhr) {
 						try {
 							xhr.setRequestHeader("X-Everlive-Filter",JSON.stringify({
-								Date : config.getToday(),
+								Date : window.myPreferences.get("Date") || config.getToday(),
 								Group : window.myPreferences.get("Group") || window.myAccount.get("Groups")[0]
 							}));
 						} catch(e) {
@@ -37,7 +37,9 @@ $(function() {
 			},
 			debug: false,
 			serverFiltering: false,
-			expand: { Owner: { Photo: true } },
+			expand: { 
+				Owner: true
+			},
 			error: function(e) {
 				if (e.xhr && e.xhr.status === 403)
 					return;
@@ -60,8 +62,9 @@ $(function() {
 		}
 		
 		window.chat.scrollToBottom = function() {
-			var scroller = $('#chat').data("kendoMobileDrawer").scroller;
-			scroller.scrollTo(0,scroller.dimensions.y.min);
+			var drawer = $('#chat').data("kendoMobileDrawer");
+			if (drawer)
+				drawer.scroller.scrollTo(0, drawer.scroller.dimensions.y.min);
 		}
 		
 		window.chat.bind("change", function(e) {
