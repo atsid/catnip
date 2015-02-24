@@ -131,10 +131,28 @@ $(function() {
 						if (!this.view().length)
 							$(".all-groups .k-grid-content tbody").empty().append('<tr><td colspan="13">Nothing yet.</td></tr>');
 					}).trigger("change");
+					
+					$('#addMessage').bind("keyup", function(e) {
+						if (e.keyCode === 13) {
+							window.chat.add({
+								'Owner' : window.myAccount,
+								'Message' : $(this).val().replace("\n",""),
+								'Date' : window.myPreferences.get("Date"),
+								'Group' : window.myPreferences.get("Group"),
+								'CreatedAt' : new Date()
+							});
+							window.chat.scrollToBottom();
+							window.chat.sync();
+							$(this).val("");
+						}
+					});
 				} catch(e) {
 					e.event = "Result View Initialization";
 					(pi||console).log(e);
 				}
+			});
+			e.view.one("afterShow", function(e) {
+				window.chat.scrollToBottom();
 			});
 			e.view.bind("show", function(e) {
 				if (!window.preferences.options.get("disabled"))

@@ -55,6 +55,7 @@
 		<script src="scripts/food.js"></script>
 		<script src="scripts/results.js"></script>
 		<script src="scripts/preferences.js"></script>
+		<script src="scripts/chat.js"></script>
 	
 		<!-- Demo Code
         <script src="scripts/identity-provider.js"></script>
@@ -233,15 +234,16 @@
 				</div>
 			</div>
 		</div>
-		<div id="chat" data-role="drawer" data-position="right">
+		<div id="chat" data-role="drawer" data-position="right" data-after-show="window.chat.scrollToBottom">
 			<div data-role="header"></div>
-			<div data-role="listview" data-source="chat">
-				<div class="chatbubble" data-bind="Message"></div>
-				<div class="Avatar round" data-role="button">
-					<div class="caption" data-bind="User.Initials"></div>
-					<img data-bind="attr: {src: User.Photo.Uri}" />
+				<div id="messages" data-role="listview" data-source="chat">
+					<div class="Avatar round" data-role="button">
+						<div class="caption">#=Owner?Owner.Initials:'L?'#</div>
+						<img src="#=Owner?Owner.Photo?Owner.Photo.Uri:'':''#" />
+					</div>
+					<div class="chatbubble left">#=Message#</div>
+					<div class="timestamp">#=CreatedAt.constructor==Date?CreatedAt.toLocaleTimeString():''#</div>
 				</div>
-			</div>
 			<div data-role="footer">
 				<div class="actions" data-align="left">
 					<form class="MyAccount" data-source="account">
@@ -251,9 +253,7 @@
 					</form>
 				</div>
 				<div class="actions" data-align="right">
-					<form data-source="chat" data-method="create">
-						<div class="chatbubble left"><textarea name="Message" placeholder="Enter your message"></textarea></div>
-					</form>
+					<div class="chatbubble left"><textarea id="addMessage" name="Message" placeholder="Enter your message"></textarea></div>
 				</div>
 			</div>
 		</div>

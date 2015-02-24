@@ -80,27 +80,89 @@
   bottom: auto;
 }
 #chat {
+  background: #3f51b5;
   z-index: 10;
   width: 80%;
 }
 #chat .km-header,
 #chat .km-content,
 #chat .km-footer {
-  background: #3f51b5;
   border: none;
   padding-left: 0.5em;
   padding-right: 0.5em;
   padding-bottom: 0em;
+  background: #3f51b5;
 }
-#chat .km-header,
-#chat .km-footer {
+#chat .km-header {
   height: 0px;
 }
+#chat .km-footer {
+  position: absolute;
+  bottom: 0;
+  height: 90px;
+  border-top: 1px solid #999;
+}
+#chat .km-content {
+  position: absolute;
+  bottom: 0px;
+  padding-top: 10px;
+  padding-right: 0.5em;
+  max-height: 100%;
+  box-sizing: border-box;
+}
+#chat .km-content .km-scroll-container {
+  padding-bottom: 100px;
+}
+#chat .km-listview-wrapper {
+  /*
+		position: absolute;
+		bottom: 0;
+		margin-bottom: 80px;
+		padding-top: 80px;
+		max-height: 100%;
+		overflow-y: scroll;
+		box-sizing: border-box;
+		*/
+}
+#chat .km-listview-wrapper .km-listview {
+  background: transparent;
+}
+#chat .km-listview-wrapper .km-listview li {
+  padding: 0.5em 0em;
+  clear: both;
+  background: transparent;
+  border-width: 0;
+  box-shadow: none;
+  min-height: 80px;
+}
+#chat .km-listview-wrapper .km-listview li .Avatar {
+  position: absolute;
+  left: 0em;
+  top: 0.5em;
+  border: 2px solid rgba(68, 68, 68, 0.2);
+}
+#chat .km-listview-wrapper .km-listview li .chatbubble.left {
+  margin: 0.5em 0em 0.5em 80px;
+}
+#chat .km-listview-wrapper .km-listview li .timestamp {
+  font-size: 0.7em;
+  text-align: right;
+  color: #999;
+}
 #chat .actions {
-  margin: 0em 0.5em 0.5em;
+  margin: 1em 0em 0.5em;
+}
+#chat .actions[data-align=left] {
+  position: absolute;
+  bottom: 0em;
+  left: 0.5em;
 }
 #chat .actions[data-align=right] {
   margin-left: 80px;
+  margin-right: 0.5em;
+  position: absolute;
+  left: 0.5em;
+  bottom: 0em;
 }
 #chat .actions[data-align=right] .chatbubble {
   margin: 0em;
