@@ -15,7 +15,10 @@ $(function() {
 								// this is what invokes the PushPlugin 
 								device.enableNotifications({
 									customParamters: {
-										Groups: e.items[0].Groups
+										Groups: window.myAccount.Groups,
+										Push: {
+											Chat: window.myAccount.get("Chat")
+										}
 									},
 									iOS: {
 										badge: "true",
@@ -76,6 +79,9 @@ $(function() {
 													case "update":
 														Everlive.$.push.updateRegistration({
 															"Groups" : window.myAccount.get("Groups"),
+															"Push" : {
+																"Chat" : window.myAccount.get("Chat")
+															},
 															"LastLogin" : config.getToday(),
 															"LastRefresh" : new Date()
 														}, function(response) {

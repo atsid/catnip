@@ -234,16 +234,16 @@
 				</div>
 			</div>
 		</div>
-		<div id="chat" data-role="drawer" data-position="right" data-after-show="window.chat.scrollToBottom">
+		<div id="chat" data-role="drawer" data-position="right" data-init="window.chat.initView">
 			<div data-role="header"></div>
-				<div id="messages" data-role="listview" data-source="chat">
-					<div class="Avatar round #=Owner?Owner.Photo?'image':'':''#" data-role="button">
-						<div class="caption">#=Owner?Owner.Initials:'L?'#</div>
-						<img src="#=Owner?Owner.Photo?Owner.Photo.Uri:'':''#" />
-					</div>
-					<div class="chatbubble left">#=Message#</div>
-					<div class="timestamp">#=CreatedAt.constructor==Date?CreatedAt.toLocaleTimeString():''#</div>
+			<div id="messages" data-role="listview" data-source="chat">
+				<div class="Avatar round #=Owner?Owner.Photo?'image':'':''#" data-role="button">
+					<div class="caption">#=Owner?Owner.Initials:'L?'#</div>
+					<img src="#=Owner?Owner.Photo?Owner.Photo.Uri:'':''#" />
 				</div>
+				<div class="chatbubble left">#=Message#</div>
+				<div class="timestamp">#=CreatedAt.constructor==Date?CreatedAt.toLocaleTimeString():''#</div>
+			</div>
 			<div data-role="footer">
 				<div class="actions" data-align="left">
 					<form class="MyAccount" data-source="account">
@@ -295,6 +295,7 @@
 					<li>Settings
 						<ul>
 							<li class="Push"><label>Push Notifications? <input name="Push" data-role="switch" type="checkbox" data-type="boolean" /></label></li>
+							<li class="Push Sub"><label>Chat <input name="Chat" data-role="switch" type="checkbox" data-type="boolean" /></label></li>
 						</ul>
 					</li>
 					<li><label>Change Password</label>

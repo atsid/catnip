@@ -28,6 +28,7 @@ $(function() {
 				"Email" : "",
 				"Password" : "",
 				"Push" : true,
+				"Chat" : true,
 				"access_token" : "" // required blank value to kick of default navigation.
 			}
 		});
@@ -122,6 +123,16 @@ $(function() {
 					// Now refresh the latest updates from the server
 					window.account.read();
 					window.groups.read();
+				});
+				
+				window.account.bind("change", function(e) {
+					if (e.field === "Push" && e.items[0] === window.myAccount) {
+						var enabled = window.myAccount.get("Push");
+						$('#Profile .Push.Sub input').each(function(index, element) {
+							var mySwitch = $(element).data("kendoMobileSwitch");
+							if (mySwitch) mySwitch.enable(enabled);
+						});
+					}
 				});
 			} catch(e) {
 				e.event = "Initialize Profile View";

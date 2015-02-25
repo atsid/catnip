@@ -62,9 +62,43 @@ $(function() {
 		}
 		
 		window.chat.scrollToBottom = function() {
-			var drawer = $('#chat').data("kendoMobileDrawer");
-			if (drawer)
-				drawer.scroller.scrollTo(0, drawer.scroller.dimensions.y.min);
+			try {
+				var drawer = $('#chat').data("kendoMobileDrawer");
+				if (drawer)
+					drawer.scroller.scrollTo(0, drawer.scroller.dimensions.y.min);
+			} catch (e) {
+				e.event = "Chat Drawer AutoScroll";
+				(pi||console).log(e);
+			}
+		}
+		window.chat.initView = function(e) {
+			var drawer = e.sender;
+			drawer.one("show", function(e) {
+				this.element.find('#addMessage').bind("keyup", function(e) {
+					if (e.keyCode === 13) {
+						try {
+							var createdAt = new Date();
+							window.chat.add({
+								'Owner' : window.myAccount,
+								'Message' : $(this).val().replace("\n",""),
+								'Date' : window.myPreferences.get("Date"),
+								'Group' : window.myPreferences.get("Group"),
+								'TimezoneOffset': createdAt.getTimezoneOffset(),
+								'CreatedAt' : createdAt
+							});
+							window.chat.scrollToBottom();
+							window.chat.sync();
+							$(this).val("");
+						} catch(e) {
+							e.event = "Create Chat Message";
+							(pi||console).log(e);
+						}
+					}
+				});
+			});
+			drawer.bind("afterShow", function(e) {
+				window.chat.scrollToBottom();
+			});
 		}
 		
 		window.chat.bind("change", function(e) {
