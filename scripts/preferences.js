@@ -318,12 +318,13 @@ $(function() {
 		
 		window.preferences.bind("change", function(e) {
 			try {
-				var food = {}, results = [], undecided = true;
+				// CAUTION: Undecided StartTimeCode and EndTimeCode are intentionally reversed, so they are always changed with the first entry.
+				var food = {}, undecided = { Users: {}, StartTimeCode: "2400", EndTimeCode: "0000" }, results = [];
 				this.view().forEach(function(daily,index) {
 					if (!daily.User || typeof(daily.User) === "string")
 						return;
 					if (daily.OptOut) {
-						// undecided = false; // CAUTION: OptOuts shouldn't affect undecided.
+						// undecided.Users[daily.User.Id] = daily; // CAUTION: OptOuts shouldn't affect undecided.
 						results.push({
 							User: daily.User.Id,
 							DisplayName: daily.User.DisplayName,
@@ -333,7 +334,7 @@ $(function() {
 						});
 					}
 					else if (daily.Brought) {
-						// undecided = false; // CAUTION: Brought shouldn't affect undecided.
+						// undecided.Users[daily.User.Id] = daily; // CAUTION: Brought shouldn't affect undecided.
 						results.push({
 							User: daily.User.Id,
 							DisplayName: daily.User.DisplayName,
@@ -345,7 +346,6 @@ $(function() {
 						});
 					} else if (daily.FoodCategories) {
 						daily.FoodCategories.forEach(function(id,index) {
-							undecided = false;
 							var record = window.food.get(id);
 							if (record) {
 								food[record.Name] = food[record.Name] || { Users: {}, StartTimeCode: daily.StartTimeCode, EndTimeCode: daily.EndTimeCode };
@@ -358,10 +358,11 @@ $(function() {
 								window.food.read(); // Maybe we're out of date
 							}
 						});
+					} else {
+						// CAUTION: There must be an undecided array in case the undecided person doesn't overlap anyone else!
+						undecided.Users[daily.User.Id] = daily;
 					}
 				});
-				if (undecided)
-					food["Undecided"] = { Users: {}, StartTimeCode: "0000", EndTimeCode: "2400" };
 				// Build results
 				for (var pref in food) {
 					this.view().forEach(function(daily,index) {
@@ -371,7 +372,7 @@ $(function() {
 							return;
 						if (daily.Brought)
 							return;
-						if (daily.StartTimeCode < food[pref].EndTimeCode && daily.EndTimeCode > food[pref].StartTimeCode)
+						if (daily.StartTimeCode < food[pref].EndTimeCode && daily.EndTimeCode > food[pref].StartTimeCode) {
 							results.push({
 								User: daily.User.Id,
 								DisplayName: daily.User.DisplayName,
@@ -380,7 +381,28 @@ $(function() {
 								Preference: food[pref].Users[daily.User.Id], // CAUTION: Could be null
 								Food: pref
 							});
+							if (undecided[daily.User.Id])
+								delete undecided[daily.User.Id];
+						} else if (undecided[daily.User.Id]) {
+							// CAUTION: Doing this here to save one loop; otherwise it must be done below.
+							if (daily.StartTimeCode < undecided.StartTimeCode)
+								undecided.StartTimeCode = daily.StartTimeCode;
+							if (daily.EndTimeCode > undecided.EndTimeCode)
+								undecided.EndTimeCode = daily.EndTimeCode;
+						}
 					});
+				}
+				// Do this AFTER we've deleted unecessary undecideds.
+				for (var userId in undecided.Users) {
+					var daily = undecided.Users[userId];
+					results.push({
+						User: daily.User.Id,
+						DisplayName: daily.User.DisplayName,
+						StartTimeCode: daily.StartTimeCode,
+						EndTimeCode: daily.EndTimeCode,
+						Preference: 0,
+						Food: "Undecided"
+					})
 				}
 				window.results.data(results);
 			} catch(e) {
