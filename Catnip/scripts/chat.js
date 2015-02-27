@@ -12,7 +12,7 @@ $(function() {
 						try {
 							xhr.setRequestHeader("X-Everlive-Filter",JSON.stringify({
 								Date : window.myPreferences.get("Date") || config.getToday(),
-								Group : window.myPreferences.get("Group") || window.myAccount.get("Groups")[0]
+								Group : window.myPreferences ? window.myPreferences.get("Group") : window.myAccount.get("Groups")[0]
 							}));
 						} catch(e) {
 							e.event = "Adding Chat Filter";
@@ -81,8 +81,8 @@ $(function() {
 							window.chat.add({
 								'Owner' : window.myAccount,
 								'Message' : $(this).val().replace("\n",""),
-								'Date' : window.myPreferences.get("Date"),
-								'Group' : window.myPreferences.get("Group"),
+								'Date' : window.myPreferences ? window.myPreferences.get("Date") : config.getToday(),
+								'Group' : window.myPreferences ? window.myPreferences.get("Group") : window.myAccount.get("Groups")[0],
 								'TimezoneOffset': createdAt.getTimezoneOffset(),
 								'CreatedAt' : createdAt
 							});

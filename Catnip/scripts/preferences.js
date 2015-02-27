@@ -43,7 +43,7 @@ $(function() {
 						try {
 						xhr.setRequestHeader("X-Everlive-Filter",JSON.stringify({
 								Date : config.getToday(),
-								Group : window.myPreferences.get("Group") || window.myAccount.get("Groups")[0]
+								Group : window.myPreferences ? window.myPreferences.get("Group") : window.myAccount.get("Groups")[0]
 						}));
 						} catch(e) {
 							e.event = "Adding Preferences Filter";
@@ -75,7 +75,7 @@ $(function() {
 				if (e.xhr && e.xhr.status === 404) {
 					// Bad record; start over.
 					window.preferences.reset();
-					delete window.myPreferences;
+					window.preferences.migratePreferences();
 					window.preferences.read();
 				} else {
 					(pi||console).log({
@@ -381,18 +381,19 @@ $(function() {
 								Preference: food[pref].Users[daily.User.Id], // CAUTION: Could be null
 								Food: pref
 							});
-							if (undecided[daily.User.Id])
-								delete undecided[daily.User.Id];
-						} else if (undecided[daily.User.Id]) {
-							// CAUTION: Doing this here to save one loop; otherwise it must be done below.
-							if (daily.StartTimeCode < undecided.StartTimeCode)
-								undecided.StartTimeCode = daily.StartTimeCode;
-							if (daily.EndTimeCode > undecided.EndTimeCode)
-								undecided.EndTimeCode = daily.EndTimeCode;
+							if (undecided.Users[daily.User.Id])
+								delete undecided.Users[daily.User.Id];
 						}
 					});
 				}
-				// Do this AFTER we've deleted unecessary undecideds.
+				// Do this in two loops & AFTER we've deleted unecessary undecideds, after checking ALL food types.
+				for (var userId in undecided.Users) {
+					var daily = undecided.Users[userId];
+					if (daily.StartTimeCode < undecided.StartTimeCode)
+						undecided.StartTimeCode = daily.StartTimeCode;
+					if (daily.EndTimeCode > undecided.EndTimeCode)
+						undecided.EndTimeCode = daily.EndTimeCode;
+				}
 				for (var userId in undecided.Users) {
 					var daily = undecided.Users[userId];
 					results.push({
