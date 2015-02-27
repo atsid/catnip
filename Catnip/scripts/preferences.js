@@ -41,14 +41,15 @@ $(function() {
 				read: {
 					beforeSend: function(xhr) {
 						try {
-						xhr.setRequestHeader("X-Everlive-Filter",JSON.stringify({
-								Date : config.getToday(),
+							xhr.setRequestHeader("X-Everlive-Filter",JSON.stringify({
+								// WARNING: If there's a server interruption, plan for window.myPreferences temporarily not existing.
+								Date : window.myPreferences.get("Date") || config.getToday(),
 								Group : window.myPreferences ? window.myPreferences.get("Group") : window.myAccount.get("Groups")[0]
-						}));
+							}));
 						} catch(e) {
 							e.event = "Adding Preferences Filter";
 							(pi||console).log(e);
-					}
+						}
 					}
 				},
 				create: {

@@ -11,6 +11,7 @@ $(function() {
 					beforeSend: function(xhr) {
 						try {
 							xhr.setRequestHeader("X-Everlive-Filter",JSON.stringify({
+								// WARNING: If there's a server interruption, plan for window.myPreferences temporarily not existing.
 								Date : window.myPreferences.get("Date") || config.getToday(),
 								Group : window.myPreferences ? window.myPreferences.get("Group") : window.myAccount.get("Groups")[0]
 							}));
@@ -81,6 +82,7 @@ $(function() {
 							window.chat.add({
 								'Owner' : window.myAccount,
 								'Message' : $(this).val().replace("\n",""),
+								// WARNING: If there's a server interruption, plan for window.myPreferences temporarily not existing.
 								'Date' : window.myPreferences ? window.myPreferences.get("Date") : config.getToday(),
 								'Group' : window.myPreferences ? window.myPreferences.get("Group") : window.myAccount.get("Groups")[0],
 								'TimezoneOffset': createdAt.getTimezoneOffset(),
