@@ -73,6 +73,7 @@ $(function() {
 								$('#results').data('kendoMobileView').scroller.pullHandled();
 							});
 							window.preferences.cycle();
+							window.chat.cycle();
 						}
 					});
 					e.view.header.kendoTouch({
