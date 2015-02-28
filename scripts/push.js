@@ -29,10 +29,12 @@ $(function() {
 										senderID: "853777628192"
 									},
 									notificationCallbackIOS: function() {
-										
+										window.chat.cycle();
+										window.chat.show();
 									},
 									notificationCallbackAndroid: function() {
-										
+										window.chat.cycle();
+										window.chat.show();
 									}
 								}).then(
 									function () {

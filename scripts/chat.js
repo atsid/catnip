@@ -62,11 +62,16 @@ $(function() {
 			window.chat.timeout = window.setTimeout(window.chat.cycle, 5 * 60 * 1000); // check every 5 minutes
 		}
 		
+		window.chat.show = function() {
+			var drawer = $('#chat').data("kendoMobileDrawer");
+			if (drawer)
+				drawer.show();
+		}
 		window.chat.scrollToBottom = function() {
 			try {
 				var drawer = $('#chat').data("kendoMobileDrawer");
 				if (drawer)
-					drawer.scroller.scrollTo(0, drawer.scroller.dimensions.y.min);
+					drawer.scroller.animatedScrollTo(0, drawer.scroller.dimensions.y.min);
 			} catch (e) {
 				e.event = "Chat Drawer AutoScroll";
 				(pi||console).log(e);
@@ -100,6 +105,9 @@ $(function() {
 			});
 			drawer.bind("afterShow", function(e) {
 				window.chat.scrollToBottom();
+				this.element.find("#addMessage").focus();
+			}).bind("afterHide", function(e) {
+				this.element.find("#addMessage").blur();
 			});
 		}
 		
@@ -111,6 +119,13 @@ $(function() {
 				e.event = "Refresh Chat";
 				(pi||console).log(e);
 			}
+		});
+		
+		window.chat.bind("requestEnd", function(e) {
+			if (e.type === "read")
+				this.one("change", function(e) {
+					window.chat.scrollToBottom();
+				});
 		});
 		
 		// Login/Logout
