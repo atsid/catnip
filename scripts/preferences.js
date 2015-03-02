@@ -345,7 +345,7 @@ $(function() {
 							Food: "Brought",
 							sort: 0
 						});
-					} else if (daily.FoodCategories) {
+					} else if (daily.FoodCategories.length) {
 						daily.FoodCategories.forEach(function(id,index) {
 							var record = window.food.get(id);
 							if (record) {
