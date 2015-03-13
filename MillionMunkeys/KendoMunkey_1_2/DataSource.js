@@ -27,7 +27,8 @@ pi.data.DataSource = {
 		pi.data.DataSource.configureSchema(options);
 		pi.data.DataSource.configureModel(options);
 		// Call initial function
-		result = new kendo.data.DataSource(options);
+		// WARNING: We must use create() so that we get back a DataSource of the right type.
+		result = kendo.data.DataSource.create(options);
 		// CAUTION: Kendo uses the apply function to add options to an internal object.
 		// So we can only do this after instantiation when this internal object is finally made available to us.
 		result.options = pi.observable(result.options);

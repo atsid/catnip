@@ -7,10 +7,7 @@ configdb = pi.data.DataSource.create({
 	// storage : "localStorage",
 	default : {
 		id : "com.atsid.labs.lunch",
-		server : {
-			results : "https://catnip-ats.herokuapp.com/results"
-		},
-		version : "1.5.2",
+		version : "1.5.3",
 		everlive : {
 			apiKey : "1V7hKCv6hyKjyPUl",
 			scheme : "http"
@@ -25,6 +22,7 @@ configdb = pi.data.DataSource.create({
 // This call will fire the JIT handler for selected.
 config = configdb.options.get("selected");
 config.getToday = function() {
+	// Ran into a bug where if the app is loaded before midnight (GMT), and still running past midnight, dates get messed up.
 	var today = new Date().toSortString();
 	this.set("today", today);
 	return today;
