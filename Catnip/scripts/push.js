@@ -84,6 +84,7 @@ $(function() {
 															"Push" : {
 																"Chat" : window.myAccount.get("Chat")
 															},
+															"OptOut" : window.myPreferences ? window.myPreferences.get("OptOut") : false,
 															"LastLogin" : config.getToday(),
 															"LastRefresh" : new Date()
 														}, function(response) {

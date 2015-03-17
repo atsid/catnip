@@ -141,8 +141,21 @@
   top: 0.5em;
   border: 2px solid rgba(68, 68, 68, 0.2);
 }
-#chat .km-listview-wrapper .km-listview li .chatbubble.left {
+#chat .km-listview-wrapper .km-listview li .left .Avatar {
+  left: 0em;
+  right: auto;
+}
+#chat .km-listview-wrapper .km-listview li .left .chatbubble {
   margin: 0.5em 0em 0.5em 80px;
+}
+#chat .km-listview-wrapper .km-listview li .right .Avatar {
+  left: auto;
+  right: 0em;
+  top: auto;
+  bottom: 0em;
+}
+#chat .km-listview-wrapper .km-listview li .right .chatbubble {
+  margin: 0.5em 75px 0.5em 0.25em;
 }
 #chat .km-listview-wrapper .km-listview li .timestamp {
   font-size: 0.7em;
@@ -156,24 +169,34 @@
   position: absolute;
   bottom: 0em;
   left: 0.5em;
+  margin-left: 0.5em;
+  margin-right: 80px;
 }
-#chat .actions[data-align=right] {
-  margin-left: 80px;
-  margin-right: 0.5em;
-  position: absolute;
-  left: 0.5em;
-  bottom: 0em;
-}
-#chat .actions[data-align=right] .chatbubble {
+#chat .actions[data-align=left] .chatbubble {
   margin: 0em;
   height: 60px;
   margin-bottom: 0.5em;
 }
-#chat .actions[data-align=right] .chatbubble input,
-#chat .actions[data-align=right] .chatbubble select,
-#chat .actions[data-align=right] .chatbubble textarea {
+#chat .actions[data-align=left] .chatbubble input,
+#chat .actions[data-align=left] .chatbubble select,
+#chat .actions[data-align=left] .chatbubble textarea {
   background: transparent;
   border: none;
   font-size: 15px;
   width: 100%;
+}
+#chat .actions[data-align=right] {
+  position: absolute;
+  right: 0.5em;
+  bottom: 0em;
+}
+#chat .actions[data-align=right] .Avatar {
+  height: 30px;
+  line-height: 30px;
+  border-radius: 15px;
+  border-color: #f2f2f2;
+}
+#chat .actions[data-align=right] .Avatar .caption {
+  line-height: 30px;
+  font-size: 16px;
 }

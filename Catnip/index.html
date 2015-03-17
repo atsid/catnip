@@ -237,23 +237,23 @@
 		<div id="chat" data-role="drawer" data-position="right" data-init="window.chat.initView">
 			<div data-role="header"></div>
 			<div id="messages" data-role="listview" data-source="chat">
-				<div class="Avatar round #=Owner?Owner.Photo?'image':'':''#" data-role="button">
-					<div class="caption">#=Owner?Owner.Initials:'L?'#</div>
-					<img src="#=Owner?Owner.Photo?Owner.Photo.Uri:'':''#" />
+				<div class="#=Owner?(Owner.Id===window.myAccount.Id)?'right':'left':'left'#">
+					<div class="Avatar round #=Owner?Owner.Photo?'image':'':''#" data-role="button">
+						<div class="caption">#=Owner?Owner.Initials:'L?'#</div>
+						<img src="#=Owner?Owner.Photo?Owner.Photo.Uri:'':''#" />
+					</div>
+					<div class="chatbubble">#=Message#</div>
+					<div class="timestamp">#=CreatedAt.constructor==Date?CreatedAt.toLocaleTimeString():''#</div>
 				</div>
-				<div class="chatbubble left">#=Message#</div>
-				<div class="timestamp">#=CreatedAt.constructor==Date?CreatedAt.toLocaleTimeString():''#</div>
 			</div>
 			<div data-role="footer">
 				<div class="actions" data-align="left">
-					<form class="MyAccount" data-source="account">
-						<button class="Avatar round" data-role="button" href="#results">
-							<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo.Uri }" />
-						</button>
-					</form>
+					<div class="chatbubble right"><textarea id="addMessage" name="Message" placeholder="Enter your message"></textarea></div>
 				</div>
 				<div class="actions" data-align="right">
-					<div class="chatbubble left"><textarea id="addMessage" name="Message" placeholder="Enter your message"></textarea></div>
+					<button class="Avatar round" data-role="button">
+						<span class="caption">Send</span>
+					</button>
 				</div>
 			</div>
 		</div>
