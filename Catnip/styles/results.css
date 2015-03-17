@@ -204,3 +204,8 @@
   font-size: 0.8em;
   text-align: center;
 }
+.km-android #results .km-footer .actions .km-button .chatbubble {
+  line-height: 1.3em;
+  height: 1.5em;
+  min-height: 1em;
+}

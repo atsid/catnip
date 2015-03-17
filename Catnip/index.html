@@ -242,7 +242,7 @@
 						<div class="caption">#=Owner?Owner.Initials:'L?'#</div>
 						<img src="#=Owner?Owner.Photo?Owner.Photo.Uri:'':''#" />
 					</div>
-					<div class="chatbubble">#=Message#</div>
+					<div class="chatbubble #=Owner?(Owner.Id===window.myAccount.Id)?'right':'left':'left'#">#=Message#</div>
 					<div class="timestamp">#=CreatedAt.constructor==Date?CreatedAt.toLocaleTimeString():''#</div>
 				</div>
 			</div>

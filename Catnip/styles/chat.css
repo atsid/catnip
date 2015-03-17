@@ -146,7 +146,12 @@
   right: auto;
 }
 #chat .km-listview-wrapper .km-listview li .left .chatbubble {
-  margin: 0.5em 0em 0.5em 80px;
+  margin: 0.5em 0.25em 0.5em 60px;
+}
+@media (min-width: 370px) {
+  #chat .km-listview-wrapper .km-listview li .left .chatbubble {
+    margin: 0.5em 0.25em 0.5em 75px;
+  }
 }
 #chat .km-listview-wrapper .km-listview li .right .Avatar {
   left: auto;
@@ -155,7 +160,12 @@
   bottom: 0em;
 }
 #chat .km-listview-wrapper .km-listview li .right .chatbubble {
-  margin: 0.5em 75px 0.5em 0.25em;
+  margin: 0.5em 60px 0.5em 0.25em;
+}
+@media (min-width: 370px) {
+  #chat .km-listview-wrapper .km-listview li .right .chatbubble {
+    margin: 0.5em 75px 0.5em 0.25em;
+  }
 }
 #chat .km-listview-wrapper .km-listview li .timestamp {
   font-size: 0.7em;
