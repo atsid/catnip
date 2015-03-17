@@ -28,13 +28,21 @@ $(function() {
 									android: {
 										senderID: "853777628192"
 									},
-									notificationCallbackIOS: function() {
-										window.chat.cycle();
-										window.chat.show();
+									notificationCallbackIOS: function(e) {
+										if (e.category === "chat") {
+											window.chat.cycle();
+											window.chat.show();
+										} else {
+											window.preferences.cycle();
+										}
 									},
-									notificationCallbackAndroid: function() {
-										window.chat.cycle();
-										window.chat.show();
+									notificationCallbackAndroid: function(e) {
+										if (e.payload.category === "chat") {
+											window.chat.cycle();
+											window.chat.show();
+										} else {
+											window.preferences.cycle();
+										}
 									}
 								}).then(
 									function () {
