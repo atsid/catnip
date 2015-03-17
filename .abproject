@@ -15,13 +15,13 @@
   ],
   "iOSStatusBarStyle": "Default",
   "AndroidHardwareAcceleration": "True",
-  "BundleVersion": "1.5.3",
+  "BundleVersion": "1.5.4",
   "iOSDisplayName": "",
   "iOSDeviceFamily": [
     "1",
     "2"
   ],
-  "AndroidVersionCode": "19",
+  "AndroidVersionCode": "20",
   "CorePlugins": [
     "com.phonegap.plugins.PushPlugin",
     "org.apache.cordova.camera",

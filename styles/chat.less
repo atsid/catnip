@@ -150,8 +150,25 @@
 					top: 0.5em;
 					border: 2px solid rgba(68, 68, 68, 0.2);
 				}
-				.chatbubble.left {
-					margin: 0.5em 0em 0.5em 80px;
+				.left {
+					.Avatar {
+						left: 0em;
+						right: auto;
+					}
+					.chatbubble {
+						margin: 0.5em 0em 0.5em 80px;
+					}
+				}
+				.right {
+					.Avatar {
+						left: auto;
+						right: 0em;
+						top: auto;
+						bottom: 0em;
+					}
+					.chatbubble {
+						margin: 0.5em 75px 0.5em 0.25em;
+					}
 				}
 				.timestamp {
 					font-size: 0.7em;
@@ -170,13 +187,8 @@
 		position: absolute;
 		bottom: 0em;
 		left: 0.5em;
-	}
-	.actions[data-align=right] {
-		margin-left: 80px;
-		margin-right: 0.5em;
-		position: absolute;
-		left: 0.5em;
-		bottom: 0em;
+		margin-left: 0.5em;
+		margin-right: 80px;
 		
 		.chatbubble {
 			margin: 0em;
@@ -188,6 +200,23 @@
 				border: none;
 				font-size: 15px;
 				width: 100%;
+			}
+		}
+	}
+	.actions[data-align=right] {
+		position: absolute;
+		right: 0.5em;
+		bottom: 0em;
+		
+		.Avatar {
+			height: 30px;
+			line-height: 30px;
+			border-radius: 15px;
+			border-color: #f2f2f2;
+			
+			.caption {
+				line-height: 30px;
+				font-size: 16px;
 			}
 		}
 	}

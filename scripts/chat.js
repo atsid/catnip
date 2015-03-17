@@ -80,26 +80,25 @@ $(function() {
 		window.chat.initView = function(e) {
 			var drawer = e.sender;
 			drawer.one("show", function(e) {
-				this.element.find('#addMessage').bind("keyup", function(e) {
-					if (e.keyCode === 13) {
-						try {
-							var createdAt = new Date();
-							window.chat.add({
-								'Owner' : window.myAccount,
-								'Message' : $(this).val().replace("\n",""),
-								// WARNING: If there's a server interruption, plan for window.myPreferences temporarily not existing.
-								'Date' : window.myPreferences ? window.myPreferences.get("Date") : config.getToday(),
-								'Group' : window.myPreferences ? window.myPreferences.get("Group") : window.myAccount.get("Groups")[0],
-								'TimezoneOffset': createdAt.getTimezoneOffset(),
-								'CreatedAt' : createdAt
-							});
-							window.chat.scrollToBottom();
-							window.chat.sync();
-							$(this).val("");
-						} catch(e) {
-							e.event = "Create Chat Message";
-							(pi||console).log(e);
-						}
+				var $message = this.element.find('#addMessage');
+				this.element.find('.km-footer button').bind("click", function(e) {
+					try {
+						var createdAt = new Date();
+						window.chat.add({
+							'Owner' : window.myAccount,
+							'Message' : $message.val(),
+							// WARNING: If there's a server interruption, plan for window.myPreferences temporarily not existing.
+							'Date' : window.myPreferences ? window.myPreferences.get("Date") : config.getToday(),
+							'Group' : window.myPreferences ? window.myPreferences.get("Group") : window.myAccount.get("Groups")[0],
+							'TimezoneOffset': createdAt.getTimezoneOffset(),
+							'CreatedAt' : createdAt
+						});
+						window.chat.scrollToBottom();
+						window.chat.sync();
+						$message.val("");
+					} catch(e) {
+						e.event = "Create Chat Message";
+						(pi||console).log(e);
 					}
 				});
 			});

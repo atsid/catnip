@@ -7,7 +7,7 @@ configdb = pi.data.DataSource.create({
 	// storage : "localStorage",
 	default : {
 		id : "com.atsid.labs.lunch",
-		version : "1.5.3",
+		version : "1.5.4",
 		everlive : {
 			apiKey : "1V7hKCv6hyKjyPUl",
 			scheme : "http"
