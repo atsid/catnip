@@ -41,6 +41,7 @@
     	<script src="MillionMunkeys/KendoMunkey_1_2/ListView.js"></script>
     	<script src="MillionMunkeys/KendoMunkey_1_2/Grid.js"></script>
     	<script src="MillionMunkeys/KendoMunkey_1_2/Touch.js"></script>
+    	<script src="MillionMunkeys/KendoMunkey_1_2/Scroller.js"></script>
 		<script src="MillionMunkeys/KendoMunkey_1_2/File.js"></script>
 		
         <!-- Less.js 
@@ -236,7 +237,7 @@
 		</div>
 		<div id="chat" data-role="drawer" data-position="right" data-init="window.chat.initView">
 			<div data-role="header"></div>
-			<div id="messages" data-role="listview" data-source="chat">
+			<div id="messages" data-role="listview" data-source="chat" data-pull-to-refresh="true" data-pull-offset="-140">
 				<div class="#=Owner?(Owner.Id===window.myAccount.Id)?'right':'left':'left'#">
 					<div class="Avatar round #=Owner?Owner.Photo?'image':'':''#" data-role="button">
 						<div class="caption">#=Owner?Owner.Initials:'L?'#</div>

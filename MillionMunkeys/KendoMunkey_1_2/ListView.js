@@ -10,6 +10,13 @@ kendo.mobile.ui.ListView = pi.mobile.ui.ListView.extend({
 		pi.ui.Widget.attributeOptions.apply(this,arguments);
         this._configure(element,options);
 		pi.mobile.ui.ListView.fn.init.apply(this,arguments);
+		// It's not documented, but ListView accepts a pullOffset options value.  It just doesn't pass it to the Scroller.
+		if (this.options.pullOffset < 0) {
+			this._scrollerInstance.setOptions({
+				pullToRefresh: this.options.pullToRefresh, // pullToRefresh must exist to set pullOffset!
+				pullOffset: this.options.pullOffset
+			})
+		}
     },
     _configure : function(element,options) {
         if (typeof(options.dataSource) == "undefined" || typeof(options.template) != "undefined")
