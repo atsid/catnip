@@ -23,12 +23,13 @@ kendo.mobile.ui.Scroller = pi.mobile.ui.Scroller.extend({
 		var that = this;
 		pi.mobile.ui.Scroller.fn._paneChange.apply(that,arguments);
 		var OUT_OF_BOUNDS_FRICTION = 0.5;
-		if (that.options.pullOffset < 0 && ( that.movable.y / OUT_OF_BOUNDS_FRICTION < that.options.pullOffset )) {
-			if (!that.pulled) {
-				that.pulled = true;
+		if (that.options.pullOffset < 0) {
+			if ( that.movable.y / OUT_OF_BOUNDS_FRICTION < that.options.pullOffset ) {
+				if (!that.pulled)
+					that.pulled = true;
+			} else if (that.pulled) {
+				that.pulled = false;
 			}
-		} else if (that.pulled) {
-			that.pulled = false;
 		}
 	}
 });
