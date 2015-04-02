@@ -68,14 +68,14 @@ pi.data.DataSource = {
 								type : "GET"
 							}
 							break;
-						case "create":
+						case "update":
 						case "put":
 							options.transport.create = {
 								url : options.source,
 								type : "PUT"
 							}
 							break;
-						case "update":
+						case "create":
 						case "post":
 							options.transport.update = {
 								url : options.source,

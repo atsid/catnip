@@ -71,20 +71,31 @@ $(function() {
 			serverFiltering: false,
 			expand: { User: true },
 			error: function(e) {
-				if (e.xhr && e.xhr.status === 403)
-					return;
-				if (e.xhr && e.xhr.status === 404) {
-					// Bad record; start over.
-					window.preferences.reset();
-					window.preferences.migratePreferences();
-					window.preferences.read();
-				} else {
-					(pi||console).log({
-						type: "error",
-						message: e.status + ": " + e.errorThrown,
-						status: e.status
-					});
-				}
+				if (e.xhr)
+					switch (e.xhr.status) {
+						case 403:
+							// ignore
+							return;
+						case 303:
+						case 404:
+							// Bad record; start over.
+							delete window.myPreferences;
+							window.preferences.reset();
+							window.preferences.migratePreferences();
+							window.preferences.read();
+							return; // don't display
+						default:
+							var response = JSON.parse(e.xhr.responseText);
+							response.status = e.xhr.status;
+							response.statusText = e.xhr.statusText
+							e = response;
+							break;
+					}
+				(pi||console).log({
+					type: "error",
+					message: (e.message && e.message.length) ? e.message : (e.status + ": " + e.statusText),
+					status: e.status
+				});
 			},
 			change: function(e) {
 				try {
@@ -258,7 +269,9 @@ $(function() {
 		}
 		window.preferences.myPreferences = function(e) {
 			try{
-				if (e.action !== "itemchange" && e.items) {
+				// CAUTION: This handler is only added after a RequestEnd with a sync action, so there is no "itemchange" action.
+				// NOTE: We want to process this code block, even if the item count is zero.
+				if (e.items) {
 					this.unbind("change", window.preferences.myPreferences);
 					// WARNING: Don't use filter because even local filter fires requestEnd for an endless loop!
 					// this.filter({field:"User.Id",operator:"eq",value:window.myAccount.get("Id")});
@@ -282,7 +295,11 @@ $(function() {
 								this._destroyed.pop();
 						} else {
 							// Don't try to destroy local records on the server!
-							this._destroyed.empty();
+							// WARNING: Mobile Safari doesn't have the empty() function for Arrays!
+							if (this._destroyed.empty)
+								this._destroyed.empty();
+							else while (this._destroyed.length)
+								this._destroyed.pop();
 						}
 						// WARNING: This must come AFTER removing serverPreferences.
 						// There is a bug where the timestamp on the server is less by milliseconds until the next GET.
@@ -345,7 +362,7 @@ $(function() {
 							Food: "Brought",
 							sort: 0
 						});
-					} else if (daily.FoodCategories.length) {
+					} else if (daily.FoodCategories && daily.FoodCategories.length) {
 						daily.FoodCategories.forEach(function(id,index) {
 							var record = window.food.get(id);
 							if (record) {

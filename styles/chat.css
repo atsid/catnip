@@ -108,6 +108,7 @@
   padding-top: 10px;
   padding-right: 0.5em;
   max-height: 100%;
+  width: 100%;
   box-sizing: border-box;
 }
 #chat .km-content .km-scroll-container {
@@ -186,6 +187,7 @@
   margin: 0em;
   height: 60px;
   margin-bottom: 0.5em;
+  padding: 0.5em 0.5em;
 }
 #chat .actions[data-align=left] .chatbubble input,
 #chat .actions[data-align=left] .chatbubble select,
