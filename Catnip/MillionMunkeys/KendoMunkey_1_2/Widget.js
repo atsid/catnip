@@ -80,6 +80,10 @@ pi.ui.Widget = {
 					return result;
 			}
 		}
+		if (value === "false")
+			value = false;
+		else if (value === "true")
+			value = true;
 		return value;
     }
 };

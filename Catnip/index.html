@@ -248,14 +248,17 @@
 				</div>
 			</div>
 			<div data-role="footer">
-				<div class="actions" data-align="left">
-					<div class="chatbubble right"><textarea id="addMessage" name="Message" placeholder="Enter your message"></textarea></div>
-				</div>
-				<div class="actions" data-align="right">
-					<button class="Avatar round" data-role="button">
-						<span class="caption">Send</span>
-					</button>
-				</div>
+				<form id="newChat" method="post" data-source="window.chat" data-validate-on-blur="false">
+					<div class="actions" data-align="left">
+						<div class="chatbubble right"><textarea id="addMessage" name="Message" placeholder="Enter your message" required="true"></textarea></div>
+					</div>
+					<div class="actions" data-align="right">
+						<!-- WARNING: This can't be a kendo button, or else it won't trigger a form submit! -->
+						<button type="submit" class="Avatar round">
+							<span class="caption">Send</span>
+						</button>
+					</div>
+				</form>
 			</div>
 		</div>
 		
