@@ -36,6 +36,15 @@ $(function() {
 					}
 				}
 			},
+			change: function(e) {
+				if (e.action === "add") {
+					e.items[0].set("Owner", window.myAccount);
+					e.items[0].set("Date", window.myPreferences ? window.myPreferences.get("Date") : config.getToday());
+					e.items[0].set("Group", window.myPreferences ? window.myPreferences.get("Group") : window.myAccount.get("Groups")[0]);
+					e.items[0].set("TimezoneOffset", new Date().getTimezoneOffset());
+					e.items[0].set("CreatedAt", new Date());
+				}
+			},
 			debug: false,
 			serverFiltering: false,
 			expand: { 
@@ -80,22 +89,16 @@ $(function() {
 		window.chat.initView = function(e) {
 			var drawer = e.sender;
 			drawer.one("show", function(e) {
+				// CAUTION: We have to add this manually.  Whenever window.chat is refreshed, it resets options.selected.
 				var $message = this.element.find('#addMessage');
 				this.element.find('.km-footer button').bind("click", function(e) {
 					try {
-						var createdAt = new Date();
-						window.chat.add({
-							'Owner' : window.myAccount,
-							'Message' : $message.val(),
-							// WARNING: If there's a server interruption, plan for window.myPreferences temporarily not existing.
-							'Date' : window.myPreferences ? window.myPreferences.get("Date") : config.getToday(),
-							'Group' : window.myPreferences ? window.myPreferences.get("Group") : window.myAccount.get("Groups")[0],
-							'TimezoneOffset': createdAt.getTimezoneOffset(),
-							'CreatedAt' : createdAt
-						});
-						window.chat.scrollToBottom();
-						window.chat.sync();
-						$message.val("");
+						if ($message.val().length) {
+							window.chat.add({ 'Message' : $message.val() });
+							window.chat.scrollToBottom();
+							window.chat.sync();
+							$message.val("");
+						}
 					} catch(e) {
 						e.event = "Create Chat Message";
 						(pi||console).log(e);
