@@ -1,5 +1,6 @@
 $(function() {
 	try {
+		/*
 		$("#map").kendoMap({
 			center: [35.2681, -97.7448],
 			zoom: ($(window).width() >= 768) ? 4 :  ($(window).width() >= 500) ? 3.5 : 3,
@@ -18,6 +19,7 @@ $(function() {
 				}
 			}]
 		});
+		*/
 		
 		window.results = pi.data.DataSource.create({
 			group: {
