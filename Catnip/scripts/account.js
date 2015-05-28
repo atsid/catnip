@@ -28,6 +28,7 @@ $(function() {
 				"Email" : "",
 				"Password" : "",
 				"Push" : true,
+				"Chat" : true,
 				"access_token" : "" // required blank value to kick of default navigation.
 			}
 		});
@@ -75,12 +76,12 @@ $(function() {
 				if (window.myAccount)
 					return [
 						{field: 'User.Id', operator: 'eq', value: window.myAccount.get("Id") || ""},
-						{field: 'Date', operator: 'eq', value: config.get("today")}
+						{field: 'Date', operator: 'eq', value: config.getToday()}
 					].concat(filter);
 				else
 					return [
 						{field: 'User.Id', operator: 'eq', value: ""},
-						{field: 'Date', operator: 'eq', value: config.get("today")}
+						{field: 'Date', operator: 'eq', value: config.getToday()}
 					].concat(filter);
 			} catch(e) {
 				e.event = "Get Account Filter";
@@ -122,6 +123,16 @@ $(function() {
 					// Now refresh the latest updates from the server
 					window.account.read();
 					window.groups.read();
+				});
+				
+				window.account.bind("change", function(e) {
+					if (e.field === "Push" && e.items[0] === window.myAccount) {
+						var enabled = window.myAccount.get("Push");
+						$('#Profile .Push.Sub input').each(function(index, element) {
+							var mySwitch = $(element).data("kendoMobileSwitch");
+							if (mySwitch) mySwitch.enable(enabled);
+						});
+					}
 				});
 			} catch(e) {
 				e.event = "Initialize Profile View";

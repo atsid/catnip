@@ -6,8 +6,18 @@ kendo.ui.Validator = pi.ui.Validator.extend({
 		$(element).removeAttr('data-role'); // Having a data-role attribute screws up binding to the selected record.
 		options = options || {};
 		pi.ui.List.init.call(this,element,options);
+		// WARNING: The DOM model for the <form> tag doesn't list method in the Attributes structure in Safari!!
+		// It's a property directly off of the DOMElement.
+		if (!options.method && options.dataSource)
+			options.method = element.method || "get,put,post,delete";
 		pi.ui.Validator.fn.init.call(this,element,options);
-		options = this.options;
+		// If POST only use an unattached model to be added later (so we don't submit it too early).
+		if ((this.options.dataSource instanceof kendo.data.DataSource) && this.options.method === "post") {
+			var newModel = this.options.dataSource.add({});
+			this.options.dataSource.remove(newModel);
+			this.options.dataSource.options.set("selected", newModel);
+		}
+		options = this.options; // Store options first
 		if (this.options.autoBind != "false") {
 			this.bindValues(this.element,this.options);
 			this.configureSelected(this.element,this.options);
@@ -21,8 +31,9 @@ kendo.ui.Validator = pi.ui.Validator.extend({
 	},
 	bindValues : function(element,options) {
 		if (!this.options.dataSource) return;
+		var $this = $(element);
 		// Auto-setup data-binding
-		$(element).find(':input[name],:input[data-name],div[data-name],span[data-name]').each(function(index,element){
+		$this.find(':input[name],:input[data-name],div[data-name],span[data-name]').each(function(index,element){
 			var element = $(element);
 			if (!element.attr('data-bind')) {
 				var name = (element.attr('data-name') || element.attr('name')),
@@ -108,12 +119,25 @@ $(function() {
 						});
 					}
 					*/
-					switch ($this.attr("method")) {
+					switch (validator.options.method) {
+						// POST only
+						case "post":
+							var newModel = validator.options.dataSource.options.get("selected");
+							if (typeof(newModel) === "object" && newModel.dirty) {
+								validator.options.dataSource.add(newModel);
+								var newModel = validator.options.dataSource.add({});
+								validator.options.dataSource.remove(newModel);
+								validator.options.dataSource.options.set("selected", newModel);
+								validator.options.dataSource.sync();
+							}
+							break;
+						// GET only
 						case "get":
 							// CAUTION: For some reason it gets stuck, and every request after the first wouldn't run.
 							validator.options.dataSource._dequeueRequest();
 							validator.options.dataSource.read();
 							break;
+						// DELETE only
 						case "delete":
 							validator.options.dataSource.remove( validator.options.dataSource.options.get("selected") );
 							/*
@@ -129,6 +153,7 @@ $(function() {
 							}
 							*/
 							// CAUTION: no break; fall through!
+						// Any Other combination, e.g. "get,post" "get,put,delete"
 						default:
 							if (validator.options.dataSource.hasChanges())
 								validator.options.dataSource.sync();

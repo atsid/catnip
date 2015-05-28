@@ -5,7 +5,8 @@ $(function() {
 			method: "get",
 			source: "Everlive.Groups",
 			storage: "localStorage",
-			serverFiltering: true
+			serverFiltering: true,
+			defaultSelected: "first"
 		});
 		window.groups.bind("error", window.account.forbidden);
 		

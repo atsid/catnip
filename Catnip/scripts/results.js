@@ -1,5 +1,6 @@
 $(function() {
 	try {
+		/*
 		$("#map").kendoMap({
 			center: [35.2681, -97.7448],
 			zoom: ($(window).width() >= 768) ? 4 :  ($(window).width() >= 500) ? 3.5 : 3,
@@ -18,6 +19,7 @@ $(function() {
 				}
 			}]
 		});
+		*/
 		
 		window.results = pi.data.DataSource.create({
 			group: {
@@ -107,24 +109,48 @@ $(function() {
 								window.results.showTab(true);
 						}
 					}).trigger("change", { field: "disabled" });
-					$('.all-groups').kendoGrid({
+					var grid = $('.all-groups').kendoGrid({
 						dataSource : window.results,
 						columns : [
 							{ field: "Food", title: "", hidden:true, aggregate: ["count"], groupHeaderTemplate: "#=value# #=aggregates.Preference.sum?'('+aggregates.Preference.sum+' preferred)':''#" },
-							{ field: "DisplayName", title: "Name", width: "30%" },
-							{ field: "utc1530", title: "&nbsp;", width: "6%", attributes: {class: "#=data.Food# #=data.utc1530#"} },
-							{ field: "utc1600", title: "11a", width: "6%", attributes: {class: "#=data.Food# #=data.utc1600#"} },
-							{ field: "utc1630", title: "&nbsp;", width: "6%", attributes: {class: "#=data.Food# #=data.utc1630#"} },
-							{ field: "utc1700", title: "12p", width: "6%", attributes: {class: "#=data.Food# #=data.utc1700#"} },
-							{ field: "utc1730", title: "&nbsp;", width: "6%", attributes: {class: "#=data.Food# #=data.utc1730#"} },
-							{ field: "utc1800", title: "1p", width: "6%", attributes: {class: "#=data.Food# #=data.utc1800#"} },
-							{ field: "utc1830", title: "&nbsp;", width: "6%", attributes: {class: "#=data.Food# #=data.utc1830#"} },
-							{ field: "utc1900", title: "2p", width: "6%", attributes: {class: "#=data.Food# #=data.utc1900#"} },
-							{ field: "utc1930", title: "&nbsp;", width: "6%", attributes: {class: "#=data.Food# #=data.utc1930#"} },
-							{ field: "utc2000", title: "3p", width: "6%", attributes: {class: "#=data.Food# #=data.utc2000#"} },
-							{ field: "utc2030", title: "&nbsp;", width: "6%", attributes: {class: "#=data.Food# #=data.utc2030#"} },
+							{ field: "DisplayName", title: "Name", width: "30%" }
 						]
-					});
+					}).data("kendoGrid");
+					window.groups.options.bind("change", function(e) {
+						// CAUTION: Columns are decided by the group
+						var group = this.get(e.field),
+							StartTimeCode = 1030,
+							EndTimeCode = 1600,
+							TimeZoneOffset = (window.myPreferences ? window.myPreferences.get("TimezoneOffset") : new Date().getTimezoneOffset()),
+							TimeCodeOffset = (TimeZoneOffset / 60 * 100) + (TimeZoneOffset%60),
+							columns = [
+								{ field: "Food", title: "", hidden:true, aggregate: ["count"], groupHeaderTemplate: "#=value# #=aggregates.Preference.sum?'('+aggregates.Preference.sum+' preferred)':''#" },
+								{ field: "DisplayName", title: "Name", width: "30%" }
+							];
+						if (e.field === "selected") {
+							if (typeof(group) === "object") {
+								StartTimeCode = parseInt(group.get("StartTimeCode")) || StartTimeCode;
+								EndTimeCode = parseInt(group.get("EndTimeCode")) || EndTimeCode;
+								for (var timecode = StartTimeCode, utcTimecode, hour, hourString; timecode < EndTimeCode; timecode = (timecode%100) ? timecode+=70 : timecode+=30) {
+									utcTimecode = timecode + TimeCodeOffset;
+									hour = Math.floor(timecode/100);
+									hourString = (hour%12 || 12).toString() + ((hour<12) ? "a" : "p");
+									columns.push({
+										field: "utc"+utcTimecode, 
+										title: (timecode%100) ? "&nbsp;" : hourString, 
+										width: "6%", 
+										attributes: {
+											class: "#=data.Food# #=data.utc"+utcTimecode+"#"
+										}
+									});
+								}
+							}
+							grid.setOptions({
+								dataSource : window.results,
+								columns : columns
+							});
+						}
+					}).trigger("change", { field: "selected" });
 					window.results.bind("change", function(e) {
 						if (!this.view().length)
 							$(".all-groups .k-grid-content tbody").empty().append('<tr><td colspan="13">Nothing yet.</td></tr>');
