@@ -62,6 +62,34 @@
 			margin: 10px 0.25em 20px;
 			text-align: center;
 			
+			#week {
+				margin: 0em auto 1em;
+				width: 95%;
+				border-collapse: collapse;
+				
+				td, th {
+					width: 6%;
+					border-bottom: 1px solid #e5e5e5;
+				}
+				th[data-title=Name] {
+					width: 30%;
+				}
+				
+				thead th {
+					border-right: 1px solid #e5e5e5;
+				}
+				tbody th, tbody td {
+					border-right: 1px solid #e5e5e5;
+				}
+				
+				.today {
+					th, td:not(.available) {
+						background-color: rgba(255, 255, 255, 0.95);
+						color: #3f51b5;
+					}
+				}
+			}
+			
 			li.start, li.end, li.optout, li.brought {
 					width: 49%;
 					display: inline-block;
@@ -179,7 +207,7 @@
 	}
 }
 
-.all-groups {
+.k-grid {
 	.k-grid-header th.k-header {
 		overflow: visible;
 	}
@@ -197,7 +225,7 @@
 			overflow: hidden;
 		}
 		&.available {
-			background-color: rgba(63, 81, 181, 0.5);
+			background-color: rgba(192,192,192,0.75);
 			text-indent: -999px;
 			overflow: hidden;
 		}
