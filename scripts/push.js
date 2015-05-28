@@ -15,7 +15,10 @@ $(function() {
 								// this is what invokes the PushPlugin 
 								device.enableNotifications({
 									customParamters: {
-										Groups: e.items[0].Groups
+										Groups: window.myAccount.Groups,
+										Push: {
+											Chat: window.myAccount.get("Chat")
+										}
 									},
 									iOS: {
 										badge: "true",
@@ -25,11 +28,21 @@ $(function() {
 									android: {
 										senderID: "853777628192"
 									},
-									notificationCallbackIOS: function() {
-										
+									notificationCallbackIOS: function(e) {
+										if (e.category === "chat") {
+											window.chat.cycle();
+											window.chat.show();
+										} else {
+											window.preferences.cycle();
+										}
 									},
-									notificationCallbackAndroid: function() {
-										
+									notificationCallbackAndroid: function(e) {
+										if (e.payload.category === "chat") {
+											window.chat.cycle();
+											window.chat.show();
+										} else {
+											window.preferences.cycle();
+										}
 									}
 								}).then(
 									function () {
@@ -76,7 +89,11 @@ $(function() {
 													case "update":
 														Everlive.$.push.updateRegistration({
 															"Groups" : window.myAccount.get("Groups"),
-															"LastLogin" : config.get("today"),
+															"Push" : {
+																"Chat" : window.myAccount.get("Chat")
+															},
+															"OptOut" : window.myPreferences ? window.myPreferences.get("OptOut") : false,
+															"LastLogin" : config.getToday(),
 															"LastRefresh" : new Date()
 														}, function(response) {
 															// (pi||console).log("Updated Push Notification Registration");
@@ -124,7 +141,7 @@ $(function() {
 								(pi||console).log("Update Push Notification Triggered");
 								Everlive.$.push.updateRegistration({
 									"Groups" : window.myAccount.get("Groups"),
-									"LastLogin" : config.get("today")
+									"LastLogin" : config.getToday()
 								}, function(response) {
 									var response = response;
 									(pi||console).log("Updated Push Notification Registration");

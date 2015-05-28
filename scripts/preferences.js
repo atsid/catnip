@@ -1,18 +1,21 @@
+// Initialize variables
+Date.prototype.setTimeString = function(timeString) {
+	var time = timeString.split(":");
+	this.setHours(time[0]);
+	this.setMinutes(time[1]);
+	this.setSeconds(0);
+	this.setMilliseconds(0);
+	return this;
+}
+Date.prototype.getTimeString = function() {
+	return ("0"+this.getHours()).substr(-2) + ":" + ("0"+this.getMinutes()).substr(-2) + ":" + ("0"+this.getSeconds()).substr(-2);
+}
+Date.prototype.getUTCTimeCode = function() {
+	return ("0"+this.getUTCHours()).substr(-2) + ("0"+this.getUTCMinutes()).substr(-2);
+}
+
 $(function() {
 	try {
-		// Initialize variables
-		Date.prototype.setTimeString = function(timeString) {
-			var time = timeString.split(":");
-			this.setHours(time[0]);
-			this.setMinutes(time[1]);
-			this.setSeconds(0);
-			this.setMilliseconds(0);
-			return this;
-		}
-		Date.prototype.getUTCTimeCode = function() {
-			return ("0"+this.getUTCHours()).substr(-2) + ("0"+this.getUTCMinutes()).substr(-2);
-		}
-		
 		// Override TimePicker functionality
 		var TimePicker = kendo.ui.TimePicker;
 		kendo.ui.TimePicker = TimePicker.extend({
@@ -38,14 +41,15 @@ $(function() {
 				read: {
 					beforeSend: function(xhr) {
 						try {
-						xhr.setRequestHeader("X-Everlive-Filter",JSON.stringify({
-								Date : config.get("today"),
-								Group : window.myPreferences.get("Group") || window.myAccount.get("Groups")[0]
-						}));
+							xhr.setRequestHeader("X-Everlive-Filter",JSON.stringify({
+								// WARNING: If there's a server interruption, plan for window.myPreferences temporarily not existing.
+								Date : window.myPreferences.get("Date") || config.getToday(),
+								Group : window.myPreferences ? window.myPreferences.get("Group") : window.myAccount.get("Groups")[0]
+							}));
 						} catch(e) {
 							e.event = "Adding Preferences Filter";
 							(pi||console).log(e);
-					}
+						}
 					}
 				},
 				create: {
@@ -67,11 +71,29 @@ $(function() {
 			serverFiltering: false,
 			expand: { User: true },
 			error: function(e) {
-				if (e.xhr && e.xhr.status === 403)
-					return;
+				if (e.xhr)
+					switch (e.xhr.status) {
+						case 403:
+							// ignore
+							return;
+						case 303:
+						case 404:
+							// Bad record; start over.
+							delete window.myPreferences;
+							window.preferences.reset();
+							window.preferences.migratePreferences();
+							window.preferences.read();
+							return; // don't display
+						default:
+							var response = JSON.parse(e.xhr.responseText);
+							response.status = e.xhr.status;
+							response.statusText = e.xhr.statusText
+							e = response;
+							break;
+					}
 				(pi||console).log({
 					type: "error",
-					message: e.errorThrown,
+					message: (e.message && e.message.length) ? e.message : (e.status + ": " + e.statusText),
 					status: e.status
 				});
 			},
@@ -89,6 +111,8 @@ $(function() {
 								break;
 							case "StartTime":
 								e.items.forEach(function(item, index) {
+									// Update Time Zone
+									item.set("TimezoneOffset", item.StartTime.getTimezoneOffset());
 									// Update time code
 									item.set("StartTimeCode", item.StartTime.getUTCTimeCode());
 									// Make sure end time is after start time
@@ -107,6 +131,9 @@ $(function() {
 								break;
 							case "EndTime":
 								e.items.forEach(function(item, index) {
+									// Update Time Zone
+									item.set("TimezoneOffset", item.StartTime.getTimezoneOffset());
+									// Update time code
 									item.set("EndTimeCode", item.EndTime.getUTCTimeCode());
 									item.ModifiedAt = new Date();
 								});
@@ -196,9 +223,56 @@ $(function() {
 			if (window.myAccount && window.myAccount.Id && e.type === "read")
 				this.bind("change", window.preferences.myPreferences);
 		});
+		window.preferences.migratePreferences = function() {
+			try {
+				if (window.myPreferences) {
+					if (window.myPreferences.Date !== config.getToday()) {
+						// If defaulting to yesterday's preferences, update the Date field, and clear 'Id' to fire the create method.
+						var startTime = new Date(), endTime = new Date();
+							startTime.setHours(window.myPreferences.StartTime.getHours(), window.myPreferences.StartTime.getMinutes(), 0, 0);
+							endTime.setHours(window.myPreferences.EndTime.getHours(), window.myPreferences.EndTime.getMinutes(), 0, 0);
+						window.myPreferences.Group = (typeof(window.groups.options.selected) === "object") ? window.groups.options.selected.Id : window.myAccount.get("Groups")[0],
+						window.myPreferences.Date = config.getToday();
+						window.myPreferences.OptOut = true; // Default to "out" so people have to input an answer.
+						window.myPreferences.CreatedAt = null; // WARNING: Don't set these during creation!!
+						window.myPreferences.ModifiedAt = null; // WARNING: Don't set these during creation!!
+						window.myPreferences.StartTime = startTime;
+						window.myPreferences.EndTime = endTime;
+						window.myPreferences.TimezoneOffset = startTime.getTimezoneOffset();
+						window.myPreferences.Id = "";
+						window.myPreferences.id = "";
+						// WARNING: Don't forget to wipe out all of yesterday's data for other people!
+						window.preferences.reset([window.myPreferences]);
+					}
+				} else {
+					// NOTE: If we haven't logged in yet today, we'll create one, then save it.
+					var startTime = (new Date()).setTimeString($('#dailyprefs input[name=StartTime]').attr('min')), 
+						endTime = (new Date()).setTimeString($('#dailyprefs input[name=EndTime]').attr('max'));
+					window.myPreferences = window.preferences.options.set("selected", window.preferences.add({
+						"User": window.myAccount.get("Id"),
+						"Group": (typeof(window.groups.options.selected) === "object") ? window.groups.options.selected.Id : window.myAccount.get("Groups")[0],
+						"Date": config.getToday(),
+						"StartTime": startTime,
+						"StartTimeCode": startTime.getUTCTimeCode(),
+						"EndTime": endTime,
+						"EndTimeCode": endTime.getUTCTimeCode(),
+						"TimezoneOffset": startTime.getTimezoneOffset(),
+						// "CreatedAt": new Date(), // WARNING: Don't set these during creation!!
+						// "ModifiedAt": new Date(), // WARNING: Don't set these during creation!!
+						"OptOut": true // Default to "out" so people have to input an answer.
+					}));
+				}
+				window.myPreferences.dirty = true;
+			} catch(e) {
+				e.event = "Migrate myPreferences";
+				(pi||console).log(e);
+			}
+		}
 		window.preferences.myPreferences = function(e) {
 			try{
-				if (e.action !== "itemchange" && e.items) {
+				// CAUTION: This handler is only added after a RequestEnd with a sync action, so there is no "itemchange" action.
+				// NOTE: We want to process this code block, even if the item count is zero.
+				if (e.items) {
 					this.unbind("change", window.preferences.myPreferences);
 					// WARNING: Don't use filter because even local filter fires requestEnd for an endless loop!
 					// this.filter({field:"User.Id",operator:"eq",value:window.myAccount.get("Id")});
@@ -206,17 +280,26 @@ $(function() {
 					for (var i=0, myId=window.myAccount.get("Id"); i<e.items.length; i++) {
 						var userId = (typeof(e.items[i].User) === "object") ? e.items[i].User.Id : e.items[i].User;
 						if (userId === myId) {
-							serverPreferences = e.items[i];
-							break;
+							if (serverPreferences)
+								this.remove(e.items[i]); // cleanup duplicate records
+							else
+								serverPreferences = e.items[i];
 						}
 					}
 					var myModifiedAt = (window.myPreferences && window.myPreferences.ModifiedAt && window.myPreferences.ModifiedAt.getTime) ? window.myPreferences.ModifiedAt.getTime() : 0;
 					if (!serverPreferences || myModifiedAt > serverPreferences.ModifiedAt.getTime()) {
-						window.myPreferences.dirty = true; // Make sure it syncs
+						window.preferences.migratePreferences(); // do this again to cleanup bad data
 						if (serverPreferences) {
 							this.remove(serverPreferences);
 							// CAUTION: If two versions of the same record, don't delete on the server
 							if (serverPreferences.id === window.myPreferences.id)
+								this._destroyed.pop();
+						} else {
+							// Don't try to destroy local records on the server!
+							// WARNING: Mobile Safari doesn't have the empty() function for Arrays!
+							if (this._destroyed.empty)
+								this._destroyed.empty();
+							else while (this._destroyed.length)
 								this._destroyed.pop();
 						}
 						// WARNING: This must come AFTER removing serverPreferences.
@@ -226,6 +309,8 @@ $(function() {
 						this.sync();
 					} else {
 						window.myPreferences = this.options.set("selected", serverPreferences);
+						if (this._destroyed.length)
+							this.sync();
 					}
 					this.options.set("disabled", !!window.myPreferences.get("OptOut"));
 					// Always start closed
@@ -252,12 +337,13 @@ $(function() {
 		
 		window.preferences.bind("change", function(e) {
 			try {
-				var food = {}, results = [], undecided = true;
+				// CAUTION: Undecided StartTimeCode and EndTimeCode are intentionally reversed, so they are always changed with the first entry.
+				var food = {}, undecided = { Users: {}, StartTimeCode: "2400", EndTimeCode: "0000" }, results = [];
 				this.view().forEach(function(daily,index) {
 					if (!daily.User || typeof(daily.User) === "string")
 						return;
 					if (daily.OptOut) {
-						// undecided = false; // CAUTION: OptOuts shouldn't affect undecided.
+						// undecided.Users[daily.User.Id] = daily; // CAUTION: OptOuts shouldn't affect undecided.
 						results.push({
 							User: daily.User.Id,
 							DisplayName: daily.User.DisplayName,
@@ -267,7 +353,7 @@ $(function() {
 						});
 					}
 					else if (daily.Brought) {
-						// undecided = false; // CAUTION: Brought shouldn't affect undecided.
+						// undecided.Users[daily.User.Id] = daily; // CAUTION: Brought shouldn't affect undecided.
 						results.push({
 							User: daily.User.Id,
 							DisplayName: daily.User.DisplayName,
@@ -277,9 +363,8 @@ $(function() {
 							Food: "Brought",
 							sort: 0
 						});
-					} else if (daily.FoodCategories) {
+					} else if (daily.FoodCategories && daily.FoodCategories.length) {
 						daily.FoodCategories.forEach(function(id,index) {
-							undecided = false;
 							var record = window.food.get(id);
 							if (record) {
 								food[record.Name] = food[record.Name] || { Users: {}, StartTimeCode: daily.StartTimeCode, EndTimeCode: daily.EndTimeCode };
@@ -292,10 +377,11 @@ $(function() {
 								window.food.read(); // Maybe we're out of date
 							}
 						});
+					} else {
+						// CAUTION: There must be an undecided array in case the undecided person doesn't overlap anyone else!
+						undecided.Users[daily.User.Id] = daily;
 					}
 				});
-				if (undecided)
-					food["Undecided"] = { Users: {}, StartTimeCode: "0000", EndTimeCode: "2400" };
 				// Build results
 				for (var pref in food) {
 					this.view().forEach(function(daily,index) {
@@ -305,7 +391,7 @@ $(function() {
 							return;
 						if (daily.Brought)
 							return;
-						if (daily.StartTimeCode < food[pref].EndTimeCode && daily.EndTimeCode > food[pref].StartTimeCode)
+						if (daily.StartTimeCode < food[pref].EndTimeCode && daily.EndTimeCode > food[pref].StartTimeCode) {
 							results.push({
 								User: daily.User.Id,
 								DisplayName: daily.User.DisplayName,
@@ -314,7 +400,29 @@ $(function() {
 								Preference: food[pref].Users[daily.User.Id], // CAUTION: Could be null
 								Food: pref
 							});
+							if (undecided.Users[daily.User.Id])
+								delete undecided.Users[daily.User.Id];
+						}
 					});
+				}
+				// Do this in two loops & AFTER we've deleted unecessary undecideds, after checking ALL food types.
+				for (var userId in undecided.Users) {
+					var daily = undecided.Users[userId];
+					if (daily.StartTimeCode < undecided.StartTimeCode)
+						undecided.StartTimeCode = daily.StartTimeCode;
+					if (daily.EndTimeCode > undecided.EndTimeCode)
+						undecided.EndTimeCode = daily.EndTimeCode;
+				}
+				for (var userId in undecided.Users) {
+					var daily = undecided.Users[userId];
+					results.push({
+						User: daily.User.Id,
+						DisplayName: daily.User.DisplayName,
+						StartTimeCode: daily.StartTimeCode,
+						EndTimeCode: daily.EndTimeCode,
+						Preference: 0,
+						Food: "Undecided"
+					})
 				}
 				window.results.data(results);
 			} catch(e) {
@@ -342,36 +450,7 @@ $(function() {
 								if (userId === myId)
 									window.myPreferences = window.preferences.options.set("selected", items[i]);
 							}
-							if (window.myPreferences) {
-								if (window.myPreferences.Date !== config.get("today")) {
-									// If defaulting to yesterday's preferences, update the Date field, and clear 'Id' to fire the create method.
-									window.myPreferences.Date = config.get("today");
-									window.myPreferences.OptOut = true; // Default to "out" so people have to input an answer.
-									window.myPreferences.CreatedAt = null; // WARNING: Don't set these during creation!!
-									window.myPreferences.ModifiedAt = null; // WARNING: Don't set these during creation!!
-									window.myPreferences.Id = "";
-									window.myPreferences.id = "";
-									// WARNING: Don't forget to wipe out all of yesterday's data for other people!
-									window.preferences.reset([window.myPreferences]);
-								}
-								
-							} else {
-								// NOTE: If we haven't logged in yet today, we'll create one, then save it.
-								var startTime = (new Date()).setTimeString($('#dailyprefs input[name=StartTime]').attr('min')), 
-									endTime = (new Date()).setTimeString($('#dailyprefs input[name=EndTime]').attr('max'));
-								window.myPreferences = window.preferences.options.set("selected", window.preferences.add({
-									"User": value,
-									"Group": window.myAccount.get("Groups")[0],
-									"Date": config.get("today"),
-									"StartTime": startTime,
-									"StartTimeCode": startTime.getUTCTimeCode(),
-									"EndTime": endTime,
-									"EndTimeCode": endTime.getUTCTimeCode(),
-									// "CreatedAt": new Date(), // WARNING: Don't set these during creation!!
-									// "ModifiedAt": new Date(), // WARNING: Don't set these during creation!!
-									"OptOut": true // Default to "out" so people have to input an answer.
-								}));
-							}
+							window.preferences.migratePreferences();
 							// Populate results
 							window.preferences.trigger("change");
 							// Check server
