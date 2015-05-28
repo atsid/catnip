@@ -58,6 +58,7 @@
 		<script src="scripts/food.js"></script>
 		<script src="scripts/results.js"></script>
 		<script src="scripts/preferences.js"></script>
+		<script src="scripts/chat.js"></script>
 	
 		<!-- Demo Code
         <script src="scripts/identity-provider.js"></script>
@@ -213,7 +214,11 @@
 					</div>
 				</form>
 			</div>
-			<div id="map" data-role="map"></div>
+			<!--
+			<div id="map" data-role="map" style="height: 30%">
+				
+			</div>
+			-->
 			<div class="all-groups">
 			</div>
 			<div id="lastsync"></div>
@@ -232,28 +237,30 @@
 				</div>
 			</div>
 		</div>
-		<div id="chat" data-role="drawer" data-position="right">
+		<div id="chat" data-role="drawer" data-position="right" data-init="window.chat.initView">
 			<div data-role="header"></div>
-			<div data-role="listview" data-source="chat">
-				<div class="chatbubble" data-bind="Message"></div>
-				<div class="Avatar round" data-role="button">
-					<div class="caption" data-bind="User.Initials"></div>
-					<img data-bind="attr: {src: User.Photo.Uri}" />
+			<div id="messages" data-role="listview" data-source="chat" data-pull-to-refresh="true" data-pull-offset="-140">
+				<div class="#=Owner?(Owner.Id===window.myAccount.Id)?'right':'left':'left'#">
+					<div class="Avatar round #=Owner?Owner.Photo?'image':'':''#" data-role="button">
+						<div class="caption">#=Owner?Owner.Initials:'L?'#</div>
+						<img src="#=Owner?Owner.Photo?Owner.Photo.Uri:'':''#" />
+					</div>
+					<div class="chatbubble #=Owner?(Owner.Id===window.myAccount.Id)?'right':'left':'left'#">#=Message#</div>
+					<div class="timestamp">#=CreatedAt.constructor==Date?CreatedAt.toLocaleTimeString():''#</div>
 				</div>
 			</div>
 			<div data-role="footer">
-				<div class="actions" data-align="left">
-					<form class="MyAccount" data-source="account">
-						<button class="Avatar round" data-role="button" href="#results">
-							<span class="caption" data-bind="text: Initials"></span><img data-bind="attr: { src: Photo.Uri }" />
+				<form id="newChat" method="post" data-source="Everlive.Chat" data-validate-on-blur="false">
+					<div class="actions" data-align="left">
+						<div class="chatbubble right"><textarea id="addMessage" name="Message" placeholder="Enter your message"></textarea></div>
+					</div>
+					<div class="actions" data-align="right">
+						<!-- WARNING: This can't be a kendo button, or else it won't trigger a form submit! -->
+						<button type="submit" class="Avatar round">
+							<span class="caption">Send</span>
 						</button>
-					</form>
-				</div>
-				<div class="actions" data-align="right">
-					<form data-source="chat" data-method="create">
-						<div class="chatbubble left"><textarea name="Message" placeholder="Enter your message"></textarea></div>
-					</form>
-				</div>
+					</div>
+				</form>
 			</div>
 		</div>
 		
@@ -294,6 +301,7 @@
 					<li>Settings
 						<ul>
 							<li class="Push"><label>Push Notifications? <input name="Push" data-role="switch" type="checkbox" data-type="boolean" /></label></li>
+							<li class="Push Sub"><label>Chat <input name="Chat" data-role="switch" type="checkbox" data-type="boolean" /></label></li>
 						</ul>
 					</li>
 					<li><label>Change Password</label>
