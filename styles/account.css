@@ -39,6 +39,9 @@
 #profile #Profile {
   padding-bottom: 1em;
 }
+#profile #Profile .Push.Sub {
+  padding-left: 2em;
+}
 #profile #Profile .Avatar {
   width: 75px;
   height: 75px;
