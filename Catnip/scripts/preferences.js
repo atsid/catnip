@@ -67,7 +67,7 @@ $(function() {
 					}
 				}
 			},
-			debug: false,
+			debug: true,
 			serverFiltering: false,
 			expand: { User: true },
 			error: function(e) {
@@ -177,6 +177,7 @@ $(function() {
 				$('#opener .k-icon').removeClass("k-i-collapse").addClass("k-i-expand");
 			} else {
 				$('.km-header #preferences').animate({
+
 					"margin-top" : -$header.height() - ((kendo.support.mobileOS && kendo.support.mobileOS.ios && kendo.support.mobileOS.majorVersion >= "7") ? 30 : 20) + "px"
 				}).find('input.k-input').blur();
 				$('#opener .k-icon').removeClass("k-i-expand").addClass("k-i-collapse");

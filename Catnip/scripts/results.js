@@ -1,6 +1,5 @@
 $(function() {
 	try {
-		/*
 		$("#map").kendoMap({
 			center: [35.2681, -97.7448],
 			zoom: ($(window).width() >= 768) ? 4 :  ($(window).width() >= 500) ? 3.5 : 3,
@@ -9,7 +8,7 @@ $(function() {
 				dataSource: {
 					type: "geojson",
 					transport: {
-						read: "scripts/geojson/gz_2010_us_states_20m.json"
+						read: "scripts/geojson/gz_2010_us_districts_20m.json"
 					}
 				},
 				style: {
@@ -19,7 +18,6 @@ $(function() {
 				}
 			}]
 		});
-		*/
 		
 		window.results = pi.data.DataSource.create({
 			group: {
