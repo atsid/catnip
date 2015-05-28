@@ -15,13 +15,13 @@
   ],
   "iOSStatusBarStyle": "Default",
   "AndroidHardwareAcceleration": "True",
-  "BundleVersion": "1.4.4",
+  "BundleVersion": "1.5.5",
   "iOSDisplayName": "",
   "iOSDeviceFamily": [
     "1",
     "2"
   ],
-  "AndroidVersionCode": "16",
+  "AndroidVersionCode": "21",
   "CorePlugins": [
     "com.phonegap.plugins.PushPlugin",
     "org.apache.cordova.camera",
@@ -45,5 +45,7 @@
   "CordovaPluginVariables": {},
   "projectVersion": "1",
   "WP8PublisherID": "{2600ad09-2dee-4f3d-b1a8-45f3dbe730ee}",
-  "WP8ProductID": "{279ca375-b1fd-4479-939b-1a720eaf5721}"
+  "WP8ProductID": "{279ca375-b1fd-4479-939b-1a720eaf5721}",
+  "WP8WindowsPublisherName": "CN=Telerik",
+  "WP8PackageIdentityName": "1234Telerik.com.atsid.labs.lunch"
 }

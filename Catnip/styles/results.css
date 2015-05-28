@@ -122,7 +122,9 @@
   background: transparent;
   border: none;
   padding: 0.5em;
-  height: 70px;
+  height: 0px;
+  min-height: 0px;
+  padding: 0px;
 }
 #results .km-footer .actions .km-button:not(.chatbubble) {
   background: transparent;
@@ -201,4 +203,9 @@
   padding: 1em;
   font-size: 0.8em;
   text-align: center;
+}
+.km-android #results .km-footer .actions .km-button .chatbubble {
+  line-height: 1.3em;
+  height: 1.5em;
+  min-height: 1em;
 }

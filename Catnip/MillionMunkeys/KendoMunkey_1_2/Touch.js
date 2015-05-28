@@ -2,7 +2,6 @@
 pi = pi||{};
 pi.ui = pi.ui||{};
 // Store the original
-// Store the original
 pi.ui.Touch = kendo.ui.Touch;
 // Extend and replace the original
 kendo.ui.Touch = pi.ui.Touch.extend({
