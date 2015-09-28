@@ -12,6 +12,11 @@ configdb = pi.data.DataSource.create({
 			apiKey : "1V7hKCv6hyKjyPUl",
 			scheme : "http"
 		},
+		parse : {
+			applicationId : "YJXz8BWXQHsXGssYYrHNERY6rX4XFPAqx4CiyhS4",
+			javascriptKey : "KmBdxb6WsZou9Qy3XJGqvgzgiT37VW1oDxPvYK4e",
+			clientKey: "LLA9EokmvQqfOw2gsL8frI40havvkNdYy3hWdLIl"
+		},
 		google : {
 			scheme : "http",
 			domain : "none"
@@ -51,3 +56,6 @@ else if (/localhost/.test(document.location.host)) {
 
 // Init Everlive connection
 Everlive.init(config.get("everlive").toJSON());
+
+// Init Parse connection
+Parse.initialize(config.get("parse.applicationId"), config.get("parse.javascriptKey"));
