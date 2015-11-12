@@ -1,0 +1,268 @@
+@roundSize: 50px;
+@roundLargeSize: 60px;
+@roundRadius: @roundSize/2;
+@roundLargeRadius: @roundLargeSize/2;
+@roundFontSize: @roundSize/3;
+@roundLargeFontSize: @roundLargeSize/3;
+@roundLineHeight: @roundSize+2;
+@roundLargeLineHeight: @roundLargeSize+2;
+@blue: #3f51b5;
+@blueShadow : rgba(63, 81, 181, 0.7) -1px 3px 8px;
+@grey: #f2f2f2;
+@greyShadow : rgba(68, 68, 68, 0.2) -1px 3px 8px;
+
+.km-ios7 {
+	.km-header {
+		padding-top: 20px;
+	}
+}
+
+.km-loader .km-spin {
+	display: none;
+}
+
+.km-list {
+	&:not(.km-virtual-list) {
+		> li:first-child {
+			border-top-width: 1px;
+		}
+		> li:last-child {
+			border-bottom-width: 1px;
+		}
+	}
+	
+	input[type=image] {
+		display: none;
+	}
+	
+	input[type=password],
+	input[type=search],
+	input[type=number],
+	input[type=tel],
+	input[type=url],
+	input[type=email],
+	input[type=month],
+	input[type=color],
+	input[type=week],
+	input[type=date],
+	input[type=time],
+	input[type=datetime],
+	input[type=datetime-local],
+	input[type=text]:not(.k-input),
+	select:not([multiple]),
+	.k-dropdown-wrap,
+	textarea {
+		border-bottom: 1px solid rgba(68,68,68,0.2);
+		padding-bottom: 0px;
+		
+		&[disabled] {
+			color: rgba(68,68,68,0.5);
+		}
+	}
+	label {
+		line-height: 1.6em;
+		vertical-align: bottom;
+		display: block;
+	}
+	.k-invalid-msg {
+		position: relative;
+		float: right;
+		margin: 0em;
+		width: 70%;
+	}
+}
+
+.km-listgroupinset {
+	margin: 0em 1em;
+}
+
+button {
+	font-weight: bold;
+	color: @blue;
+	font-size: 1em;
+	border: none;
+	background: transparent;
+}
+
+.k-multiselect-wrap > ul > .k-button {
+	border-radius: 1em;
+	padding: 0.2em 0.25em 0.15em 0.75em;
+}
+.km-switch {
+	width: 5em;
+	border-radius: 2em;
+	
+	.km-switch-container {
+		background: #fff;
+		padding: 0.2em 2.1em 0.2em 0.1em;
+	}
+	.km-switch-handle {
+		background-color: rgba(229, 229, 229, 1);
+		border: 0.5px solid rgba(229, 229, 229, 0.5);
+	}
+	.km-switch-label-on, .km-switch-label-off {
+		line-height: 2em;
+	}
+}
+.km-on-ios .km-switch .km-switch-handle {
+	border-radius: 2em;
+}
+
+.km-popup .k-popup .k-list li {
+	padding: 0.5em;
+}
+
+.km-header {
+	color: rgb(255, 255, 255);
+	background: rgb(63, 81, 181);
+	
+	.km-view-title, .km-dialog-title {
+		line-height: 2em;
+		margin: 0.25em;
+	}
+	
+	ul {
+		padding: 0em;
+	}
+}
+
+.km-content {
+	#version {
+		position: absolute;
+		font-size: 0.7em;
+		height: auto;
+		width: auto;
+		text-align: right;
+		top: 0;
+		right: 0;
+		z-index: 10;
+		padding: 1em;
+	}
+}
+
+.km-footer {
+	min-height: 2.5em;
+	padding: 0.7em;
+	border-top: 1px solid rgba(68,68,68,0.2);
+	background-color: @grey;
+	
+	.actions {
+		padding: 0;
+		height: auto;
+		position: absolute;
+		right: 0em;
+		bottom: 0em;
+		
+		&[data-align=left] {
+			left: 0em;
+		}
+		
+		button:not(.round) {
+			display: inline-block;
+			height: 100%;
+			padding: 0.7em 1em;
+			vertical-align: bottom;
+			color: @blue;
+		}
+	}
+	#version {
+		position: absolute;
+		font-size: 0.7em;
+		height: auto;
+		bottom: 0px;
+		left: auto;
+		text-align: center;
+		width: 100%;
+		z-index: 0;
+	}
+}
+
+/*
+.km-button.round {
+	width: @roundSize*1.5;
+	height: @roundSize*1.5;
+	border-radius: @roundRadius*1.5;
+	
+	.caption {
+		font-size: @roundFontSize*1.5;
+		line-height: @roundLineHeight*1.5;
+	}
+	
+	img {
+		height: @roundSize*1.5;
+	}
+}
+@media (min-width: 370px) {
+	.km-button.round {
+		width: @roundSize*2;
+		height: @roundSize*2;
+		border-radius: @roundRadius*2;
+		
+		.caption {
+			font-size: @roundFontSize*2;
+			line-height: @roundLineHeight*2;
+		}
+		img {
+			height: @roundSize*2;
+		}
+	}
+}
+*/
+
+.km-button.round {
+	display: inline-block;
+	position: initial;
+	color: @grey;
+	vertical-align: middle;
+	font-size: @roundFontSize;
+	line-height: @roundLineHeight;
+	height: @roundSize;
+	width: @roundSize;
+	border: none;
+	/* border: 1px solid rgba(68, 68, 68, 0.2); */
+	border-radius: @roundRadius;
+	padding: 0px;
+	overflow: hidden;
+	text-align: center;
+	
+	.km-text {
+		display: inline-block;
+		font-weight: normal;
+		background-color: @blue;
+		width: 100%;
+		height: 100%;
+		line-height: @roundLineHeight;
+		text-align: center;
+		overflow-wrap: break-word;
+	}
+	img {
+		height: @roundSize;
+		/* This combination of two negative 50% values centers a div wider than its parent! */
+		margin-left: -50%;
+		margin-right: -50%;
+	}
+}
+@media (min-width: 370px) {
+	.km-button.round {
+		font-size: @roundLargeFontSize;
+		line-height: @roundLargeLineHeight;
+		height: @roundLargeSize;
+		width: @roundLargeSize;
+		border-radius: @roundLargeRadius;
+		
+		.km-text {
+			font-size: @roundLargeFontSize;
+			line-height: @roundLargeLineHeight;
+		}
+		img {
+			height: @roundLargeSize;
+		}
+	}
+}
+.km-button.round {
+	box-shadow: @blueShadow;
+	margin: 0px 1px 8px 3px;
+}
+.km-button.round:active {
+	box-shadow: none;
+}
