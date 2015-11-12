@@ -1,0 +1,51 @@
+{
+  "ProjectGuid": "8fa7ef35-175b-40a9-a497-dcef905450f8",
+  "ProjectTypeGuids": "{070BCB52-5A75-4F8C-A973-144AF0EAFCC9}",
+  "AppIdentifier": "com.atsid.labs.lunch",
+  "ProjectName": "Catnip",
+  "AndroidPermissions": [
+    "android.permission.CAMERA",
+    "android.permission.INTERNET",
+    "android.permission.WRITE_EXTERNAL_STORAGE",
+    "android.permission.ACCESS_NETWORK_STATE"
+  ],
+  "DeviceOrientations": [
+    "Portrait",
+    "Landscape"
+  ],
+  "iOSStatusBarStyle": "Default",
+  "AndroidHardwareAcceleration": "True",
+  "BundleVersion": "1.6.0",
+  "iOSDisplayName": "",
+  "iOSDeviceFamily": [
+    "1",
+    "2"
+  ],
+  "AndroidVersionCode": "22",
+  "CorePlugins": [
+    "com.phonegap.plugins.PushPlugin",
+    "org.apache.cordova.camera",
+    "org.apache.cordova.console",
+    "org.apache.cordova.device",
+    "org.apache.cordova.device-orientation",
+    "org.apache.cordova.dialogs",
+    "org.apache.cordova.file",
+    "org.apache.cordova.file-transfer",
+    "org.apache.cordova.geolocation",
+    "org.apache.cordova.globalization",
+    "org.apache.cordova.keyboard",
+    "org.apache.cordova.network-information",
+    "org.apache.cordova.splashscreen"
+  ],
+  "Framework": "Cordova",
+  "DisplayName": "Lunch?",
+  "Author": "Pete Oliver-Krueger",
+  "Description": "Get together with friends to grab lunch!",
+  "FrameworkVersion": "3.5.0",
+  "CordovaPluginVariables": {},
+  "projectVersion": "1",
+  "WP8PublisherID": "{2600ad09-2dee-4f3d-b1a8-45f3dbe730ee}",
+  "WP8ProductID": "{279ca375-b1fd-4479-939b-1a720eaf5721}",
+  "WP8WindowsPublisherName": "CN=Telerik",
+  "WP8PackageIdentityName": "1234Telerik.com.atsid.labs.lunch"
+}
