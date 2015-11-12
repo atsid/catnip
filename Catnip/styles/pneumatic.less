@@ -1,0 +1,2621 @@
+// If you do not want to use the pneumatic iconset, comment out this import.
+@import "pn-icons.less";
+
+// Import this to get pane/flex positioning. It includes essential styles, 
+// without which the flex layout and tabs will work very badly.
+
+
+/**
+Pneumatic.less
+==============
+
+The Pneumatic.less file contains a core set of mixins and variables necessary to run an application with the TMNG UI Toolkit.  We have tried to provide an explanation of the purpose and how to use some of the key elements found in this file.  If you have any questions or thoughts on how we can improve, please email either [brian.ingles@atsid.com](mailto:brian.ingles@atsid.com) or [derek.gesin@atsid.com](mailto:derek.gesin@atsid.com).  Hope it helps, and happy coding!
+*/
+
+
+//===================================================================
+/**                         Variables 
+=====================================================================  
+
+The main variable to notice here is the @html-font-size variable.  The toolkit utilizes the rem (stands for "root em") measurement unit in order to create relative text, along with sizing and positioning when appropriate.  If you haven't used rems before, read [this post](http://css-tricks.com/theres-more-to-the-css-rem-unit-than-font-sizing/) to learn more. Since we are using rems, which are based on the root font-size, we also utilize the 62.5% trick, whereby we set the font-size for the HTML tag to 62.5%.  This changes the default browser text size from 16px to 10px, allowing us to easily convert from pixels to rems with the conversion rate of 10px = 1rem throughtout the application.  
+*/
+
+@html-font-size:                        62.5%;
+
+@flex-top:                              0;
+@flex-left:                             0;
+@view-padding:                          5px;
+@view-padding:                          .5rem;
+
+//===================================================================
+/**                    General Application Styles
+=====================================================================  
+
+In order for the Toolkit to work, we set the following global styles:
+
+Border-box
+-------------
+We border-box the entire app.  It just makes everyone's life easier.
+
+    *, *:before, *:after {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+*/
+
+*, *:before, *:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/**HTML Font-size
+-------------------
+As stated above, we set the HTML font-size to 62.5% in order to make using rems for measurement easier.  However, just in case someone decides to create a theme not based on rems, we have implemented this using the variable @html-font-size and defined it in the base-theme file. 
+
+    html{
+        font-size: @html-font-size;
+    }
+*/
+
+html{
+    font-size: @html-font-size;
+}
+
+/**Single-page Styles and Resets
+--------------------------------
+We use the following styles to create a single-page design and reset margins/padding.
+
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        position: fixed;
+        overflow: hidden; 
+        width: 100%;
+        body {
+            -webkit-backface-visibility: hidden;
+        }
+    }
+*/
+
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    overflow: hidden; /* eliminate bogus scrolling where hidden content overflows window */
+    width: 100%;
+    body {
+        -webkit-backface-visibility: hidden;
+    }
+}
+
+
+//===================================================================
+/**                    Contextual Mix-ins 
+=====================================================================  
+The Toolkit includes a number of Less mix-ins to make styling your app a lot easier. If you are unfamiliar with how Less mix-ins work, take a few moments to [read this great post by Ivaylo Gerchev](http://www.sitepoint.com/a-comprehensive-introduction-to-less-mixins/).
+*/
+
+/**.clearfix
+-------------
+As the name implies, this will clear any floats both before and after an element.
+*/
+
+.clearfix {
+    *zoom: 1;
+    &:before,
+    &:after {
+        display: table;
+        content: "";
+        // Fixes Opera/contenteditable bug:
+        // http://nicolasgallagher.com/micro-clearfix-hack/#comment-36952
+        line-height: 0;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+/**.columns
+-----------------
+The .columns mixin allows you to easily create a responsive, cross-browser column layout that will reduce the number of columns when the containing element narrows.  It uses the following format and default parameters.  NOTE: defaults will be used for un-specified parameters.
+
+    .columns(@colwidth: 250px, @colcount: 0, @colgap: 50px, @columnRuleColor: #EEE, @columnRuleStyle: solid, @columnRuleWidth: 1px);
+*/
+
+.columns(@colwidth: 250px, @colcount: 0, @colgap: 50px, @columnRuleColor: #EEE, @columnRuleStyle: solid, @columnRuleWidth: 1px) {
+    -moz-column-width: @colwidth;
+    -moz-column-count: @colcount;
+    -moz-column-gap: @colgap;
+    -moz-column-rule-color: @columnRuleColor;
+    -moz-column-rule-style: @columnRuleStyle;
+    -moz-column-rule-width: @columnRuleWidth;
+    -webkit-column-width: @colwidth;
+    -webkit-column-count: @colcount;
+    -webkit-column-gap: @colgap;
+    -webkit-column-rule-color: @columnRuleColor;
+    -webkit-column-rule-style: @columnRuleStyle;
+    -webkit-column-rule-width: @columnRuleWidth;
+    column-width: @colwidth;
+    column-count: @colcount;
+    column-gap: @colgap;
+    column-rule-color: @columnRuleColor;
+    column-rule-style: @columnRuleStyle;
+    column-rule-width: @columnRuleWidth;
+}
+
+/**.list-as-comma
+-----------------
+Apply to a `<ul>` or `<ol>` to get a comma-separated list with items inline.  No parameters are necessary for this mix-in.
+*/
+
+.list-as-comma {
+    margin: 0;
+    padding: 0;
+    display: inline;
+    li {
+        list-style: none;
+        display: inline;
+        &:before {
+            content: ", ";
+        }
+        &:first-child {
+            &:before {
+                content: "";
+            }
+        }
+    }
+}
+
+/**.remove-btn-style
+-----------------
+This will remove the transition, background, border, padding, box-shadow, and  border-radius styles, and sets the font-size to @font-size-normal.  No parameters are necessary for this mix-in.
+*/
+
+.remove-btn-style{
+    .transition(none);
+    background: none;
+    border: none;
+    font-size: @font-size-normal;
+    padding: 0;
+    .box-shadow(none);
+    border-radius: 0;
+    &:hover, &:active {
+        background-color: transparent;
+        background-position: 0;
+        .transition(none);
+        .box-shadow(none);
+    }
+}
+
+/**.text-overflow <i>(Add Ellipsis)</i>
+---------------------------------
+By passing through a max-width parameter (in pixels), you can use this mix-in to hide overflow text and instead show ellipsis. 
+
+Example: The following mix-in will make all text wider than 300px appear as an ellipsis.
+
+    .text-overflow(300);
+*/
+
+
+.text-overflow(@max-width) {
+    max-width: @max-width;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/**.throw-off-screen
+---------------------------------
+This is an incredibly useful mix-in that allows you to move an object off screen, while still keeping it visible to screen readers.  An example case would be input labels that use placeholder text instead, or buttons that replace text with icons.  No parameters are necessary for this mix-in.
+*/
+
+.throw-off-screen () {
+    position: absolute;
+    left: -9999px;
+}
+
+
+//===================================================================
+/**                             Icon Mix-ins
+=====================================================================  
+The .icon mixins allows you to integrate icons easily into your application. In addition, you can add either -before or -after and it will attach the styles to the corresponding pseudo-class for the element. Below are examples of the icon mix-ins and the default parameters each possesses.  NOTE: The only parameter your are REQUIRED to pass through with the mix-in is the @type (Icon type).  
+*/
+
+/**.icon
+----------
+    .icon(@type, @size: 1, @color: inherit, @margin: 0.3em, @vert-align: middle, @float: none, @position: static, @top: auto);
+*/
+
+.icon(@type, @size: 1, @color: inherit, @margin: 0.3em, @vert-align: middle, @float: none, @position: static, @top: auto) {
+    &:before {
+      font-family: IconFont;
+      font-weight: normal;
+      font-style: normal;
+      display: inline-block;
+      line-height: 1em;
+      vertical-align: @vert-align;
+      text-align: center;
+      width: 1em;
+      margin-right: @margin;
+      content: @type;
+      font-size: @size * 1em;
+      line-height: 1em / @size;
+      color: @color;
+      float: @float;
+      position: @position;
+      top: @top;
+    }
+}
+
+/**.icon-after
+----------
+    .icon-after(@type, @size: 1, @color: inherit, @margin: 0.3em, @vert-align: middle, @float: none, @position: static, @top: auto);
+*/
+
+.icon-after(@type, @size: 1, @color: inherit, @margin: 0.3em, @vert-align: middle, @float: none, @position: static, @top: auto) {
+    &:after {
+      font-family: IconFont;
+      font-weight: normal;
+      font-style: normal;
+      display: inline-block;
+      line-height: 1em;
+      vertical-align: @vert-align;
+      text-align: center;
+      width: 1em;
+      margin-left: @margin;
+      content: @type;
+      font-size: @size * 1em;
+      line-height: 1em / @size;
+      color: @color;
+      float: @float;
+      position: @position;
+      top: @top;
+    }
+}
+
+/**.icon-before
+----------------
+    .icon-before(@type, @size: 1, @color: inherit, @margin: 0.3em, @vert-align: middle, @float: left, @position: static, @top: auto);
+*/
+
+.icon-before(@type, @size: 1, @color: inherit, @margin: 0.3em, @vert-align: middle, @float: left, @position: static, @top: auto) {
+    &:before {
+      font-family: IconFont;
+      font-weight: normal;
+      font-style: normal;
+      display: inline-block;
+      line-height: 1em;
+      vertical-align: @vert-align;
+      text-align: center;
+      width: 1em;
+      margin-left: @margin;
+      content: @type;
+      font-size: @size * 1em;
+      line-height: 1em / @size;
+      color: @color;
+      float: @float;
+      position: @position;
+      top: @top;
+    }
+}
+
+/**.icon-menu
+-----------------
+    .icon-menu(@type, @top: auto, @left: auto, @color: inherit, @size: 1);
+*/
+
+.icon-menu(@type, @top: auto, @left: auto, @color: inherit, @size: 1) {
+    &:before {
+      color:@color;
+      font-family: IconFont;
+      display: inline-block;
+      line-height: 1em;
+      vertical-align: middle;
+      text-align: center;
+      width: 1em;
+      content: @type;
+      font-size: @size * 1em;
+      line-height: 1.2em / @size;
+      position: absolute;
+      top: auto;
+      left: @left;
+    }
+}
+
+
+//===================================================================
+/**               Measurement Conversion Mix-ins 
+=====================================================================  
+*/
+/** In order to make the application responsive to font-size preference adjustments, whether through application or browser, we utilize the rem unit (root em).  However, to support IE8 (*insert Internet Explorer joke here*), we have created mixins that deliver a fallback in pixels.  **For all of these mixins, pass in the desired pixel amount and it will convert it to a rem output. (Reminder: 10px = 1rem)** 
+
+To use a Measurement Conversion Mix-in, simply use the same css properties as you normally would, but with Less mix-in syntax.  For example, to add a 10px vertical and 5 px horizontal padding, you would use the following mix-in.
+
+    .padding(10, 5);
+
+**NOTE: Input number only for parameters (e.g. "5" instead of "5px").  If you input a measurement unit it will not recognize rule.  This is only true for Measurement Conversion Mix-ins.**
+
+Measurement Conversion Mix-ins exist for the following css properties:
+
++ padding, padding-top, padding-right, padding-bottom, padding-left
++ margin, margin-top, margin-right, margin-bottom, margin-left
++ height and max-height
++ width and max-width
++ top, right, bottom, left
++ line-height
+*/
+
+.padding(@pt; @pr; @pb; @pl) { 
+    @ptv: @pt / 10;
+    @prv: @pr / 10;
+    @pbv: @pb / 10;
+    @plv: @pl / 10;
+    padding: ~"@{pt}px" ~"@{pr}px" ~"@{pb}px" ~"@{pl}px";
+    padding: ~"@{ptv}rem" ~"@{prv}rem" ~"@{pbv}rem" ~"@{plv}rem";
+}
+.padding(@pt; @pr; @pb) { 
+    @ptv: @pt / 10;
+    @prv: @pr / 10;
+    @pbv: @pb / 10;
+    padding: ~"@{pt}px" ~"@{pr}px" ~"@{pb}px";
+    padding: ~"@{ptv}rem" ~"@{prv}rem" ~"@{pbv}rem";
+}
+.padding(@pt; @pr) { 
+    @ptv: @pt / 10;
+    @prv: @pr / 10;
+    padding: ~"@{pt}px" ~"@{pr}px";
+    padding: ~"@{ptv}rem" ~"@{prv}rem";
+}
+.padding(@pt) { 
+    @ptv: @pt / 10;
+    padding: ~"@{pt}px";
+    padding: ~"@{ptv}rem";
+}
+.padding-top(@v) {
+    @rv: @v / 10;
+    padding-top: ~"@{v}px";
+    padding-top: ~"@{rv}rem";
+}
+.padding-right(@v){
+    @rv: @v / 10;
+    padding-right: ~"@{v}px";
+    padding-right: ~"@{rv}rem";
+}
+.padding-bottom(@v){
+    @rv: @v / 10;
+    padding-bottom: ~"@{v}px";
+    padding-bottom: ~"@{rv}rem";
+}
+.padding-left(@v){
+    @rv: @v / 10;
+    padding-left: ~"@{v}px";
+    padding-left: ~"@{rv}rem";
+}
+
+.margin(@mt; @mr; @mb; @ml) {
+    @mtv: @mt / 10;
+    @mrv: @mr / 10;
+    @mbv: @mb / 10;
+    @mlv: @ml / 10;
+    margin: ~"@{mt}px" ~"@{mr}px" ~"@{mb}px" ~"@{ml}px";
+    margin: ~"@{mtv}rem" ~"@{mrv}rem" ~"@{mbv}rem" ~"@{mlv}rem";
+}
+.margin(@mt; @mr; @mb) { 
+    @mtv: @mt / 10;
+    @mrv: @mr / 10;
+    @mbv: @mb / 10;
+    margin: ~"@{mt}px" ~"@{mr}px" ~"@{mb}px";
+    margin: ~"@{mtv}rem" ~"@{mrv}rem" ~"@{mbv}rem";
+}
+.margin(@mt; @mr) { 
+    @mtv: @mt / 10;
+    @mrv: @mr / 10;
+    margin: ~"@{mt}px" ~"@{mr}px";
+    margin: ~"@{mtv}rem" ~"@{mrv}rem";
+}
+.margin(@mt) { 
+    @mtv: @mt / 10;
+    margin: ~"@{mt}mx";
+    margin: ~"@{mtv}rem";
+}
+.margin-top(@mv){
+    @mrv: @mv / 10;
+    margin-top: ~"@{mv}px";
+    margin-top: ~"@{mrv}rem";
+}
+.margin-right(@mv){
+    @mrv: @mv / 10;
+    margin-right: ~"@{mv}px";
+    margin-right: ~"@{mrv}rem";
+}
+.margin-bottom(@mv){
+    @mrv: @mv / 10;
+    margin-bottom: ~"@{mv}px";
+    margin-bottom: ~"@{mrv}rem";
+}
+.margin-left(@mv){
+    @mrv: @mv / 10;
+    margin-left: ~"@{mv}px";
+    margin-left: ~"@{mrv}rem";
+}
+
+.height(@mv){
+    @mrv: @mv / 10;
+    height: ~"@{mv}px";
+    height: ~"@{mrv}rem";
+}
+.max-height(@mv){
+    @mrv: @mv / 10;
+    max-height: ~"@{mv}px";
+    max-height: ~"@{mrv}rem";
+}
+.width(@mv){ 
+    @mrv: @mv / 10;
+    width: ~"@{mv}px";
+    width: ~"@{mrv}rem";
+}
+.max-width(@mv){ 
+    @mrv: @mv / 10;
+    max-width: ~"@{mv}px";
+    max-width: ~"@{mrv}rem";
+}
+
+.top(@mv){
+    @mrv: @mv / 10;
+    top: ~"@{mv}px";
+    top: ~"@{mrv}rem";
+}
+.right(@mv){
+    @mrv: @mv / 10;
+    right: ~"@{mv}px";
+    right: ~"@{mrv}rem";
+}
+.bottom(@mv){
+    @mrv: @mv / 10;
+    bottom: ~"@{mv}px";
+    bottom: ~"@{mrv}rem";
+}
+.left(@mv){
+    @mrv: @mv / 10;
+    left: ~"@{mv}px";
+    left: ~"@{mrv}rem";
+}
+
+.line-height(@mv){
+    @mrv: @mv / 10;
+    line-height: ~"@{mv}px";
+    line-height: ~"@{mrv}rem";
+}
+
+
+//===================================================================
+/**               Cross Browser Support Mix-ins 
+=====================================================================  
+
+In our continued effort to make efficient use of development time, we have also created or borrowed mix-ins to help with cross-browser functionality.  Unless noted otherwise, each mix-in is written as you would normally write the CSS, but is converted into Less mix-in syntax
+
+Example:  
+
+    border-radius: 5px; 
+
+becomes
+
+    .border-radius(5px); 
+
+**NOTE: Unlike Measurement Conversion Mix-ins, which do not accept measurement units in parameters, Cross Browser Support Mix-ins will pass through whatever value (and labels) you give them.**
+
+Currently, Cross Browser Support Mix-ins exist for the following css properties:
+
++ border-radius, 
++ border-top-radius, border-right-radius, border-bottom-radius, and border-left-radius
++ border-top-left-radius, border-top-right-radius, border-bottom-left-radius, and border-bottom-right-radius
++ box-shadow
++ box-sizing
++ opacity
++ placeholder 
+*/
+
+.border-radius(@radius) {
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    border-radius: @radius;
+}
+.border-top-left-radius(@radius) {
+    -webkit-border-top-left-radius: @radius;
+    -moz-border-radius-topleft: @radius;
+    border-top-left-radius: @radius;
+}
+.border-top-right-radius(@radius) {
+    -webkit-border-top-right-radius: @radius;
+    -moz-border-radius-topright: @radius;
+    border-top-right-radius: @radius;
+}
+.border-bottom-right-radius(@radius) {
+    -webkit-border-bottom-right-radius: @radius;
+    -moz-border-radius-bottomright: @radius;
+    border-bottom-right-radius: @radius;
+}
+.border-bottom-left-radius(@radius) {
+    -webkit-border-bottom-left-radius: @radius;
+    -moz-border-radius-bottomleft: @radius;
+    border-bottom-left-radius: @radius;
+}
+.border-top-radius(@radius) {
+    .border-top-right-radius(@radius);
+    .border-top-left-radius(@radius);
+}
+.border-right-radius(@radius) {
+    .border-top-right-radius(@radius);
+    .border-bottom-right-radius(@radius);
+}
+.border-bottom-radius(@radius) {
+    .border-bottom-right-radius(@radius);
+    .border-bottom-left-radius(@radius);
+}
+.border-left-radius(@radius) {
+    .border-top-left-radius(@radius);
+    .border-bottom-left-radius(@radius);
+}
+.box-shadow(@arguments) {
+    -webkit-box-shadow: @arguments;
+    -moz-box-shadow: @arguments;
+    box-shadow: @arguments;
+}
+.box-sizing(@type) {
+    -webkit-box-shadow: @type;
+    -moz-box-sizing: @type;
+    box-sizing: @type;
+}
+.opacity(@opacity) {
+    opacity: @opacity;
+    @percent-opacity: @opacity * 100;
+    -ms-filter:
+    "progid:DXImageTransform.Microsoft.Alpha(opacity=@{percent-opacity})";
+}
+
+
+// Placeholder text color
+.placeholder(@color: @placeholder-text) {
+    &:-moz-placeholder {
+        color: @color;
+    }
+    &::-moz-placeholder {
+        color: @color;
+    }
+    &:-ms-input-placeholder {
+        color: @color;
+    }
+    &::-webkit-input-placeholder {
+        color: @color;
+    }
+}
+
+/** Gradients and Backgrounds
+---------------------------------
+Hang tight, this section is being written and will be released soon!
+*/
+
+// Gradient Bar Colors for buttons and alerts
+.gradientBar(@primaryColor, @secondaryColor, @base-font-color: #fff, @textShadow: 0 -1px 0 rgba(0,0,0,.25)) {
+    color: @base-font-color;
+    text-shadow: @textShadow;
+    #gradient > .vertical(@primaryColor, @secondaryColor);
+    border-color: @secondaryColor @secondaryColor darken(@secondaryColor, 15%);
+    border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) fadein(rgba(0,0,0,.1), 15%);
+}
+
+// Set a threshold to create gradient that darkens at bottom
+.autoGradient(@color, @threshold: 3%) {
+    .gradient(@color, @color, darken(@color, @threshold));
+}
+
+// Default Linear Gradient 
+.gradient(@default, @from, @to) {
+    background-color: @default;
+    background-image: -moz-linear-gradient(100% 100% 90deg, @to, @from);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(@from), to(@to));
+    background-image: -webkit-linear-gradient(@from, @to);
+    background-image: -moz-linear-gradient(@from, @to);
+    background-image: -ms-linear-gradient(@from, @to);
+    background-image: -o-linear-gradient(@from, @to);
+    background-image: linear-gradient(@from, @to);  
+}
+
+// Directional Gradients
+#gradient {
+    .horizontal(@startColor: #555, @endColor: #333) {
+        background-color: @endColor;
+        background-image: -moz-linear-gradient(left, @startColor, @endColor); // FF 3.6+
+        background-image: -webkit-gradient(linear, 0 0, 100% 0, from(@startColor), to(@endColor)); // Safari 4+, Chrome 2+
+        background-image: -webkit-linear-gradient(left, @startColor, @endColor); // Safari 5.1+, Chrome 10+
+        background-image: -o-linear-gradient(left, @startColor, @endColor); // Opera 11.10
+        background-image: linear-gradient(to right, @startColor, @endColor); // Standard, IE10
+        background-repeat: repeat-x;
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)",argb(@startColor),argb(@endColor))); // IE9 and down
+    }
+    .vertical(@startColor: #555, @endColor: #333) {
+        background-color: mix(@startColor, @endColor, 60%);
+        background-image: -moz-linear-gradient(top, @startColor, @endColor); // FF 3.6+
+        background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@startColor), to(@endColor)); // Safari 4+, Chrome 2+
+        background-image: -webkit-linear-gradient(top, @startColor, @endColor); // Safari 5.1+, Chrome 10+
+        background-image: -o-linear-gradient(top, @startColor, @endColor); // Opera 11.10
+        background-image: linear-gradient(to bottom, @startColor, @endColor); // Standard, IE10
+        background-repeat: repeat-x;
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@startColor),argb(@endColor))); // IE9 and down
+    }
+    .directional(@startColor: #555, @endColor: #333, @deg: 45deg) {
+        background-color: @endColor;
+        background-repeat: repeat-x;
+        background-image: -moz-linear-gradient(@deg, @startColor, @endColor); // FF 3.6+
+        background-image: -webkit-linear-gradient(@deg, @startColor, @endColor); // Safari 5.1+, Chrome 10+
+        background-image: -o-linear-gradient(@deg, @startColor, @endColor); // Opera 11.10
+        background-image: linear-gradient(@deg, @startColor, @endColor); // Standard, IE10
+    }
+    .vertical-three-colors(@startColor: #00b3ee, @midColor: #7a43b6, @colorStop: 50%, @endColor: #c3325f) {
+        background-color: mix(@midColor, @endColor, 80%);
+        background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@startColor), color-stop(@colorStop, @midColor), to(@endColor));
+        background-image: -webkit-linear-gradient(@startColor, @midColor @colorStop, @endColor);
+        background-image: -moz-linear-gradient(top, @startColor, @midColor @colorStop, @endColor);
+        background-image: -o-linear-gradient(@startColor, @midColor @colorStop, @endColor);
+        background-image: linear-gradient(@startColor, @midColor @colorStop, @endColor);
+        background-repeat: no-repeat;
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@startColor),argb(@endColor))); // IE9 and down, gets no color-stop at all for proper fallback
+    }
+    .radial(@innerColor: #555, @outerColor: #333) {
+        background-color: @outerColor;
+        background-image: -webkit-gradient(radial, center center, 0, center center, 460, from(@innerColor), to(@outerColor));
+        background-image: -webkit-radial-gradient(circle, @innerColor, @outerColor);
+        background-image: -moz-radial-gradient(circle, @innerColor, @outerColor);
+        background-image: -o-radial-gradient(circle, @innerColor, @outerColor);
+        background-repeat: no-repeat;
+    }
+    .striped(@color: #555, @angle: 45deg) {
+        background-color: @color;
+        background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255,255,255,.15)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255,255,255,.15)), color-stop(.75, rgba(255,255,255,.15)), color-stop(.75, transparent), to(transparent));
+        background-image: -webkit-linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+        background-image: -moz-linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+        background-image: -o-linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+        background-image: linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+    }
+}
+
+// Button Backgrounds
+.buttonBackground(@startColor, @endColor, @base-font-color: #fff, @textShadow: 0 -1px 0 rgba(0,0,0,.25)) {
+    // gradientBar will set the background to a pleasing blend of these, to support IE<=9
+    .gradientBar(@startColor, @endColor, @base-font-color, @textShadow);
+    *background-color: @endColor; /* Darken IE7 buttons by default so they stand out more given they won't have borders */
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(enabled = false)"));
+    // in these cases the gradient won't cover the background, so we override
+    &:hover, &:active, &[disabled] {
+        color: lighten(@base-font-color,40%);
+        background-color: @endColor;
+        *background-color: darken(@endColor, 5%);
+    }
+    // IE 7 + 8 can't handle box-shadow to show active, so we darken a bit ourselves
+    &:active {
+        background-color: darken(@endColor, 10%) e("\9");
+    }
+}
+
+
+//===================================================================
+/**                       Animations
+=====================================================================  
+
+The Toolkit contains a variety of built in animations to use in your application.  We have added some instructions on how to use the main ones, but we recommend spending some time reviewing the pneumatic.less file to see everything it has to offer.
+*/
+
+.animated {
+    -webkit-animation-duration: 1s;
+    -moz-animation-duration: 1s;
+    -o-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    -o-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.animated.hinge {
+    -webkit-animation-duration: 2s;
+    -moz-animation-duration: 2s;
+    -o-animation-duration: 2s;
+    animation-duration: 2s;
+}
+
+/**.fadein
+----------
+Fades element in with a .6 second duration.
+*/
+
+.fadein {
+    animation: fadein 0.6s;
+    -moz-animation: fadein 0.6s; /* Firefox */
+    -webkit-animation: fadein 0.6s; /* Safari and Chrome */
+    -o-animation: fadein 0.6s; /* Opera */
+}
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    30% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@-moz-keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    30% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@-webkit-keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    30% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@-o-keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    30% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+/**.icon-spin
+----------------------------
+Continuously spins element with a 2 second duration.  Useful for preloaders such as .pn-loading.
+*/
+
+.icon-spin {
+    display: inline-block;
+    -moz-animation: spin 2s infinite linear;
+    -o-animation: spin 2s infinite linear;
+    -webkit-animation: spin 2s infinite linear;
+    animation: spin 2s infinite linear;
+    span {
+        .throw-off-screen;
+    }
+}
+@-moz-keyframes spin {
+    0% { -moz-transform: rotate(0deg); }
+    100% { -moz-transform: rotate(359deg); }
+}
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(359deg); }
+}
+@-o-keyframes spin {
+    0% { -o-transform: rotate(0deg); }
+    100% { -o-transform: rotate(359deg); }
+}
+@-ms-keyframes spin {
+    0% { -ms-transform: rotate(0deg); }
+    100% { -ms-transform: rotate(359deg); }
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(359deg); }
+}
+@-moz-document url-prefix() {
+    .icon-spin { 
+        height: .9em; 
+    }
+    .btn .icon-spin { 
+        height: auto; 
+    }
+}
+
+/**.no-flick
+-------------
+Prevents other elements on the page from flickering during animations
+*/
+
+.no-flick { 
+    -webkit-transform:translate3d(0,0,0); 
+}
+
+/**.zero-vertical-dimensions
+----------------------------
+This helps to set margins, padding and borders to zero on top and bottom. Though this, in itself, is not an animation, it is useful for css transitions that shrink something vertically so we've put it here.
+*/
+
+.zero-vertical-dimensions () {
+    border-top-width: 0; border-bottom-width: 0;
+    padding-top: 0; padding-bottom: 0;
+    margin-top: 0; margin-bottom: 0;
+    * {
+        max-height: 0; // For images and other block-type content
+        border-top-width: 0; border-bottom-width: 0;
+        padding-top: 0; padding-bottom: 0;
+        margin-top: 0; margin-bottom: 0;
+    }
+}
+
+// Flash Messages - Success, Error, etc.
+@-webkit-keyframes flash {
+    0% {
+        -webkit-transform: translateY(-20px);
+        opacity: 0;
+    }
+    15% {  
+        -webkit-transform: translateY(0);
+        opacity: 1;
+    }
+    50% { 
+        opacity: 1; 
+    }
+    85% {  
+        -webkit-transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform: translateY(-20px);
+        opacity: 0;
+    }
+}
+
+@-moz-keyframes flash {
+    0% {
+        -moz-transform: translateY(-20px);
+        opacity: 0;
+    }
+    15% {  
+        -moz-transform: translateY(0);
+        opacity: 1;
+    }
+    50% { 
+        opacity: 1; 
+    }
+    85% {  
+        -moz-transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        -moz-transform: translateY(-20px);
+        opacity: 0;
+    }
+}
+
+@-o-keyframes flash {
+    0% {
+        -o-transform: translateY(-20px);
+        opacity: 0;
+    }
+    15% {  
+        -o-transform: translateY(0);
+        opacity: 1;
+    }
+    50% { 
+        opacity: 1; 
+    }
+    85% {  
+        -o-transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        -o-transform: translateY(-20px);
+        opacity: 0;
+    }
+}
+
+@keyframes flash {
+    0% {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    15% {  
+        transform: translateY(0);
+        opacity: 1;
+    }
+    50% { 
+        opacity: 1; 
+    }
+    85% {  
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+}
+
+.flash {
+    -webkit-animation-duration: 5s;
+    -moz-animation-duration: 5s;
+    -o-animation-duration: 5s;
+    animation-duration: 5s;
+    -webkit-animation-name: flash;
+    -moz-animation-name: flash;
+    -o-animation-name: flash;
+    animation-name: flash;
+}
+
+@-webkit-keyframes flip {
+    0% {
+        -webkit-transform: perspective(400px) rotateY(0);
+        -webkit-animation-timing-function: ease-out;
+    }
+    40% {
+        -webkit-transform: perspective(400px) translateZ(150px) rotateY(170deg);
+        -webkit-animation-timing-function: ease-out;
+    }
+    50% {
+        -webkit-transform: perspective(400px) translateZ(150px) rotateY(190deg) scale(1);
+        -webkit-animation-timing-function: ease-in;
+    }
+    80% {
+        -webkit-transform: perspective(400px) rotateY(360deg) scale(.95);
+        -webkit-animation-timing-function: ease-in;
+    }
+    100% {
+        -webkit-transform: perspective(400px) scale(1);
+        -webkit-animation-timing-function: ease-in;
+    }
+}
+@-moz-keyframes flip {
+    0% {
+        -moz-transform: perspective(400px) rotateY(0);
+        -moz-animation-timing-function: ease-out;
+    }
+    40% {
+        -moz-transform: perspective(400px) translateZ(150px) rotateY(170deg);
+        -moz-animation-timing-function: ease-out;
+    }
+    50% {
+        -moz-transform: perspective(400px) translateZ(150px) rotateY(190deg) scale(1);
+        -moz-animation-timing-function: ease-in;
+    }
+    80% {
+        -moz-transform: perspective(400px) rotateY(360deg) scale(.95);
+        -moz-animation-timing-function: ease-in;
+    }
+    100% {
+        -moz-transform: perspective(400px) scale(1);
+        -moz-animation-timing-function: ease-in;
+    }
+}
+@-o-keyframes flip {
+    0% {
+        -o-transform: perspective(400px) rotateY(0);
+        -o-animation-timing-function: ease-out;
+    }
+    40% {
+        -o-transform: perspective(400px) translateZ(150px) rotateY(170deg);
+        -o-animation-timing-function: ease-out;
+    }
+    50% {
+        -o-transform: perspective(400px) translateZ(150px) rotateY(190deg) scale(1);
+        -o-animation-timing-function: ease-in;
+    }
+    80% {
+        -o-transform: perspective(400px) rotateY(360deg) scale(.95);
+        -o-animation-timing-function: ease-in;
+    }
+    100% {
+        -o-transform: perspective(400px) scale(1);
+        -o-animation-timing-function: ease-in;
+    }
+}
+@keyframes flip {
+    0% {
+        transform: perspective(400px) rotateY(0);
+        animation-timing-function: ease-out;
+    }
+    40% {
+        transform: perspective(400px) translateZ(150px) rotateY(170deg);
+        animation-timing-function: ease-out;
+    }
+    50% {
+        transform: perspective(400px) translateZ(150px) rotateY(190deg)    scale(1);
+        animation-timing-function: ease-in;
+    }
+    80% {
+        transform: perspective(400px) rotateY(360deg) scale(.95);
+        animation-timing-function: ease-in;
+    }
+    100% {
+        transform: perspective(400px) scale(1);
+        animation-timing-function: ease-in;
+    }
+}
+.flip {
+    -webkit-backface-visibility: visible !important;
+    -webkit-animation-name: flip;
+    -moz-backface-visibility: visible !important;
+    -moz-animation-name: flip;
+    -o-backface-visibility: visible !important;
+    -o-animation-name: flip;
+    backface-visibility: visible !important;
+    animation-name: flip;
+}
+@-webkit-keyframes flipInX {
+    0% {
+        -webkit-transform: perspective(400px) rotateX(90deg);
+        opacity: 0;
+    }
+    40% {
+        -webkit-transform: perspective(400px) rotateX(-10deg);
+    }
+    70% {
+        -webkit-transform: perspective(400px) rotateX(10deg);
+    }
+    100% {
+        -webkit-transform: perspective(400px) rotateX(0deg);
+        opacity: 1;
+    }
+}
+@-moz-keyframes flipInX {
+    0% {
+        -moz-transform: perspective(400px) rotateX(90deg);
+        opacity: 0;
+    }
+    40% {
+        -moz-transform: perspective(400px) rotateX(-10deg);
+    }
+    70% {
+        -moz-transform: perspective(400px) rotateX(10deg);
+    }
+    100% {
+        -moz-transform: perspective(400px) rotateX(0deg);
+        opacity: 1;
+    }
+}
+@-o-keyframes flipInX {
+    0% {
+        -o-transform: perspective(400px) rotateX(90deg);
+        opacity: 0;
+    }
+    40% {
+        -o-transform: perspective(400px) rotateX(-10deg);
+    }
+    70% {
+        -o-transform: perspective(400px) rotateX(10deg);
+    }
+    100% {
+        -o-transform: perspective(400px) rotateX(0deg);
+        opacity: 1;
+    }
+}
+@keyframes flipInX {
+    0% {
+        transform: perspective(400px) rotateX(90deg);
+        opacity: 0;
+    }
+    40% {
+        transform: perspective(400px) rotateX(-10deg);
+    }
+    70% {
+        transform: perspective(400px) rotateX(10deg);
+    }
+    100% {
+        transform: perspective(400px) rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+.flipInX {
+    -webkit-backface-visibility: visible !important;
+    -webkit-animation-name: flipInX;
+    -moz-backface-visibility: visible !important;
+    -moz-animation-name: flipInX;
+    -o-backface-visibility: visible !important;
+    -o-animation-name: flipInX;
+    backface-visibility: visible !important;
+    animation-name: flipInX;
+}
+@-webkit-keyframes flipOutX {
+    0% {
+        -webkit-transform: perspective(400px) rotateX(0deg);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform: perspective(400px) rotateX(90deg);
+        opacity: 0;
+    }
+}
+
+@-moz-keyframes flipOutX {
+    0% {
+        -moz-transform: perspective(400px) rotateX(0deg);
+        opacity: 1;
+    }
+    100% {
+        -moz-transform: perspective(400px) rotateX(90deg);
+        opacity: 0;
+    }
+}
+@-o-keyframes flipOutX {
+    0% {
+        -o-transform: perspective(400px) rotateX(0deg);
+        opacity: 1;
+    }
+    100% {
+        -o-transform: perspective(400px) rotateX(90deg);
+        opacity: 0;
+    }
+}
+@keyframes flipOutX {
+    0% {
+        transform: perspective(400px) rotateX(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: perspective(400px) rotateX(90deg);
+        opacity: 0;
+    }
+}
+.flipOutX {
+    -webkit-animation-name: flipOutX;
+    -webkit-backface-visibility: visible !important;
+    -moz-animation-name: flipOutX;
+    -moz-backface-visibility: visible !important;
+    -o-animation-name: flipOutX;
+    -o-backface-visibility: visible !important;
+    animation-name: flipOutX;
+    backface-visibility: visible !important;
+}
+@-webkit-keyframes flipInY {
+    0% {
+        -webkit-transform: perspective(400px) rotateY(90deg);
+        opacity: 0;
+    }
+    40% {
+        -webkit-transform: perspective(400px) rotateY(-10deg);
+    }
+    70% {
+        -webkit-transform: perspective(400px) rotateY(10deg);
+    }
+    100% {
+        -webkit-transform: perspective(400px) rotateY(0deg);
+        opacity: 1;
+    }
+}
+@-moz-keyframes flipInY {
+    0% {
+        -moz-transform: perspective(400px) rotateY(90deg);
+        opacity: 0;
+    }
+    40% {
+        -moz-transform: perspective(400px) rotateY(-10deg);
+    }
+    70% {
+        -moz-transform: perspective(400px) rotateY(10deg);
+    }
+    100% {
+        -moz-transform: perspective(400px) rotateY(0deg);
+        opacity: 1;
+    }
+}
+@-o-keyframes flipInY {
+    0% {
+        -o-transform: perspective(400px) rotateY(90deg);
+        opacity: 0;
+    }
+    40% {
+        -o-transform: perspective(400px) rotateY(-10deg);
+    }
+    70% {
+        -o-transform: perspective(400px) rotateY(10deg);
+    }
+    100% {
+        -o-transform: perspective(400px) rotateY(0deg);
+        opacity: 1;
+    }
+}
+@keyframes flipInY {
+    0% {
+        transform: perspective(400px) rotateY(90deg);
+        opacity: 0;
+    }
+    40% {
+        transform: perspective(400px) rotateY(-10deg);
+    }
+    70% {
+        transform: perspective(400px) rotateY(10deg);
+    }
+    100% {
+        transform: perspective(400px) rotateY(0deg);
+        opacity: 1;
+    }
+}
+.flipInY {
+  -webkit-backface-visibility: visible !important;
+  -webkit-animation-name: flipInY;
+  -moz-backface-visibility: visible !important;
+  -moz-animation-name: flipInY;
+  -o-backface-visibility: visible !important;
+  -o-animation-name: flipInY;
+  backface-visibility: visible !important;
+  animation-name: flipInY;
+}
+@-webkit-keyframes flipOutY {
+    0% {
+        -webkit-transform: perspective(400px) rotateY(0deg);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform: perspective(400px) rotateY(90deg);
+        opacity: 0;
+    }
+}
+@-moz-keyframes flipOutY {
+    0% {
+        -moz-transform: perspective(400px) rotateY(0deg);
+        opacity: 1;
+    }
+    100% {
+        -moz-transform: perspective(400px) rotateY(90deg);
+        opacity: 0;
+    }
+}
+@-o-keyframes flipOutY {
+    0% {
+        -o-transform: perspective(400px) rotateY(0deg);
+        opacity: 1;
+    }
+    100% {
+        -o-transform: perspective(400px) rotateY(90deg);
+        opacity: 0;
+    }
+}
+@keyframes flipOutY {
+    0% {
+        transform: perspective(400px) rotateY(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: perspective(400px) rotateY(90deg);
+        opacity: 0;
+    }
+}
+.flipOutY {
+    -webkit-backface-visibility: visible !important;
+    -webkit-animation-name: flipOutY;
+    -moz-backface-visibility: visible !important;
+    -moz-animation-name: flipOutY;
+    -o-backface-visibility: visible !important;
+    -o-animation-name: flipOutY;
+    backface-visibility: visible !important;
+    animation-name: flipOutY;
+}
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@-moz-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@-o-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.fadeIn {
+    -webkit-animation-name: fadeIn;
+    -moz-animation-name: fadeIn;
+    -o-animation-name: fadeIn;
+    animation-name: fadeIn;
+}
+@-webkit-keyframes fadeInDelayed {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+    }
+    75% {
+        opacity: 0.75;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@-moz-keyframes fadeInDelayed {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+    }
+    75% {
+        opacity: 0.75;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@-o-keyframes fadeInDelayed {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+    }
+    75% {
+        opacity: 0.75;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes fadeInDelayed {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+    }
+    75% {
+        opacity: 0.75;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.fadeInDelayed {
+    -webkit-animation-name: fadeInDelayed;
+    -moz-animation-name: fadeInDelayed;
+    -o-animation-name: fadeInDelayed;
+    animation-name: fadeInDelayed;
+}
+@-webkit-keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateY(0);
+    }
+}
+@-moz-keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        -moz-transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        -moz-transform: translateY(0);
+    }
+}
+@-o-keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        -o-transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        -o-transform: translateY(0);
+    }
+}
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.fadeInUp {
+    -webkit-animation-name: fadeInUp;
+    -moz-animation-name: fadeInUp;
+    -o-animation-name: fadeInUp;
+    animation-name: fadeInUp;
+}
+@-webkit-keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateY(0);
+    }
+}
+@-moz-keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        -moz-transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        -moz-transform: translateY(0);
+    }
+}
+@-o-keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        -o-transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        -o-transform: translateY(0);
+    }
+}
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.fadeInDown {
+    -webkit-animation-name: fadeInDown;
+    -moz-animation-name: fadeInDown;
+    -o-animation-name: fadeInDown;
+    animation-name: fadeInDown;
+}
+@-webkit-keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateX(-20px);
+    }   
+    100% {
+        opacity: 1;
+        -webkit-transform: translateX(0);
+    }
+}
+@-moz-keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        -moz-transform: translateX(-20px);
+    }
+    100% {
+        opacity: 1;
+        -moz-transform: translateX(0);
+    }
+}
+@-o-keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        -o-transform: translateX(-20px);
+    }
+    100% {
+        opacity: 1;
+        -o-transform: translateX(0);
+    }
+}
+@keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+.fadeInLeft {
+    -webkit-animation-name: fadeInLeft;
+    -moz-animation-name: fadeInLeft;
+    -o-animation-name: fadeInLeft;
+    animation-name: fadeInLeft;
+}
+@-webkit-keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateX(20px);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateX(0);
+    }
+}
+@-moz-keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        -moz-transform: translateX(20px);
+    }
+    100% {
+        opacity: 1;
+        -moz-transform: translateX(0);
+    }
+}
+@-o-keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        -o-transform: translateX(20px);
+    }
+    100% {
+        opacity: 1;
+        -o-transform: translateX(0);
+    }
+}
+@keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+.fadeInRight {
+    -webkit-animation-name: fadeInRight;
+    -moz-animation-name: fadeInRight;
+    -o-animation-name: fadeInRight;
+    animation-name: fadeInRight;
+}
+@-webkit-keyframes fadeInUpBig {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateY(2000px);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateY(0);
+    }
+}
+@-moz-keyframes fadeInUpBig {
+    0% {
+        opacity: 0;
+        -moz-transform: translateY(2000px);
+    }
+    100% {
+        opacity: 1;
+        -moz-transform: translateY(0);
+    }
+}
+@-o-keyframes fadeInUpBig {
+    0% {
+        opacity: 0;
+        -o-transform: translateY(2000px);
+    }
+    100% {
+        opacity: 1;
+        -o-transform: translateY(0);
+    }
+}
+@keyframes fadeInUpBig {
+    0% {
+        opacity: 0;
+        transform: translateY(2000px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.fadeInUpBig {
+    -webkit-animation-name: fadeInUpBig;
+    -moz-animation-name: fadeInUpBig;
+    -o-animation-name: fadeInUpBig;
+    animation-name: fadeInUpBig;
+}
+@-webkit-keyframes fadeInDownBig {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateY(-2000px);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateY(0);
+    }
+}
+@-moz-keyframes fadeInDownBig {
+    0% {
+        opacity: 0;
+        -moz-transform: translateY(-2000px);
+    }
+    100% {
+        opacity: 1;
+        -moz-transform: translateY(0);
+    }
+}
+@-o-keyframes fadeInDownBig {
+    0% {
+        opacity: 0;
+        -o-transform: translateY(-2000px);
+    }
+    100% {
+        opacity: 1;
+        -o-transform: translateY(0);
+    }
+}
+@keyframes fadeInDownBig {
+    0% {
+        opacity: 0;
+        transform: translateY(-2000px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.fadeInDownBig {
+    -webkit-animation-name: fadeInDownBig;
+    -moz-animation-name: fadeInDownBig;
+    -o-animation-name: fadeInDownBig;
+    animation-name: fadeInDownBig;
+}
+@-webkit-keyframes fadeInLeftBig {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateX(-2000px);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateX(0);
+    }
+}
+@-moz-keyframes fadeInLeftBig {
+    0% {
+        opacity: 0;
+        -moz-transform: translateX(-2000px);
+    }
+    100% {
+        opacity: 1;
+        -moz-transform: translateX(0);
+    }
+}
+@-o-keyframes fadeInLeftBig {
+    0% {
+        opacity: 0;
+        -o-transform: translateX(-2000px);
+    }
+    100% {
+        opacity: 1;
+        -o-transform: translateX(0);
+    }
+}
+@keyframes fadeInLeftBig {
+    0% {
+        opacity: 0;
+        transform: translateX(-2000px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+.fadeInLeftBig {
+    -webkit-animation-name: fadeInLeftBig;
+    -moz-animation-name: fadeInLeftBig;
+    -o-animation-name: fadeInLeftBig;
+    animation-name: fadeInLeftBig;
+}
+@-webkit-keyframes fadeInRightBig {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateX(2000px);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateX(0);
+    }
+}
+@-moz-keyframes fadeInRightBig {
+    0% {
+        opacity: 0;
+        -moz-transform: translateX(2000px);
+    }
+    100% {
+        opacity: 1;
+        -moz-transform: translateX(0);
+    }
+}
+@-o-keyframes fadeInRightBig {
+    0% {
+        opacity: 0;
+        -o-transform: translateX(2000px);
+    }
+    100% {
+        opacity: 1;
+        -o-transform: translateX(0);
+    }
+}
+@keyframes fadeInRightBig {
+    0% {
+        opacity: 0;
+        transform: translateX(2000px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+.fadeInRightBig {
+    -webkit-animation-name: fadeInRightBig;
+    -moz-animation-name: fadeInRightBig;
+    -o-animation-name: fadeInRightBig;
+    animation-name: fadeInRightBig;
+}
+@-webkit-keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@-moz-keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@-o-keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+.fadeOut {
+    -webkit-animation-name: fadeOut;
+    -moz-animation-name: fadeOut;
+    -o-animation-name: fadeOut;
+    animation-name: fadeOut;
+}
+@-webkit-keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+        -webkit-transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: translateY(-20px);
+    }
+}
+@-moz-keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+        -moz-transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        -moz-transform: translateY(-20px);
+    }
+}
+@-o-keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+        -o-transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        -o-transform: translateY(-20px);
+    }
+}
+@keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+.fadeOutUp {
+    -webkit-animation-name: fadeOutUp;
+    -moz-animation-name: fadeOutUp;
+    -o-animation-name: fadeOutUp;
+    animation-name: fadeOutUp;
+}
+@-webkit-keyframes fadeOutDown {
+    0% {
+        opacity: 1;
+        -webkit-transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: translateY(20px);
+    }
+}
+@-moz-keyframes fadeOutDown {
+    0% {
+        opacity: 1;
+        -moz-transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        -moz-transform: translateY(20px);
+    }
+}
+@-o-keyframes fadeOutDown {
+    0% {
+        opacity: 1;
+        -o-transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        -o-transform: translateY(20px);
+    }
+}
+@keyframes fadeOutDown {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+.fadeOutDown {
+    -webkit-animation-name: fadeOutDown;
+    -moz-animation-name: fadeOutDown;
+    -o-animation-name: fadeOutDown;
+    animation-name: fadeOutDown;
+}
+@-webkit-keyframes fadeOutLeft {
+    0% {
+        opacity: 1;
+        -webkit-transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: translateX(-20px);
+    }
+}
+@-moz-keyframes fadeOutLeft {
+    0% {
+        opacity: 1;
+        -moz-transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        -moz-transform: translateX(-20px);
+    }
+}
+@-o-keyframes fadeOutLeft {
+    0% {
+        opacity: 1;
+        -o-transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        -o-transform: translateX(-20px);
+    }
+}
+@keyframes fadeOutLeft {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+}
+.fadeOutLeft {
+    -webkit-animation-name: fadeOutLeft;
+    -moz-animation-name: fadeOutLeft;
+    -o-animation-name: fadeOutLeft;
+    animation-name: fadeOutLeft;
+}
+@-webkit-keyframes fadeOutRight {
+    0% {
+        opacity: 1;
+        -webkit-transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: translateX(20px);
+    }
+}
+@-moz-keyframes fadeOutRight {
+    0% {
+        opacity: 1;
+        -moz-transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        -moz-transform: translateX(20px);
+    }
+}
+@-o-keyframes fadeOutRight {
+    0% {
+        opacity: 1;
+        -o-transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        -o-transform: translateX(20px);
+    }
+}
+@keyframes fadeOutRight {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+}
+.fadeOutRight {
+    -webkit-animation-name: fadeOutRight;
+    -moz-animation-name: fadeOutRight;
+    -o-animation-name: fadeOutRight;
+    animation-name: fadeOutRight;
+}
+@-webkit-keyframes fadeOutUpBig {
+    0% {
+        opacity: 1;
+        -webkit-transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: translateY(-2000px);
+    }
+}
+@-moz-keyframes fadeOutUpBig {
+    0% {
+        opacity: 1;
+        -moz-transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        -moz-transform: translateY(-2000px);
+    }
+}
+@-o-keyframes fadeOutUpBig {
+    0% {
+        opacity: 1;
+        -o-transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        -o-transform: translateY(-2000px);
+    }
+}
+@keyframes fadeOutUpBig {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-2000px);
+    }
+}
+.fadeOutUpBig {
+    -webkit-animation-name: fadeOutUpBig;
+    -moz-animation-name: fadeOutUpBig;
+    -o-animation-name: fadeOutUpBig;
+    animation-name: fadeOutUpBig;
+}
+@-webkit-keyframes fadeOutDownBig {
+    0% {
+        opacity: 1;
+        -webkit-transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: translateY(2000px);
+    }
+}
+@-moz-keyframes fadeOutDownBig {
+    0% {
+        opacity: 1;
+        -moz-transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        -moz-transform: translateY(2000px);
+    }
+}
+@-o-keyframes fadeOutDownBig {
+    0% {
+        opacity: 1;
+        -o-transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        -o-transform: translateY(2000px);
+    }
+}
+@keyframes fadeOutDownBig {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(2000px);
+    }
+}
+.fadeOutDownBig {
+    -webkit-animation-name: fadeOutDownBig;
+    -moz-animation-name: fadeOutDownBig;
+    -o-animation-name: fadeOutDownBig;
+    animation-name: fadeOutDownBig;
+}
+@-webkit-keyframes fadeOutLeftBig {
+    0% {
+        opacity: 1;
+        -webkit-transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: translateX(-2000px);
+    }
+}
+@-moz-keyframes fadeOutLeftBig {
+    0% {
+        opacity: 1;
+        -moz-transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        -moz-transform: translateX(-2000px);
+    }
+}
+@-o-keyframes fadeOutLeftBig {
+    0% {
+        opacity: 1;
+        -o-transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        -o-transform: translateX(-2000px);
+    }
+}
+@keyframes fadeOutLeftBig {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-2000px);
+    }
+}
+.fadeOutLeftBig {
+    -webkit-animation-name: fadeOutLeftBig;
+    -moz-animation-name: fadeOutLeftBig;
+    -o-animation-name: fadeOutLeftBig;
+    animation-name: fadeOutLeftBig;
+}
+@-webkit-keyframes fadeOutRightBig {
+    0% {
+        opacity: 1;
+        -webkit-transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: translateX(2000px);
+    }
+}
+@-moz-keyframes fadeOutRightBig {
+    0% {
+        opacity: 1;
+        -moz-transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        -moz-transform: translateX(2000px);
+    }
+}
+@-o-keyframes fadeOutRightBig {
+    0% {
+        opacity: 1;
+        -o-transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        -o-transform: translateX(2000px);
+    }
+}
+@keyframes fadeOutRightBig {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(2000px);
+    }
+}
+.fadeOutRightBig {
+    -webkit-animation-name: fadeOutRightBig;
+    -moz-animation-name: fadeOutRightBig;
+    -o-animation-name: fadeOutRightBig;
+    animation-name: fadeOutRightBig;
+}
+@-webkit-keyframes bounceIn {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(.3);
+    }
+    50% {
+        opacity: 1;
+        -webkit-transform: scale(1.05);
+    }
+    70% {
+        -webkit-transform: scale(.9);
+    }
+    100% {
+        -webkit-transform: scale(1);
+    }
+}
+@-moz-keyframes bounceIn {
+    0% {
+        opacity: 0;
+        -moz-transform: scale(.3);
+    }
+    50% {
+        opacity: 1;
+        -moz-transform: scale(1.05);
+    }
+    70% {
+        -moz-transform: scale(.9);
+    }
+    100% {
+        -moz-transform: scale(1);
+    }
+}
+@-o-keyframes bounceIn {
+    0% {
+        opacity: 0;
+        -o-transform: scale(.3);
+    }
+    50% {
+        opacity: 1;
+        -o-transform: scale(1.05);
+    }
+    70% {
+        -o-transform: scale(.9);
+    }
+    100% {
+        -o-transform: scale(1);
+    }
+}
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(.9);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+.hinge {
+    -webkit-animation-name: hinge;
+    -moz-animation-name: hinge;
+    -o-animation-name: hinge;
+    animation-name: hinge;
+}
+/* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
+@-webkit-keyframes rollIn {
+    0% { 
+        opacity: 0;
+        -webkit-transform: translateX(-100%) rotate(-120deg); 
+    }
+    100% { 
+        opacity: 1; 
+        -webkit-transform: translateX(0px) rotate(0deg); 
+    }
+}
+@-moz-keyframes rollIn {
+    0% { 
+        opacity: 0; 
+        -moz-transform: translateX(-100%) rotate(-120deg); 
+    }
+    100% { 
+        opacity: 1; 
+        -moz-transform: translateX(0px) rotate(0deg); 
+    }
+}
+@-o-keyframes rollIn {
+    0% { 
+        opacity: 0; -o-transform: translateX(-100%) rotate(-120deg); 
+    }
+    100% { 
+        opacity: 1; -o-transform: translateX(0px) rotate(0deg); 
+    }
+}
+@keyframes rollIn {
+    0% { 
+        opacity: 0; transform: translateX(-100%) rotate(-120deg); 
+    }
+    100% { 
+        opacity: 1; transform: translateX(0px) rotate(0deg); 
+    }
+}
+
+
+//===================================================================
+/**           Cross Browser Support Mix-ins for Animations
+=====================================================================  
+Though all of our Animation Mix-ins offer cross-browser support, the following is a list of animation mix-ins used specifically to render cross-browser support.  For each of these, use the standard CSS properties inside Less mix-in syntax (As shown in examples below).
+
+
+*/
+
+/**
+.transition(<i>transition property</i>)
+-------------------
+    .transition(rotate(50));
+*/
+
+.transition(@transition) {
+    -webkit-transition: @transition;
+    -moz-transition: @transition;
+    -o-transition: @transition;
+    transition: @transition;
+}
+
+/**
+.transition-delay(<i>delay amount</i>)
+-------------------
+    .transition-delay(6s);
+*/
+
+.transition-delay(@transition-delay) {
+    -webkit-transition-delay: @transition-delay;
+    -moz-transition-delay: @transition-delay;
+    -o-transition-delay: @transition-delay;
+    transition-delay: @transition-delay;
+}
+
+/**.transform(<i>transform property</i>)
+-----------------------
+    .transform(scale(1.5));
+*/ 
+
+.transform(@string){
+    -webkit-transform: @string;
+    -moz-transform: @string;
+    -ms-transform: @string;
+    -o-transform: @string;
+}
+
+/**.rotate(<i>degree amount</i>)
+--------------------
+    .rotate(50);
+*/
+
+.rotate(@degrees) {
+    -webkit-transform: rotate(@degrees);
+    -moz-transform: rotate(@degrees);
+    -ms-transform: rotate(@degrees);
+    -o-transform: rotate(@degrees);
+    transform: rotate(@degrees);
+}
+
+/**.scale(<i>scale ratio</i>)
+-----------------
+    .scale(1.5);
+*/
+
+.scale(@ratio) {
+    -webkit-transform: scale(@ratio);
+    -moz-transform: scale(@ratio);
+    -ms-transform: scale(@ratio);
+    -o-transform: scale(@ratio);
+    transform: scale(@ratio);
+}
+
+/**.translate(<i>x translation</i>, <i>y translation</i>)
+----------------------------------------------------------
+    .translate(10px, 5px);
+*/
+
+.translate(@x, @y) {
+    -webkit-transform: translate(@x, @y);
+    -moz-transform: translate(@x, @y);
+    -ms-transform: translate(@x, @y);
+    -o-transform: translate(@x, @y);
+    transform: translate(@x, @y);
+}
+
+/**.skew(<i>x skew</i>, <i>y skew</i>)
+--------------------------------------
+    .skew(10deg, 20deg);
+*/
+
+.skew(@x, @y) {
+    -webkit-transform: skew(@x, @y);
+    -moz-transform: skew(@x, @y);
+    -ms-transform: skewX(@x) skewY(@y);
+    -o-transform: skew(@x, @y);
+    transform: skew(@x, @y);
+    -webkit-backface-visibility: hidden; 
+}
+
+/**.translate3d(<i>x translation</i>, <i>y translation</i>, <i>z translation</i>)
+---------------------------------------------------------------
+    .translate3d(10px, 5px, 15px);
+*/
+
+.translate3d(@x, @y, @z) {
+    -webkit-transform: translate3d(@x, @y, @z);
+    -moz-transform: translate3d(@x, @y, @z);
+    -o-transform: translate3d(@x, @y, @z);
+    transform: translate3d(@x, @y, @z);
+}
+
+
+.animation-duration(@duration) {
+    -webkit-animation-duration: @duration;
+    -moz-animation-duration: @duration;
+    -o-animation-duration: @duration;
+    animation-duration: @duration;
+}
+.animation-fill-mode(@rule) {
+    -webkit-animation-duration: @rule;
+    -moz-animation-duration: @rule;
+    -o-animation-duration: @rule;
+    animation-duration: @rule;
+}
+.animation-delay(@delay) {
+    -webkit-animation-delay: @delay;
+    -moz-animation-delay: @delay;
+    -o-animation-delay: @delay;
+    animation-delay: @delay;
+}
+
+
+// Components
+// ================================================================
+
+
+table.mouse-over-resize-handle {
+    cursor: ew-resize;
+}
+
+// Buttons
+// ========================================
+.btn-link,
+.btn-link:active,
+.btn-link[disabled] {
+    background-color: transparent;
+    background-image: none;
+    .box-shadow(none);
+}
+.btn-link {
+    border-color: transparent;
+    cursor: pointer;
+    color: @link-color;
+    .border-radius(0);
+}
+.btn-link:hover {
+    color: @link-color-hover;
+    text-decoration: underline;
+    background-color: transparent;
+    border-color: transparent;
+    .transition(none);
+}
+.btn-link[disabled]:hover {
+    color: @gray-dark;
+    text-decoration: none;
+}
+
+
+// Wrappers
+// ========================================
+
+/*
+Centered Wrappers
+
+> In progress - don't use yet
+
+Center vertically and horizontally, using the structure the [center module](#api/center) creates.
+
+    !!!
+    <div style="position: relative;
+                height: 200px; width: 200px;
+                background-color: gray">
+        <div class="pn-center-wrapper">
+            <div>
+                <div>
+                    <div class="pn-centered">
+                        <p style="background-color: white;
+                                  padding: 1ex;">
+
+                            Content
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+*/
+.pn-center-wrapper {
+    display: table-cell;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    > div {
+        display: table;
+        margin: 0 auto;
+        height: 100%;
+        > div {
+            display: table-cell;
+            vertical-align: middle;
+        }
+    }
+}
+/*!*/
+
+// Flex
+// --------------------------------------------------
+body > .flex {
+    position: fixed;
+    top: @flex-top;
+    right: 0;
+    bottom: 0;
+    left: @flex-left;
+}
+.flex-drop-tab {
+    display: none;
+}
+.pn-dragging-tab .flex-drop-tab {
+    display: block;
+}
+
+// Popup Wrapper basic styles
+.pn-popup-wrapper {
+    display: table-cell;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+    > div {
+        display: table;
+        margin: 0 auto;
+        height: 100%;
+        > div {
+            display: table-cell;
+            vertical-align: middle;
+        }
+    }
+}
+
+
+// Tooltips
+// ========================================
+.follower, .follower-arrow {
+    position: fixed;
+}
+.follower-arrow {
+    width: 0;
+    height: 0;
+}
+
+
+
+
+
+
+// ?????????????????????????
+// ================================================================
+
+
+table.mouse-over-resize-handle {
+    cursor: ew-resize;
+}
+
+sup, sub { 
+    vertical-align: 0;
+    position: relative; 
+}
+sup { 
+    bottom: 1ex; 
+}
+sub { 
+    top: 0.8ex; 
+}
+
+
+
+
+
+
+// TO BE REMOVED
+// ================================================================
+
+.pane {
+    > .tabs {
+        margin: 0;
+        padding: 0;
+        overflow-x: auto;
+        > .tab {
+            display: table-cell;
+
+            .padding(5);
+            > * {
+                display: inline-block; // Fixes close button dropping below the text in Chrome 22
+                .margin(0, 5, 0, 0);
+            }
+            > button {
+                margin: 0;
+            }
+        }
+    }
+    > .view {
+        clear: left;
+
+        margin: 0;
+        padding: 0;
+        &.pn-inactive {
+            display: none;
+        }
+        > * {
+            .padding(5);
+        }
+        > .body {
+            overflow: auto;
+        }
+    }
+}

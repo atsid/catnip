@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="initial-scale=1">
+        <title>Lunch?</title>
+        <!-- Kendo Styles -->
+        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.common.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.default.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.mobile.common.min.css" />
+        <link rel="stylesheet" type="text/css" href="kendo/styles/kendo.mobile.all.min.css" />
+
+        <!-- Local Styles -->
+        <link rel="stylesheet" type="text/css" href="styles/index.css" />
+        <link rel="stylesheet/less" type="text/css" href="styles/styles.less" />
+
+        <!--- Cordova - Loaded on mobile apps only -->
+        <script type="text/javascript" src="cordova.js"></script>
+
+        <!-- jQuery Js -->
+        <script src="kendo/js/jquery-1.9.1.js"></script>
+
+        <!-- Kendo Js -->
+        <script src="kendo/js/kendo.all.js"></script>
+        <script src="kendo/js/everlive.all.js"></script>
+
+        <!-- MillionMunkeys Js -->
+        <script src="MillionMunkeys/KendoMunkey_1_0.js"></script>
+
+        <!-- Less.js -->
+        <script src="scripts/less-1.7.5.min.js" type="text/javascript"></script>
+
+		<!-- Catnip Code -->
+        <script src="scripts/config.js"></script>
+		<script src="scripts/preferences.js"></script>
+		<script src="scripts/food.js"></script>
+		<script src="scripts/results.js"></script>
+
+        <!-- Initialize -->
+        <script type="text/javascript">
+			new kendo.mobile.Application(document.body,{
+				layout: "android-layout"
+			});
+		</script>
+    </head>
+    <body>
+        <div id="results" data-role="view" data-title="Where?">
+            <div class="all-groups">
+            </div>
+        </div>
+        <div id="results_detail" data-role="view" data-title="Where?">
+            <div class="img">
+                <img src="img/color-table.png"/>
+            </div>
+            <div class="details">
+                <span class="genre"></span>
+                <span class="time"></span>
+                <div class="scroll-list" data-role="scroller">
+                    <ul class="people" data-role="listview"></ul>
+                </div>
+            </div>
+        </div>
+        <div data-id="ios-layout" data-role="layout">
+            <header data-role="header">
+                <nav data-role="navbar">
+                    <a data-role="backbutton" data-align="left">Back</a>
+                    <div data-role="view-title">Lunch?</div>
+                </nav>
+            </header>
+            <footer data-role="footer">
+                <div data-role="tabstrip">
+                    <a data-icon="home" href="login.html">Login</a>
+                    <a data-icon="recents" href="preferences.html">Daily Preferences</a>
+                    <a data-icon="cart" href="food.html">Food Preferences</a>
+                    <a data-icon="search" href="results.html">Results</a>
+                </div>
+            </footer>
+        </div>
+
+        <div data-id="android-layout" data-role="layout">
+            <header data-role="header">
+                <nav data-role="navbar">
+                    <a data-role="button" data-rel="drawer" href="#drawer" data-align="left" style="transform:rotate(90deg)">|||</a>
+                    <div data-role="view-title">Lunch?</div>
+                </nav>
+            </header>
+        </div>
+		<div data-role="drawer" id="drawer">
+			<ul data-role="listview" data-type="group">
+                <li>Daily Prefs
+                    <div id="preferences">
+                        <!-- Daily preferences -->
+                        <!-- Times -->
+                        <div>
+                            <label for="startTime">Earliest I can leave</label>
+                            <input id="startTime" name="StartTime" value="12:00 PM" />
+                        </div>
+                        
+                        <div>
+                            <label for="endTime">Latest I can be back</label>
+                            <input id="endTime" name="EndTime" value="1:00 PM" />
+                        </div>
+                        <script src="scripts/daily-prefs.js"></script>
+                    </div>
+                </li>
+			</ul>
+		</div>
+    </body>
+</html>
